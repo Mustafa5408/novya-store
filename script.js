@@ -7,26 +7,28 @@
 /* =========================================================
    ⭐ PRODUCT MANAGEMENT SECTION ⭐
 
-   IMPORTANT:
-   This is the main section you will edit in the future.
+   THIS IS THE MAIN SECTION YOU WILL EDIT IN THE FUTURE.
 
-   To ADD a product:
+   ADD PRODUCT:
    Add another product object inside PRODUCTS.
 
-   To REMOVE a product:
+   REMOVE PRODUCT:
    Delete its complete object.
 
-   To CHANGE PRICE:
+   CHANGE PRICE:
    Change the "price" value.
 
-   To CHANGE STOCK:
+   CHANGE STOCK:
    Change the "stock" value.
 
-   To CHANGE CATEGORY:
+   CHANGE CATEGORY:
    Change the "category" value.
 
-   To CHANGE IMAGE:
+   CHANGE IMAGE:
    Change the "image" value.
+
+   CHANGE DESCRIPTION:
+   Change the "description" value.
 
 ========================================================= */
 
@@ -43,7 +45,6 @@ const PRODUCTS = [
             "Convenient kitchen chopper for quick and easy food preparation."
     },
 
-
     {
         id: "beater",
         name: "Beater",
@@ -54,7 +55,6 @@ const PRODUCTS = [
         description:
             "Useful electric beater for mixing and preparing everyday recipes."
     },
-
 
     {
         id: "induction-hot-plate",
@@ -67,7 +67,6 @@ const PRODUCTS = [
             "Compact induction hot plate suitable for everyday cooking."
     },
 
-
     {
         id: "cooking-spoons",
         name: "Cooking Spoons",
@@ -78,7 +77,6 @@ const PRODUCTS = [
         description:
             "Practical cooking spoon set for everyday kitchen use."
     },
-
 
     {
         id: "knife-sets",
@@ -91,7 +89,6 @@ const PRODUCTS = [
             "Useful kitchen knife set for everyday cutting and preparation."
     },
 
-
     {
         id: "premium-storage-boxes",
         name: "Premium Quality Storage Boxes",
@@ -102,7 +99,6 @@ const PRODUCTS = [
         description:
             "Premium quality storage boxes for organized kitchen storage."
     },
-
 
     {
         id: "nebulizer",
@@ -115,7 +111,6 @@ const PRODUCTS = [
             "Compact nebulizer suitable for home use."
     },
 
-
     {
         id: "trimmer",
         name: "Trimmer",
@@ -127,7 +122,6 @@ const PRODUCTS = [
             "Convenient rechargeable trimmer for everyday grooming."
     },
 
-
     {
         id: "hair-brush",
         name: "Hair Brush",
@@ -138,7 +132,6 @@ const PRODUCTS = [
         description:
             "Easy-to-use hair brush for everyday styling."
     },
-
 
     {
         id: "bags",
@@ -179,6 +172,24 @@ const CATEGORIES = [
 
 
 /* =========================================================
+   EMAILJS CONFIGURATION
+========================================================= */
+
+const EMAILJS_CONFIG = {
+
+    PUBLIC_KEY:
+        "lUS3en_oobE9akyfp",
+
+    SERVICE_ID:
+        "service_74rgsbc",
+
+    TEMPLATE_ID:
+        "template_uavapz8"
+
+};
+
+
+/* =========================================================
    APPLICATION STATE
 ========================================================= */
 
@@ -186,20 +197,24 @@ let selectedCategory = "All Products";
 
 let searchTerm = "";
 
+
+/*
+   Shopping cart is stored in browser localStorage
+   so it remains available after page refresh.
+*/
+
 let cart = JSON.parse(
     localStorage.getItem("novyaCart") || "[]"
 );
 
 
 /*
-   Local stock tracking.
+   Stock overrides are currently stored locally
+   in the customer's browser.
 
    IMPORTANT:
-   This is browser-based stock tracking for the current
-   static version.
-
-   A real shared inventory for all customers will be added
-   later using a database/backend.
+   A future database version will provide globally
+   shared inventory for all customers.
 */
 
 let stockOverrides = JSON.parse(
@@ -312,10 +327,12 @@ function getAvailableStock(product) {
             product.id
         )
     ) {
+
         return Math.max(
             0,
             Number(stockOverrides[product.id])
         );
+
     }
 
     return Math.max(
@@ -347,12 +364,33 @@ function saveStock() {
 
 
 /* =========================================================
-   CATEGORY DISPLAY
+   HTML ESCAPE
+========================================================= */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+/* =========================================================
+   CATEGORY BUTTONS
 ========================================================= */
 
 function renderCategoryButtons() {
 
+    if (!categoryButtons) {
+        return;
+    }
+
     categoryButtons.innerHTML = "";
+
 
     CATEGORIES.forEach(category => {
 
@@ -362,36 +400,53 @@ function renderCategoryButtons() {
         button.className =
             "category-button";
 
+
         if (category === selectedCategory) {
+
             button.classList.add("active");
+
         }
 
-        button.textContent = category;
+
+        button.textContent =
+            category;
+
 
         button.addEventListener(
             "click",
             () => {
 
-                selectedCategory = category;
+                selectedCategory =
+                    category;
 
                 searchTerm = "";
 
-                searchInput.value = "";
+                if (searchInput) {
+                    searchInput.value = "";
+                }
 
                 renderCategoryButtons();
 
                 renderProducts();
 
-                document
-                    .getElementById("products")
-                    .scrollIntoView({
+                const productsSection =
+                    document.getElementById("products");
+
+                if (productsSection) {
+
+                    productsSection.scrollIntoView({
                         behavior: "smooth"
                     });
+
+                }
 
             }
         );
 
-        categoryButtons.appendChild(button);
+
+        categoryButtons.appendChild(
+            button
+        );
 
     });
 
@@ -410,8 +465,10 @@ function getFilteredProducts() {
             selectedCategory === "All Products" ||
             product.category === selectedCategory;
 
+
         const searchText =
             searchTerm.toLowerCase().trim();
+
 
         const matchesSearch =
             !searchText ||
@@ -425,6 +482,7 @@ function getFilteredProducts() {
                 .toLowerCase()
                 .includes(searchText);
 
+
         return (
             matchesCategory &&
             matchesSearch
@@ -436,35 +494,57 @@ function getFilteredProducts() {
 
 
 /* =========================================================
-   PRODUCT CARDS
+   RENDER PRODUCTS
 ========================================================= */
 
 function renderProducts() {
 
+    if (!productsGrid) {
+        return;
+    }
+
+
     const products =
         getFilteredProducts();
 
+
     productsGrid.innerHTML = "";
 
-    productsTitle.textContent =
-        selectedCategory;
 
-    productResultCount.textContent =
-        `${products.length} ${
-            products.length === 1
-                ? "product"
-                : "products"
-        }`;
+    if (productsTitle) {
+
+        productsTitle.textContent =
+            selectedCategory;
+
+    }
+
+
+    if (productResultCount) {
+
+        productResultCount.textContent =
+            `${products.length} ${
+                products.length === 1
+                    ? "product"
+                    : "products"
+            }`;
+
+    }
+
 
     if (products.length === 0) {
 
-        emptyProducts.hidden = false;
+        if (emptyProducts) {
+            emptyProducts.hidden = false;
+        }
 
         return;
 
     }
 
-    emptyProducts.hidden = true;
+
+    if (emptyProducts) {
+        emptyProducts.hidden = true;
+    }
 
 
     products.forEach(product => {
@@ -472,11 +552,14 @@ function renderProducts() {
         const stock =
             getAvailableStock(product);
 
+
         const outOfStock =
             stock <= 0;
 
+
         const card =
             document.createElement("article");
+
 
         card.className =
             "product-card";
@@ -488,7 +571,7 @@ function renderProducts() {
 
                 <img
                     class="product-image"
-                    src="${product.image}"
+                    src="${escapeHTML(product.image)}"
                     alt="${escapeHTML(product.name)}"
                     loading="lazy"
                     onerror="this.src='https://placehold.co/800x800/f1f5f9/111827?text=NOVYA+Store'"
@@ -496,9 +579,11 @@ function renderProducts() {
 
                 ${
                     stock > 0
+
                     ? `<span class="stock-badge">
                             ${stock} available
                        </span>`
+
                     : `<span class="stock-badge out">
                             Out of Stock
                        </span>`
@@ -513,13 +598,16 @@ function renderProducts() {
                     ${escapeHTML(product.category)}
                 </div>
 
+
                 <h3 class="product-name">
                     ${escapeHTML(product.name)}
                 </h3>
 
+
                 <p class="product-description">
                     ${escapeHTML(product.description)}
                 </p>
+
 
                 <div class="product-bottom">
 
@@ -527,16 +615,19 @@ function renderProducts() {
                         Rs. ${formatPrice(product.price)}
                     </div>
 
+
                     <button
                         class="add-to-cart-btn"
-                        data-product-id="${product.id}"
+                        data-product-id="${escapeHTML(product.id)}"
                         ${outOfStock ? "disabled" : ""}
                     >
+
                         ${
                             outOfStock
-                            ? "Out of Stock"
-                            : "Add to Cart"
+                                ? "Out of Stock"
+                                : "Add to Cart"
                         }
+
                     </button>
 
                 </div>
@@ -551,13 +642,16 @@ function renderProducts() {
                 ".add-to-cart-btn"
             );
 
-        if (!outOfStock) {
+
+        if (!outOfStock && addButton) {
 
             addButton.addEventListener(
                 "click",
                 () => {
 
-                    addToCart(product.id);
+                    addToCart(
+                        product.id
+                    );
 
                 }
             );
@@ -565,7 +659,9 @@ function renderProducts() {
         }
 
 
-        productsGrid.appendChild(card);
+        productsGrid.appendChild(
+            card
+        );
 
     });
 
@@ -573,23 +669,7 @@ function renderProducts() {
 
 
 /* =========================================================
-   SECURITY HELPER
-========================================================= */
-
-function escapeHTML(value) {
-
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-
-}
-
-
-/* =========================================================
-   CART
+   ADD TO CART
 ========================================================= */
 
 function addToCart(productId) {
@@ -597,16 +677,20 @@ function addToCart(productId) {
     const product =
         getProduct(productId);
 
+
     if (!product) {
         return;
     }
 
+
     const availableStock =
         getAvailableStock(product);
 
+
     const existingItem =
         cart.find(
-            item => item.productId === productId
+            item =>
+                item.productId === productId
         );
 
 
@@ -622,7 +706,7 @@ function addToCart(productId) {
     ) {
 
         alert(
-            `Only ${availableStock} units of ${product.name} are available.`
+            `Only ${availableStock} unit(s) of ${product.name} are available.`
         );
 
         return;
@@ -637,8 +721,13 @@ function addToCart(productId) {
     } else {
 
         cart.push({
-            productId: productId,
-            quantity: 1
+
+            productId:
+                productId,
+
+            quantity:
+                1
+
         });
 
     }
@@ -653,23 +742,32 @@ function addToCart(productId) {
 }
 
 
+/* =========================================================
+   INCREASE CART QUANTITY
+========================================================= */
+
 function increaseQuantity(productId) {
 
     const product =
         getProduct(productId);
 
+
     if (!product) {
         return;
     }
 
+
     const item =
         cart.find(
-            item => item.productId === productId
+            cartItem =>
+                cartItem.productId === productId
         );
+
 
     if (!item) {
         return;
     }
+
 
     const availableStock =
         getAvailableStock(product);
@@ -681,7 +779,7 @@ function increaseQuantity(productId) {
     ) {
 
         alert(
-            `Only ${availableStock} units of ${product.name} are available.`
+            `Only ${availableStock} unit(s) of ${product.name} are available.`
         );
 
         return;
@@ -691,6 +789,7 @@ function increaseQuantity(productId) {
 
     item.quantity += 1;
 
+
     saveCart();
 
     updateCartUI();
@@ -698,12 +797,18 @@ function increaseQuantity(productId) {
 }
 
 
+/* =========================================================
+   DECREASE CART QUANTITY
+========================================================= */
+
 function decreaseQuantity(productId) {
 
     const item =
         cart.find(
-            item => item.productId === productId
+            cartItem =>
+                cartItem.productId === productId
         );
+
 
     if (!item) {
         return;
@@ -718,7 +823,8 @@ function decreaseQuantity(productId) {
         cart =
             cart.filter(
                 cartItem =>
-                    cartItem.productId !== productId
+                    cartItem.productId !==
+                    productId
             );
 
     }
@@ -731,13 +837,19 @@ function decreaseQuantity(productId) {
 }
 
 
+/* =========================================================
+   REMOVE CART ITEM
+========================================================= */
+
 function removeFromCart(productId) {
 
     cart =
         cart.filter(
             item =>
-                item.productId !== productId
+                item.productId !==
+                productId
         );
+
 
     saveCart();
 
@@ -752,6 +864,11 @@ function removeFromCart(productId) {
 
 function updateCartUI() {
 
+    if (!cartItems) {
+        return;
+    }
+
+
     let totalQuantity = 0;
 
     let subtotal = 0;
@@ -763,7 +880,9 @@ function updateCartUI() {
     if (cart.length === 0) {
 
         cartItems.innerHTML = `
+
             <div class="cart-empty">
+
                 <div style="font-size:40px;">
                     🛒
                 </div>
@@ -771,16 +890,22 @@ function updateCartUI() {
                 <p>
                     Your cart is empty.
                 </p>
+
             </div>
+
         `;
 
     }
+
+
+    const validCart = [];
 
 
     cart.forEach(item => {
 
         const product =
             getProduct(item.productId);
+
 
         if (!product) {
             return;
@@ -792,8 +917,8 @@ function updateCartUI() {
 
 
         /*
-           If stock changed and the cart quantity
-           is now too high, automatically reduce it.
+           Automatically correct the cart if
+           stock has become lower than cart quantity.
         */
 
         if (
@@ -812,6 +937,9 @@ function updateCartUI() {
         }
 
 
+        validCart.push(item);
+
+
         totalQuantity +=
             item.quantity;
 
@@ -824,6 +952,7 @@ function updateCartUI() {
         const cartItem =
             document.createElement("div");
 
+
         cartItem.className =
             "cart-item";
 
@@ -832,7 +961,7 @@ function updateCartUI() {
 
             <img
                 class="cart-item-image"
-                src="${product.image}"
+                src="${escapeHTML(product.image)}"
                 alt="${escapeHTML(product.name)}"
                 onerror="this.src='https://placehold.co/200x200/f1f5f9/111827?text=NOVYA'"
             >
@@ -844,6 +973,7 @@ function updateCartUI() {
                     ${escapeHTML(product.name)}
                 </div>
 
+
                 <div class="cart-item-price">
                     Rs. ${formatPrice(product.price)}
                 </div>
@@ -853,18 +983,20 @@ function updateCartUI() {
 
                     <button
                         data-action="decrease"
-                        data-id="${product.id}"
+                        data-id="${escapeHTML(product.id)}"
                     >
                         −
                     </button>
+
 
                     <span>
                         ${item.quantity}
                     </span>
 
+
                     <button
                         data-action="increase"
-                        data-id="${product.id}"
+                        data-id="${escapeHTML(product.id)}"
                     >
                         +
                     </button>
@@ -875,7 +1007,7 @@ function updateCartUI() {
                 <button
                     class="remove-cart-item"
                     data-action="remove"
-                    data-id="${product.id}"
+                    data-id="${escapeHTML(product.id)}"
                 >
                     Remove
                 </button>
@@ -884,30 +1016,46 @@ function updateCartUI() {
 
 
             <div class="cart-item-total">
+
                 Rs.
                 ${formatPrice(
                     product.price *
                     item.quantity
                 )}
+
             </div>
 
         `;
 
 
-        cartItems.appendChild(cartItem);
+        cartItems.appendChild(
+            cartItem
+        );
 
     });
+
+
+    cart =
+        validCart;
 
 
     saveCart();
 
 
-    cartCount.textContent =
-        totalQuantity;
+    if (cartCount) {
+
+        cartCount.textContent =
+            totalQuantity;
+
+    }
 
 
-    cartSubtotal.textContent =
-        formatPrice(subtotal);
+    if (cartSubtotal) {
+
+        cartSubtotal.textContent =
+            formatPrice(subtotal);
+
+    }
 
 
     updateCheckoutSummary();
@@ -916,59 +1064,96 @@ function updateCartUI() {
 
 
 /* =========================================================
-   CART BUTTON EVENTS
+   CART ITEM BUTTONS
 ========================================================= */
 
-cartItems.addEventListener(
-    "click",
-    event => {
+if (cartItems) {
 
-        const button =
-            event.target.closest("button");
+    cartItems.addEventListener(
+        "click",
+        event => {
 
-        if (!button) {
-            return;
+            const button =
+                event.target.closest(
+                    "button"
+                );
+
+
+            if (!button) {
+                return;
+            }
+
+
+            const productId =
+                button.dataset.id;
+
+
+            const action =
+                button.dataset.action;
+
+
+            if (
+                action ===
+                "increase"
+            ) {
+
+                increaseQuantity(
+                    productId
+                );
+
+            }
+
+            else if (
+                action ===
+                "decrease"
+            ) {
+
+                decreaseQuantity(
+                    productId
+                );
+
+            }
+
+            else if (
+                action ===
+                "remove"
+            ) {
+
+                removeFromCart(
+                    productId
+                );
+
+            }
+
         }
+    );
 
-
-        const productId =
-            button.dataset.id;
-
-        const action =
-            button.dataset.action;
-
-
-        if (action === "increase") {
-
-            increaseQuantity(productId);
-
-        }
-
-        else if (action === "decrease") {
-
-            decreaseQuantity(productId);
-
-        }
-
-        else if (action === "remove") {
-
-            removeFromCart(productId);
-
-        }
-
-    }
-);
+}
 
 
 /* =========================================================
-   CART OPEN / CLOSE
+   OPEN CART
 ========================================================= */
 
 function openCart() {
 
-    cartDrawer.classList.add("open");
+    if (cartDrawer) {
 
-    cartOverlay.classList.add("open");
+        cartDrawer.classList.add(
+            "open"
+        );
+
+    }
+
+
+    if (cartOverlay) {
+
+        cartOverlay.classList.add(
+            "open"
+        );
+
+    }
+
 
     document.body.style.overflow =
         "hidden";
@@ -976,11 +1161,29 @@ function openCart() {
 }
 
 
+/* =========================================================
+   CLOSE CART
+========================================================= */
+
 function closeCart() {
 
-    cartDrawer.classList.remove("open");
+    if (cartDrawer) {
 
-    cartOverlay.classList.remove("open");
+        cartDrawer.classList.remove(
+            "open"
+        );
+
+    }
+
+
+    if (cartOverlay) {
+
+        cartOverlay.classList.remove(
+            "open"
+        );
+
+    }
+
 
     document.body.style.overflow =
         "";
@@ -988,20 +1191,38 @@ function closeCart() {
 }
 
 
-cartButton.addEventListener(
-    "click",
-    openCart
-);
+/* =========================================================
+   CART BUTTON EVENTS
+========================================================= */
 
-cartClose.addEventListener(
-    "click",
-    closeCart
-);
+if (cartButton) {
 
-cartOverlay.addEventListener(
-    "click",
-    closeCart
-);
+    cartButton.addEventListener(
+        "click",
+        openCart
+    );
+
+}
+
+
+if (cartClose) {
+
+    cartClose.addEventListener(
+        "click",
+        closeCart
+    );
+
+}
+
+
+if (cartOverlay) {
+
+    cartOverlay.addEventListener(
+        "click",
+        closeCart
+    );
+
+}
 
 
 /* =========================================================
@@ -1009,6 +1230,11 @@ cartOverlay.addEventListener(
 ========================================================= */
 
 function updateCheckoutSummary() {
+
+    if (!checkoutSummary) {
+        return;
+    }
+
 
     if (cart.length === 0) {
 
@@ -1027,7 +1253,10 @@ function updateCheckoutSummary() {
         cart.map(item => {
 
             const product =
-                getProduct(item.productId);
+                getProduct(
+                    item.productId
+                );
+
 
             if (!product) {
                 return "";
@@ -1043,6 +1272,7 @@ function updateCheckoutSummary() {
 
 
             return `
+
                 <div class="summary-item">
 
                     <span>
@@ -1050,11 +1280,13 @@ function updateCheckoutSummary() {
                         × ${item.quantity}
                     </span>
 
+
                     <strong>
                         Rs. ${formatPrice(total)}
                     </strong>
 
                 </div>
+
             `;
 
         }).join("");
@@ -1073,6 +1305,7 @@ function updateCheckoutSummary() {
                 Total
             </strong>
 
+
             <strong>
                 Rs. ${formatPrice(subtotal)}
             </strong>
@@ -1090,95 +1323,103 @@ function updateCheckoutSummary() {
 
 function performSearch() {
 
+    if (!searchInput) {
+        return;
+    }
+
+
     searchTerm =
         searchInput.value.trim();
 
+
     selectedCategory =
         "All Products";
+
 
     renderCategoryButtons();
 
     renderProducts();
 
-    document
-        .getElementById("products")
-        .scrollIntoView({
+
+    const productsSection =
+        document.getElementById(
+            "products"
+        );
+
+
+    if (productsSection) {
+
+        productsSection.scrollIntoView({
             behavior: "smooth"
         });
+
+    }
 
 }
 
 
-searchBtn.addEventListener(
-    "click",
-    performSearch
-);
+if (searchBtn) {
+
+    searchBtn.addEventListener(
+        "click",
+        performSearch
+    );
+
+}
 
 
-searchInput.addEventListener(
-    "keydown",
-    event => {
+if (searchInput) {
 
-        if (event.key === "Enter") {
+    searchInput.addEventListener(
+        "keydown",
+        event => {
 
-            performSearch();
+            if (
+                event.key ===
+                "Enter"
+            ) {
+
+                performSearch();
+
+            }
 
         }
+    );
 
-    }
-);
-
-
-/* =========================================================
-   CHECKOUT
-========================================================= */
-
-checkoutBtn.addEventListener(
-    "click",
-    () => {
-
-        closeCart();
-
-        document
-            .getElementById("checkout")
-            .scrollIntoView({
-                behavior: "smooth"
-            });
-
-    }
-);
+}
 
 
 /* =========================================================
-   EMAILJS CONFIGURATION
+   CHECKOUT BUTTON
 ========================================================= */
 
-/*
-   IMPORTANT:
+if (checkoutBtn) {
 
-   We will fill these values during the EmailJS setup.
+    checkoutBtn.addEventListener(
+        "click",
+        () => {
 
-   DO NOT enter your Gmail password here.
+            closeCart();
 
-   You will get these values from EmailJS:
 
-   1. PUBLIC_KEY
-   2. SERVICE_ID
-   3. TEMPLATE_ID
-*/
+            const checkoutSection =
+                document.getElementById(
+                    "checkout"
+                );
 
-const EMAILJS_CONFIG = {
 
-    PUBLIC_KEY:
-        "YOUR_EMAILJS_PUBLIC_KEY",
+            if (checkoutSection) {
 
-    SERVICE_ID:
-        "YOUR_EMAILJS_SERVICE_ID",
+                checkoutSection.scrollIntoView({
+                    behavior: "smooth"
+                });
 
-    TEMPLATE_ID:
-        "YOUR_EMAILJS_TEMPLATE_ID"
+            }
 
-};
+        }
+    );
+
+}
 
 
 /* =========================================================
@@ -1188,41 +1429,72 @@ const EMAILJS_CONFIG = {
 function initializeEmailJS() {
 
     if (
-        !window.emailjs ||
-        EMAILJS_CONFIG.PUBLIC_KEY ===
-            "YOUR_EMAILJS_PUBLIC_KEY"
+        typeof emailjs ===
+        "undefined"
     ) {
 
-        console.log(
-            "EmailJS is not configured yet."
+        console.error(
+            "EmailJS SDK was not loaded."
         );
 
-        return;
+        return false;
 
     }
 
 
-    emailjs.init({
-        publicKey:
-            EMAILJS_CONFIG.PUBLIC_KEY
-    });
+    try {
+
+        emailjs.init({
+
+            publicKey:
+                EMAILJS_CONFIG.PUBLIC_KEY
+
+        });
+
+
+        console.log(
+            "EmailJS initialized successfully."
+        );
+
+
+        return true;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "EmailJS initialization failed:",
+            error
+        );
+
+
+        return false;
+
+    }
 
 }
 
 
-initializeEmailJS();
+const emailJSInitialized =
+    initializeEmailJS();
 
 
 /* =========================================================
-   ORDER VALIDATION
+   VALIDATE STOCK BEFORE ORDER
 ========================================================= */
 
 function validateCartStock() {
 
-    for (const item of cart) {
+    for (
+        const item of cart
+    ) {
 
         const product =
-            getProduct(item.productId);
+            getProduct(
+                item.productId
+            );
+
 
         if (!product) {
             continue;
@@ -1230,7 +1502,9 @@ function validateCartStock() {
 
 
         const availableStock =
-            getAvailableStock(product);
+            getAvailableStock(
+                product
+            );
 
 
         if (
@@ -1239,10 +1513,13 @@ function validateCartStock() {
         ) {
 
             return {
-                valid: false,
+
+                valid:
+                    false,
 
                 message:
                     `${product.name} has only ${availableStock} unit(s) available.`
+
             };
 
         }
@@ -1251,8 +1528,13 @@ function validateCartStock() {
 
 
     return {
-        valid: true,
-        message: ""
+
+        valid:
+            true,
+
+        message:
+            ""
+
     };
 
 }
@@ -1267,8 +1549,10 @@ function generateOrderNumber() {
     const random =
         Math.floor(
             100000 +
-            Math.random() * 900000
+            Math.random() *
+            900000
         );
+
 
     return `NOVYA-${random}`;
 
@@ -1288,7 +1572,10 @@ function buildOrderDetails() {
         cart.map(item => {
 
             const product =
-                getProduct(item.productId);
+                getProduct(
+                    item.productId
+                );
+
 
             if (!product) {
                 return "";
@@ -1300,24 +1587,31 @@ function buildOrderDetails() {
                 item.quantity;
 
 
-            total += lineTotal;
+            total +=
+                lineTotal;
 
 
             return (
                 `${product.name} | ` +
                 `Qty: ${item.quantity} | ` +
-                `Rs. ${formatPrice(lineTotal)}`
+                `Rs. ${formatPrice(
+                    lineTotal
+                )}`
             );
 
         });
 
 
     return {
+
         productLines:
-            productLines.join("\n"),
+            productLines.join(
+                "\n"
+            ),
 
         total:
             total
+
     };
 
 }
@@ -1332,7 +1626,10 @@ function reduceLocalStock() {
     cart.forEach(item => {
 
         const product =
-            getProduct(item.productId);
+            getProduct(
+                item.productId
+            );
+
 
         if (!product) {
             return;
@@ -1340,10 +1637,14 @@ function reduceLocalStock() {
 
 
         const currentStock =
-            getAvailableStock(product);
+            getAvailableStock(
+                product
+            );
 
 
-        stockOverrides[product.id] =
+        stockOverrides[
+            product.id
+        ] =
             Math.max(
                 0,
                 currentStock -
@@ -1359,238 +1660,6 @@ function reduceLocalStock() {
 
 
 /* =========================================================
-   PLACE ORDER
-========================================================= */
-
-orderForm.addEventListener(
-    "submit",
-    async event => {
-
-        event.preventDefault();
-
-
-        orderMessage.className =
-            "order-message";
-
-        orderMessage.textContent =
-            "";
-
-
-        if (cart.length === 0) {
-
-            showOrderMessage(
-                "Please add at least one product to your cart.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        const stockCheck =
-            validateCartStock();
-
-
-        if (!stockCheck.valid) {
-
-            showOrderMessage(
-                stockCheck.message,
-                "error"
-            );
-
-            updateCartUI();
-
-            return;
-
-        }
-
-
-        const formData =
-            new FormData(orderForm);
-
-
-        const customerName =
-            formData.get("customerName").trim();
-
-        const customerPhone =
-            formData.get("customerPhone").trim();
-
-        const customerEmail =
-            formData.get("customerEmail").trim();
-
-        const customerCity =
-            formData.get("customerCity").trim();
-
-        const customerAddress =
-            formData.get("customerAddress").trim();
-
-        const orderNotes =
-            formData.get("orderNotes").trim();
-
-
-        const orderNumber =
-            generateOrderNumber();
-
-
-        const orderDetails =
-            buildOrderDetails();
-
-
-        /*
-           =================================================
-           EMAILJS NOT CONFIGURED YET
-           =================================================
-
-           Until you enter your EmailJS credentials,
-           the order will NOT be sent by email.
-
-           After Step 6, these values will work.
-        */
-
-
-        const emailJSReady =
-            window.emailjs &&
-            EMAILJS_CONFIG.PUBLIC_KEY !==
-                "YOUR_EMAILJS_PUBLIC_KEY" &&
-            EMAILJS_CONFIG.SERVICE_ID !==
-                "YOUR_EMAILJS_SERVICE_ID" &&
-            EMAILJS_CONFIG.TEMPLATE_ID !==
-                "YOUR_EMAILJS_TEMPLATE_ID";
-
-
-        if (!emailJSReady) {
-
-            showOrderMessage(
-                "EmailJS is not configured yet. Complete the EmailJS setup before accepting real customer orders.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        placeOrderBtn.disabled =
-            true;
-
-        placeOrderBtn.textContent =
-            "Sending Order...";
-
-
-        try {
-
-            const templateParams = {
-
-                order_number:
-                    orderNumber,
-
-                customer_name:
-                    customerName,
-
-                customer_phone:
-                    customerPhone,
-
-                customer_email:
-                    customerEmail ||
-                    "Not provided",
-
-                customer_city:
-                    customerCity,
-
-                customer_address:
-                    customerAddress,
-
-                order_notes:
-                    orderNotes ||
-                    "None",
-
-                order_items:
-                    orderDetails.productLines,
-
-                order_total:
-                    `Rs. ${formatPrice(
-                        orderDetails.total
-                    )}`,
-
-                order_date:
-                    new Date().toLocaleString(
-                        "en-PK"
-                    )
-
-            };
-
-
-            await emailjs.send(
-
-                EMAILJS_CONFIG.SERVICE_ID,
-
-                EMAILJS_CONFIG.TEMPLATE_ID,
-
-                templateParams
-
-            );
-
-
-            /*
-               Only reduce the local stock AFTER
-               EmailJS successfully accepts the order.
-            */
-
-            reduceLocalStock();
-
-
-            cart = [];
-
-            saveCart();
-
-            updateCartUI();
-
-            renderProducts();
-
-
-            orderForm.reset();
-
-
-            showOrderMessage(
-                `Order ${orderNumber} has been submitted successfully. Thank you for shopping with NOVYA Store!`,
-                "success"
-            );
-
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "EmailJS order error:",
-                error
-            );
-
-
-            showOrderMessage(
-                "We could not submit your order right now. Please try again.",
-                "error"
-            );
-
-        }
-
-
-        finally {
-
-            placeOrderBtn.disabled =
-                false;
-
-            placeOrderBtn.textContent =
-                "Place Order";
-
-        }
-
-    }
-);
-
-
-/* =========================================================
    ORDER MESSAGE
 ========================================================= */
 
@@ -1599,8 +1668,14 @@ function showOrderMessage(
     type
 ) {
 
+    if (!orderMessage) {
+        return;
+    }
+
+
     orderMessage.textContent =
         message;
+
 
     orderMessage.className =
         `order-message ${type}`;
@@ -1609,55 +1684,423 @@ function showOrderMessage(
 
 
 /* =========================================================
+   PLACE ORDER
+========================================================= */
+
+if (orderForm) {
+
+    orderForm.addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+
+            showOrderMessage(
+                "",
+                ""
+            );
+
+
+            /*
+               Make sure the customer has products
+               in the cart.
+            */
+
+            if (
+                cart.length === 0
+            ) {
+
+                showOrderMessage(
+                    "Please add at least one product to your cart.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            /*
+               Verify stock again immediately
+               before sending the order.
+            */
+
+            const stockCheck =
+                validateCartStock();
+
+
+            if (
+                !stockCheck.valid
+            ) {
+
+                showOrderMessage(
+                    stockCheck.message,
+                    "error"
+                );
+
+
+                updateCartUI();
+
+
+                return;
+
+            }
+
+
+            /*
+               Verify EmailJS is available.
+            */
+
+            if (
+                !emailJSInitialized
+            ) {
+
+                showOrderMessage(
+                    "Email service is not available. Please refresh the page and try again.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            const formData =
+                new FormData(
+                    orderForm
+                );
+
+
+            const customerName =
+                String(
+                    formData.get(
+                        "customerName"
+                    ) || ""
+                ).trim();
+
+
+            const customerPhone =
+                String(
+                    formData.get(
+                        "customerPhone"
+                    ) || ""
+                ).trim();
+
+
+            const customerEmail =
+                String(
+                    formData.get(
+                        "customerEmail"
+                    ) || ""
+                ).trim();
+
+
+            const customerCity =
+                String(
+                    formData.get(
+                        "customerCity"
+                    ) || ""
+                ).trim();
+
+
+            const customerAddress =
+                String(
+                    formData.get(
+                        "customerAddress"
+                    ) || ""
+                ).trim();
+
+
+            const orderNotes =
+                String(
+                    formData.get(
+                        "orderNotes"
+                    ) || ""
+                ).trim();
+
+
+            /*
+               Generate order number.
+            */
+
+            const orderNumber =
+                generateOrderNumber();
+
+
+            /*
+               Generate order details.
+            */
+
+            const orderDetails =
+                buildOrderDetails();
+
+
+            /*
+               Disable button while sending.
+            */
+
+            if (placeOrderBtn) {
+
+                placeOrderBtn.disabled =
+                    true;
+
+                placeOrderBtn.textContent =
+                    "Sending Order...";
+
+            }
+
+
+            try {
+
+                /*
+                   These variable names MUST match
+                   the variables in your EmailJS template.
+                */
+
+                const templateParams = {
+
+                    order_number:
+                        orderNumber,
+
+                    order_date:
+                        new Date()
+                            .toLocaleString(
+                                "en-PK"
+                            ),
+
+                    customer_name:
+                        customerName,
+
+                    customer_phone:
+                        customerPhone,
+
+                    customer_email:
+                        customerEmail ||
+                        "Not provided",
+
+                    customer_city:
+                        customerCity,
+
+                    customer_address:
+                        customerAddress,
+
+                    order_notes:
+                        orderNotes ||
+                        "None",
+
+                    order_items:
+                        orderDetails.productLines,
+
+                    order_total:
+                        `Rs. ${formatPrice(
+                            orderDetails.total
+                        )}`
+
+                };
+
+
+                console.log(
+                    "Sending NOVYA order:",
+                    templateParams
+                );
+
+
+                /*
+                   SEND ORDER TO EMAILJS
+                */
+
+                const response =
+                    await emailjs.send(
+
+                        EMAILJS_CONFIG.SERVICE_ID,
+
+                        EMAILJS_CONFIG.TEMPLATE_ID,
+
+                        templateParams
+
+                    );
+
+
+                console.log(
+                    "EmailJS response:",
+                    response
+                );
+
+
+                /*
+                   Email successfully accepted.
+                   Now reduce local stock.
+                */
+
+                reduceLocalStock();
+
+
+                /*
+                   Empty cart.
+                */
+
+                cart = [];
+
+
+                saveCart();
+
+
+                updateCartUI();
+
+
+                renderProducts();
+
+
+                /*
+                   Clear checkout form.
+                */
+
+                orderForm.reset();
+
+
+                /*
+                   Show success message.
+                */
+
+                showOrderMessage(
+
+                    `Order ${orderNumber} has been submitted successfully. Thank you for shopping with NOVYA Store!`,
+
+                    "success"
+
+                );
+
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "NOVYA EmailJS Order Error:",
+                    error
+                );
+
+
+                showOrderMessage(
+
+                    "We could not submit your order right now. Please check your internet connection and try again.",
+
+                    "error"
+
+                );
+
+            }
+
+
+            finally {
+
+                if (placeOrderBtn) {
+
+                    placeOrderBtn.disabled =
+                        false;
+
+                    placeOrderBtn.textContent =
+                        "Place Order";
+
+                }
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
    HERO BUTTONS
 ========================================================= */
 
-shopNowBtn.addEventListener(
-    "click",
-    () => {
+if (shopNowBtn) {
 
-        document
-            .getElementById("products")
-            .scrollIntoView({
-                behavior: "smooth"
-            });
+    shopNowBtn.addEventListener(
+        "click",
+        () => {
 
-    }
-);
+            const productsSection =
+                document.getElementById(
+                    "products"
+                );
 
 
-viewProductsBtn.addEventListener(
-    "click",
-    () => {
+            if (productsSection) {
 
-        document
-            .getElementById("products")
-            .scrollIntoView({
-                behavior: "smooth"
-            });
+                productsSection.scrollIntoView({
+                    behavior: "smooth"
+                });
 
-    }
-);
+            }
+
+        }
+    );
+
+}
+
+
+if (viewProductsBtn) {
+
+    viewProductsBtn.addEventListener(
+        "click",
+        () => {
+
+            const productsSection =
+                document.getElementById(
+                    "products"
+                );
+
+
+            if (productsSection) {
+
+                productsSection.scrollIntoView({
+                    behavior: "smooth"
+                });
+
+            }
+
+        }
+    );
+
+}
 
 
 /* =========================================================
    MOBILE MENU
 ========================================================= */
 
-mobileMenuBtn.addEventListener(
-    "click",
-    () => {
+if (mobileMenuBtn) {
 
-        mainNav.classList.toggle(
-            "mobile-open"
-        );
+    mobileMenuBtn.addEventListener(
+        "click",
+        () => {
 
-    }
-);
+            if (mainNav) {
 
+                mainNav.classList.toggle(
+                    "mobile-open"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   NAVIGATION CATEGORY LINKS
+========================================================= */
 
 document
-    .querySelectorAll(".nav-container a")
+    .querySelectorAll(
+        ".nav-container a"
+    )
     .forEach(link => {
 
         link.addEventListener(
@@ -1668,14 +2111,19 @@ document
                     link.dataset.category;
 
 
-                if (category === "all") {
+                if (
+                    category ===
+                    "all"
+                ) {
 
                     selectedCategory =
                         "All Products";
 
                 }
 
-                else if (category) {
+                else if (
+                    category
+                ) {
 
                     selectedCategory =
                         category;
@@ -1685,7 +2133,13 @@ document
 
                 searchTerm = "";
 
-                searchInput.value = "";
+
+                if (searchInput) {
+
+                    searchInput.value =
+                        "";
+
+                }
 
 
                 renderCategoryButtons();
@@ -1694,24 +2148,39 @@ document
 
 
                 if (
-                    link.getAttribute("href") ===
+                    link.getAttribute(
+                        "href"
+                    ) ===
                     "#products"
                 ) {
 
                     event.preventDefault();
 
-                    document
-                        .getElementById("products")
-                        .scrollIntoView({
+
+                    const productsSection =
+                        document.getElementById(
+                            "products"
+                        );
+
+
+                    if (productsSection) {
+
+                        productsSection.scrollIntoView({
                             behavior: "smooth"
                         });
+
+                    }
 
                 }
 
 
-                mainNav.classList.remove(
-                    "mobile-open"
-                );
+                if (mainNav) {
+
+                    mainNav.classList.remove(
+                        "mobile-open"
+                    );
+
+                }
 
             }
         );
@@ -1723,42 +2192,70 @@ document
    LOGO
 ========================================================= */
 
-document
-    .getElementById("logoLink")
-    .addEventListener(
+const logoLink =
+    document.getElementById(
+        "logoLink"
+    );
+
+
+if (logoLink) {
+
+    logoLink.addEventListener(
         "click",
         event => {
 
             event.preventDefault();
 
+
             selectedCategory =
                 "All Products";
 
+
             searchTerm = "";
 
-            searchInput.value = "";
+
+            if (searchInput) {
+
+                searchInput.value =
+                    "";
+
+            }
+
 
             renderCategoryButtons();
 
             renderProducts();
 
+
             window.scrollTo({
-                top: 0,
-                behavior: "smooth"
+
+                top:
+                    0,
+
+                behavior:
+                    "smooth"
+
             });
 
         }
     );
 
+}
+
 
 /* =========================================================
-   INITIALIZE WEBSITE
+   INITIALIZE STORE
 ========================================================= */
 
 function initializeStore() {
 
-    currentYear.textContent =
-        new Date().getFullYear();
+    if (currentYear) {
+
+        currentYear.textContent =
+            new Date().getFullYear();
+
+    }
+
 
     renderCategoryButtons();
 
