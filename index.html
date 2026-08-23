@@ -1,125 +1,712 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="NOVYA Store - smart everyday products, home essentials, gadgets, fashion and more.">
-<title>NOVYA Store | Shop Smart. Live Better.</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NOVYA Store | Shop Smart. Live Better.</title>
+
+    <meta
+        name="description"
+        content="NOVYA Store - Smart finds for everyday life. Nationwide delivery and easy ordering."
+    >
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- EmailJS -->
+    <!-- We will configure this later in Step 6 -->
+    <script
+        type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
+    ></script>
 </head>
+
 <body>
-<div class="topbar">🚚 Nationwide delivery • Easy ordering • Cash on Delivery</div>
 
-<header class="site-header">
-  <div class="header-main container">
-    <button class="menu-btn" id="menuBtn">☰</button>
-    <a class="brand" href="#home"><span class="brand-mark">N</span><span>NOVYA</span><small>STORE</small></a>
-    <form class="search" id="searchForm">
-      <input id="searchInput" type="search" placeholder="Search products..." aria-label="Search products">
-      <button>Search</button>
-    </form>
-    <button class="cart-button" id="cartButton">🛒 Cart <span id="cartCount">0</span></button>
-  </div>
-  <nav class="nav" id="mainNav">
-    <div class="container nav-inner">
-      <a href="#home">Home</a>
-      <a href="#products">All Products</a>
-      <a href="#products" data-category="Kitchen Appliances">Kitchen Appliances</a>
-      <a href="#products" data-category="Kitchen Accessories">Kitchen Accessories</a>
-      <a href="#products" data-category="Kitchen Utensils">Kitchen Utensils</a>
-      <a href="#products" data-category="Home Appliances">Home Appliances</a>
-      <a href="#products" data-category="Home Accessories">Home Accessories</a>
-      <a href="#products" data-category="Home Decor">Home Decor</a>
-      <a href="#products" data-category="Electronics Gadgets">Electronics Gadgets</a>
-      <a href="#products" data-category="Mobile Accessories">Mobile Accessories</a>
-      <a href="#products" data-category="Personal Care Products">Personal Care</a>
-      <a href="#products" data-category="Baby Accessories">Baby Accessories</a>
-      <a href="#products" data-category="Tools & Tool Kits">Tools & Tool Kits</a>
-      <a href="#products" data-category="Men">Men</a>
-      <a href="#products" data-category="Women">Women</a>
-      <a href="#products" data-category="Bags & Luggage">Bags & Luggage</a>
+    <!-- =========================
+         TOP BAR
+    ========================== -->
+    <div class="top-bar">
+        🚚 Nationwide delivery • Easy ordering • Cash on Delivery
     </div>
-  </nav>
-</header>
 
-<main id="home">
-<section class="hero">
- <div class="container hero-content">
-  <div>
-   <p class="eyebrow">WELCOME TO NOVYA STORE</p>
-   <h1>Smart finds for<br><span>everyday life.</span></h1>
-   <p class="hero-text">Discover useful home essentials, gadgets, accessories, tools, fashion and more — all in one place.</p>
-   <div class="hero-actions"><a class="btn primary" href="#products">Shop Now</a><button class="btn light" id="dealBtn">View Products</button></div>
-  </div>
-  <div class="hero-card"><span>NEW COLLECTION</span><strong>Everyday<br>Essentials</strong><p>Quality products. Simple ordering.</p></div>
- </div>
-</section>
 
-<section class="trust-strip"><div class="container trust-grid">
- <div>🚚 <strong>Nationwide Delivery</strong><small>Order from anywhere in Pakistan</small></div>
- <div>🛍️ <strong>Wide Selection</strong><small>Home, gadgets, fashion & more</small></div>
- <div>📱 <strong>Mobile Friendly</strong><small>Easy shopping on every device</small></div>
- <div>💬 <strong>Easy Ordering</strong><small>Simple customer checkout</small></div>
-</div></section>
+    <!-- =========================
+         HEADER
+    ========================== -->
+    <header class="main-header">
 
-<section class="categories container">
- <div class="section-heading"><div><p class="eyebrow">SHOP BY CATEGORY</p><h2>Find what you need</h2></div></div>
- <div class="category-grid" id="categoryGrid"></div>
-</section>
+        <div class="header-container">
 
-<section class="products-section" id="products">
- <div class="container">
-  <div class="section-heading products-heading">
-   <div><p class="eyebrow">OUR COLLECTION</p><h2 id="productsTitle">All Products</h2></div>
-   <select id="sortSelect"><option value="default">Featured</option><option value="low">Price: Low to High</option><option value="high">Price: High to Low</option><option value="name">Name: A-Z</option></select>
-  </div>
-  <div class="filter-row" id="filterRow"></div>
-  <div class="products-grid" id="productGrid"></div>
-  <p class="empty-state" id="emptyState" hidden>No products found.</p>
- </div>
-</section>
+            <button
+                class="mobile-menu-btn"
+                id="mobileMenuBtn"
+                aria-label="Open menu"
+            >
+                ☰
+            </button>
 
-<section class="promo container"><div><p class="eyebrow">NOVYA STORE</p><h2>Useful products. Better everyday shopping.</h2><p>Browse our growing collection and order directly from the website.</p></div><a class="btn primary" href="#products">Explore Products</a></section>
+            <a href="#" class="logo" id="logoLink">
+                <span>N</span>OVYA<span>STORE</span>
+            </a>
 
-<section class="checkout-section container" id="checkout">
- <div class="checkout-card">
-  <div class="section-heading"><div><p class="eyebrow">ORDER DIRECTLY</p><h2>Checkout</h2><p>Enter your delivery details and submit your order.</p></div></div>
-  <div id="checkoutSummary" class="checkout-summary">Your cart is empty.</div>
-  <form id="orderForm">
-   <div class="form-grid">
-    <label>Full Name<input id="customerName" required></label>
-    <label>Phone Number<input id="phone" type="tel" required placeholder="03XXXXXXXXX"></label>
-    <label>Email (optional)<input id="email" type="email"></label>
-    <label>City<input id="city" required></label>
-   </div>
-   <label>Complete Delivery Address<textarea id="address" required rows="3"></textarea></label>
-   <label>Order Notes (optional)<textarea id="notes" rows="2"></textarea></label>
-   <button class="btn primary wide" type="submit">Place Order</button>
-   <p class="form-status" id="formStatus"></p>
-  </form>
- </div>
-</section>
-</main>
+            <div class="search-area">
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search products..."
+                    autocomplete="off"
+                >
+                <button id="searchBtn">Search</button>
+            </div>
 
-<aside class="cart-drawer" id="cartDrawer">
- <div class="drawer-head"><h2>Your Cart</h2><button id="closeCart">×</button></div>
- <div id="cartItems" class="cart-items"></div>
- <div class="drawer-footer"><div><span>Subtotal</span><strong id="cartTotal">Rs. 0</strong></div><button class="btn primary wide" id="checkoutBtn">Checkout</button></div>
-</aside>
-<div class="drawer-overlay" id="drawerOverlay"></div>
+            <button
+                class="cart-button"
+                id="cartButton"
+                aria-label="Open shopping cart"
+            >
+                🛒 Cart
+                <span id="cartCount">0</span>
+            </button>
 
-<footer>
- <div class="container footer-grid">
-  <div><a class="brand footer-brand" href="#home"><span class="brand-mark">N</span><span>NOVYA</span><small>STORE</small></a><p>Smart finds for everyday life.</p></div>
-  <div><h3>Shop</h3><a href="#products">All Products</a><a href="#products" data-category="Home Appliances">Home Appliances</a><a href="#products" data-category="Electronics Gadgets">Electronics Gadgets</a><a href="#products" data-category="Men">Men</a></div>
-  <div><h3>Customer</h3><a href="#checkout">Checkout</a><a href="#home">Delivery Information</a></div>
-  <div><h3>Contact</h3><p>📍 Pakistan</p><p>📞 Add your business phone</p><p>💬 WhatsApp support</p></div>
- </div>
- <div class="copyright">© <span id="year"></span> NOVYA Store. All rights reserved.</div>
-</footer>
-<script src="script.js"></script>
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         NAVIGATION
+    ========================== -->
+    <nav class="main-nav" id="mainNav">
+
+        <div class="nav-container">
+
+            <a href="#" data-category="all">Home</a>
+
+            <a href="#products" data-category="all">
+                All Products
+            </a>
+
+            <!-- Existing categories - DO NOT REMOVE -->
+            <a href="#products" data-category="Kitchen Appliances">
+                Kitchen Appliances
+            </a>
+
+            <a href="#products" data-category="Kitchen Accessories">
+                Kitchen Accessories
+            </a>
+
+            <a href="#products" data-category="Kitchen Utensils">
+                Kitchen Utensils
+            </a>
+
+            <a href="#products" data-category="Home Appliances">
+                Home Appliances
+            </a>
+
+            <a href="#products" data-category="Home Accessories">
+                Home Accessories
+            </a>
+
+            <a href="#products" data-category="Home Decor">
+                Home Decor
+            </a>
+
+            <a href="#products" data-category="Electronics Gadgets">
+                Electronics Gadgets
+            </a>
+
+            <a href="#products" data-category="Mobile Accessories">
+                Mobile Accessories
+            </a>
+
+            <a href="#products" data-category="Personal Care">
+                Personal Care
+            </a>
+
+            <a href="#products" data-category="Baby Accessories">
+                Baby Accessories
+            </a>
+
+            <a href="#products" data-category="Tools & Tool Kits">
+                Tools & Tool Kits
+            </a>
+
+            <a href="#products" data-category="Men">
+                Men
+            </a>
+
+            <a href="#products" data-category="Women">
+                Women
+            </a>
+
+            <a href="#products" data-category="Bags & Luggage">
+                Bags & Luggage
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================
+         HERO SECTION
+    ========================== -->
+    <main>
+
+        <section class="hero">
+
+            <div class="hero-container">
+
+                <div class="hero-content">
+
+                    <p class="eyebrow">
+                        WELCOME TO NOVYA STORE
+                    </p>
+
+                    <h1>
+                        Smart finds for
+                        <span>everyday life.</span>
+                    </h1>
+
+                    <p class="hero-description">
+                        Discover useful home essentials, kitchen products,
+                        gadgets, accessories and more — all in one place.
+                    </p>
+
+                    <div class="hero-buttons">
+
+                        <button
+                            class="primary-btn"
+                            id="shopNowBtn"
+                        >
+                            Shop Now
+                        </button>
+
+                        <button
+                            class="secondary-btn"
+                            id="viewProductsBtn"
+                        >
+                            View Products
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="hero-card">
+
+                    <p>NEW COLLECTION</p>
+
+                    <h2>
+                        Everyday
+                        <br>
+                        Essentials
+                    </h2>
+
+                    <span>
+                        Quality products.
+                        <br>
+                        Simple ordering.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             FEATURES
+        ========================== -->
+        <section class="features">
+
+            <div class="feature">
+
+                <div class="feature-icon">🚚</div>
+
+                <div>
+                    <strong>Nationwide Delivery</strong>
+                    <p>Order from anywhere in Pakistan</p>
+                </div>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">🛍️</div>
+
+                <div>
+                    <strong>Useful Products</strong>
+                    <p>Quality products for everyday life</p>
+                </div>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">📱</div>
+
+                <div>
+                    <strong>Mobile Friendly</strong>
+                    <p>Easy shopping on every device</p>
+                </div>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">💬</div>
+
+                <div>
+                    <strong>Easy Ordering</strong>
+                    <p>Simple customer checkout</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             CATEGORY FILTER
+        ========================== -->
+        <section class="category-section">
+
+            <div class="section-heading">
+
+                <p class="eyebrow">
+                    SHOP BY CATEGORY
+                </p>
+
+                <h2>
+                    Find what you need
+                </h2>
+
+            </div>
+
+            <div
+                class="category-buttons"
+                id="categoryButtons"
+            ></div>
+
+        </section>
+
+
+        <!-- =========================
+             PRODUCTS
+        ========================== -->
+        <section
+            class="products-section"
+            id="products"
+        >
+
+            <div class="section-heading products-heading">
+
+                <div>
+
+                    <p class="eyebrow">
+                        OUR COLLECTION
+                    </p>
+
+                    <h2 id="productsTitle">
+                        All Products
+                    </h2>
+
+                </div>
+
+                <span
+                    class="product-result-count"
+                    id="productResultCount"
+                >
+                    0 products
+                </span>
+
+            </div>
+
+
+            <div
+                class="products-grid"
+                id="productsGrid"
+            ></div>
+
+
+            <div
+                class="empty-products"
+                id="emptyProducts"
+                hidden
+            >
+
+                <div class="empty-icon">
+                    🛍️
+                </div>
+
+                <h3>
+                    No products found
+                </h3>
+
+                <p>
+                    There are currently no products in this category.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             CHECKOUT
+        ========================== -->
+        <section
+            class="checkout-section"
+            id="checkout"
+        >
+
+            <div class="checkout-container">
+
+                <div class="checkout-info">
+
+                    <p class="eyebrow">
+                        ORDER DIRECTLY
+                    </p>
+
+                    <h2>
+                        Checkout
+                    </h2>
+
+                    <p>
+                        Enter your delivery details and submit your order.
+                    </p>
+
+                    <div
+                        class="checkout-summary"
+                        id="checkoutSummary"
+                    >
+                        Your cart is empty.
+                    </div>
+
+                </div>
+
+
+                <form
+                    id="orderForm"
+                    class="order-form"
+                >
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label for="customerName">
+                                Full Name *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="customerName"
+                                name="customerName"
+                                required
+                                placeholder="Your full name"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="customerPhone">
+                                Phone Number *
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="customerPhone"
+                                name="customerPhone"
+                                required
+                                placeholder="03XXXXXXXXX"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label for="customerEmail">
+                                Email (optional)
+                            </label>
+
+                            <input
+                                type="email"
+                                id="customerEmail"
+                                name="customerEmail"
+                                placeholder="customer@example.com"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="customerCity">
+                                City *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="customerCity"
+                                name="customerCity"
+                                required
+                                placeholder="Your city"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="customerAddress">
+                            Complete Delivery Address *
+                        </label>
+
+                        <textarea
+                            id="customerAddress"
+                            name="customerAddress"
+                            rows="4"
+                            required
+                            placeholder="House number, street, area, landmark..."
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="orderNotes">
+                            Order Notes (optional)
+                        </label>
+
+                        <textarea
+                            id="orderNotes"
+                            name="orderNotes"
+                            rows="3"
+                            placeholder="Any additional instructions..."
+                        ></textarea>
+
+                    </div>
+
+
+                    <div
+                        class="order-message"
+                        id="orderMessage"
+                        role="alert"
+                    ></div>
+
+
+                    <button
+                        type="submit"
+                        class="place-order-btn"
+                        id="placeOrderBtn"
+                    >
+                        Place Order
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         CART DRAWER
+    ========================== -->
+    <div
+        class="cart-overlay"
+        id="cartOverlay"
+    ></div>
+
+
+    <aside
+        class="cart-drawer"
+        id="cartDrawer"
+        aria-label="Shopping cart"
+    >
+
+        <div class="cart-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    YOUR CART
+                </p>
+
+                <h2>
+                    Shopping Cart
+                </h2>
+
+            </div>
+
+            <button
+                class="cart-close"
+                id="cartClose"
+                aria-label="Close cart"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div
+            class="cart-items"
+            id="cartItems"
+        ></div>
+
+
+        <div class="cart-footer">
+
+            <div class="cart-total">
+
+                <span>
+                    Subtotal
+                </span>
+
+                <strong>
+                    Rs. <span id="cartSubtotal">0</span>
+                </strong>
+
+            </div>
+
+
+            <button
+                class="checkout-btn"
+                id="checkoutBtn"
+            >
+                Checkout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+    <footer>
+
+        <div class="footer-container">
+
+            <div class="footer-brand">
+
+                <a href="#" class="logo">
+                    <span>N</span>OVYA<span>STORE</span>
+                </a>
+
+                <p>
+                    Smart finds. Better everyday shopping.
+                </p>
+
+                <p>
+                    Browse useful products and order directly
+                    from the website.
+                </p>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h3>
+                    Shop
+                </h3>
+
+                <a href="#products">
+                    All Products
+                </a>
+
+                <a href="#products">
+                    Kitchen Appliances
+                </a>
+
+                <a href="#products">
+                    Electronics Gadgets
+                </a>
+
+                <a href="#products">
+                    Bags & Luggage
+                </a>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h3>
+                    Customer
+                </h3>
+
+                <a href="#checkout">
+                    Checkout
+                </a>
+
+                <a href="#checkout">
+                    Delivery Information
+                </a>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h3>
+                    Contact
+                </h3>
+
+                <p>
+                    📍 Pakistan
+                </p>
+
+                <p>
+                    📞 Add your business phone
+                </p>
+
+                <p>
+                    💬 WhatsApp support
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            © <span id="currentYear"></span>
+            NOVYA Store. All rights reserved.
+
+        </div>
+
+    </footer>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+    <script src="script.js"></script>
+
 </body>
 </html>
