@@ -1,39 +1,24 @@
 /* =========================================================
-   NOVYA STORE
-   Main JavaScript
+   NOVYA STORE - UPDATED JAVASCRIPT
+   Product management, category pages, cart, Buy Now,
+   inventory, checkout and EmailJS order email.
 ========================================================= */
-
 
 /* =========================================================
    ⭐ PRODUCT MANAGEMENT SECTION ⭐
 
-   THIS IS THE MAIN SECTION YOU WILL EDIT IN THE FUTURE.
+   Future product changes are made HERE.
 
-   ADD PRODUCT:
-   Add another product object inside PRODUCTS.
-
-   REMOVE PRODUCT:
-   Delete its complete object.
-
-   CHANGE PRICE:
-   Change the "price" value.
-
-   CHANGE STOCK:
-   Change the "stock" value.
-
-   CHANGE CATEGORY:
-   Change the "category" value.
-
-   CHANGE IMAGE:
-   Change the "image" value.
-
-   CHANGE DESCRIPTION:
-   Change the "description" value.
-
+   Add product = add another object.
+   Remove product = delete its object.
+   Change price = edit price.
+   Change stock = edit stock.
+   Change category = edit category.
+   Change image = edit image.
+   Change description = edit description.
 ========================================================= */
 
 const PRODUCTS = [
-
     {
         id: "chopper",
         name: "Chopper",
@@ -41,10 +26,8 @@ const PRODUCTS = [
         price: 2499,
         stock: 20,
         image: "https://placehold.co/800x800/f1f5f9/111827?text=Chopper",
-        description:
-            "Convenient kitchen chopper for quick and easy food preparation."
+        description: "Convenient kitchen chopper for quick and easy food preparation."
     },
-
     {
         id: "beater",
         name: "Beater",
@@ -52,10 +35,8 @@ const PRODUCTS = [
         price: 1999,
         stock: 15,
         image: "https://placehold.co/800x800/f1f5f9/111827?text=Beater",
-        description:
-            "Useful electric beater for mixing and preparing everyday recipes."
+        description: "Useful electric beater for mixing and preparing everyday recipes."
     },
-
     {
         id: "induction-hot-plate",
         name: "Induction Hot Plate",
@@ -63,10 +44,8 @@ const PRODUCTS = [
         price: 3499,
         stock: 10,
         image: "https://placehold.co/800x800/f1f5f9/111827?text=Induction+Hot+Plate",
-        description:
-            "Compact induction hot plate suitable for everyday cooking."
+        description: "Compact induction hot plate suitable for everyday cooking."
     },
-
     {
         id: "cooking-spoons",
         name: "Cooking Spoons",
@@ -74,10 +53,8 @@ const PRODUCTS = [
         price: 899,
         stock: 25,
         image: "https://placehold.co/800x800/f1f5f9/111827?text=Cooking+Spoons",
-        description:
-            "Practical cooking spoon set for everyday kitchen use."
+        description: "Practical cooking spoon set for everyday kitchen use."
     },
-
     {
         id: "knife-sets",
         name: "Knife Sets",
@@ -85,10 +62,8 @@ const PRODUCTS = [
         price: 1799,
         stock: 15,
         image: "https://placehold.co/800x800/f1f5f9/111827?text=Knife+Sets",
-        description:
-            "Useful kitchen knife set for everyday cutting and preparation."
+        description: "Useful kitchen knife set for everyday cutting and preparation."
     },
-
     {
         id: "premium-storage-boxes",
         name: "Premium Quality Storage Boxes",
@@ -96,10 +71,8 @@ const PRODUCTS = [
         price: 1499,
         stock: 20,
         image: "https://placehold.co/800x800/f1f5f9/111827?text=Storage+Boxes",
-        description:
-            "Premium quality storage boxes for organized kitchen storage."
+        description: "Premium quality storage boxes for organized kitchen storage."
     },
-
     {
         id: "nebulizer",
         name: "Nebulizer",
@@ -107,10 +80,8 @@ const PRODUCTS = [
         price: 2999,
         stock: 10,
         image: "https://placehold.co/800x800/f1f5f9/111827?text=Nebulizer",
-        description:
-            "Compact nebulizer suitable for home use."
+        description: "Compact nebulizer suitable for home use."
     },
-
     {
         id: "trimmer",
         name: "Trimmer",
@@ -118,10 +89,8 @@ const PRODUCTS = [
         price: 1799,
         stock: 20,
         image: "https://placehold.co/800x800/f1f5f9/111827?text=Trimmer",
-        description:
-            "Convenient rechargeable trimmer for everyday grooming."
+        description: "Convenient rechargeable trimmer for everyday grooming."
     },
-
     {
         id: "hair-brush",
         name: "Hair Brush",
@@ -129,10 +98,8 @@ const PRODUCTS = [
         price: 2299,
         stock: 15,
         image: "https://placehold.co/800x800/f1f5f9/111827?text=Hair+Brush",
-        description:
-            "Easy-to-use hair brush for everyday styling."
+        description: "Easy-to-use hair brush for everyday styling."
     },
-
     {
         id: "bags",
         name: "Bags",
@@ -140,17 +107,9 @@ const PRODUCTS = [
         price: 2499,
         stock: 20,
         image: "https://placehold.co/800x800/f1f5f9/111827?text=Bags",
-        description:
-            "Useful everyday bags suitable for shopping, travel and daily use."
+        description: "Useful everyday bags suitable for shopping, travel and daily use."
     }
-
 ];
-
-
-/* =========================================================
-   EXISTING CATEGORIES
-   DO NOT REMOVE THESE.
-========================================================= */
 
 const CATEGORIES = [
     "All Products",
@@ -170,405 +129,108 @@ const CATEGORIES = [
     "Bags & Luggage"
 ];
 
-
-/* =========================================================
-   EMAILJS CONFIGURATION
-========================================================= */
-
+/* Existing working EmailJS configuration */
 const EMAILJS_CONFIG = {
-
-    PUBLIC_KEY:
-        "lUS3en_oobE9akyfp",
-
-    SERVICE_ID:
-        "service_74rgsbc",
-
-    TEMPLATE_ID:
-        "template_uavapz8"
-
+    PUBLIC_KEY: "lUS3en_oobE9akyfp",
+    SERVICE_ID: "service_74rgsbc",
+    TEMPLATE_ID: "template_uavapz8"
 };
 
+let cart = JSON.parse(localStorage.getItem("novyaCart") || "[]");
+let stockOverrides = JSON.parse(localStorage.getItem("novyaStockOverrides") || "{}");
 
-/* =========================================================
-   APPLICATION STATE
-========================================================= */
+const isCategoryPage = document.body.classList.contains("category-page");
 
-let selectedCategory = "All Products";
+const productsGrid = document.getElementById("productsGrid");
+const emptyProducts = document.getElementById("emptyProducts");
+const productResultCount = document.getElementById("productResultCount");
+const productsTitle = document.getElementById("productsTitle");
+const categoryPageTitle = document.getElementById("categoryPageTitle");
+const categoryPageDescription = document.getElementById("categoryPageDescription");
 
-let searchTerm = "";
-
-
-/*
-   Shopping cart is stored in browser localStorage
-   so it remains available after page refresh.
-*/
-
-let cart = JSON.parse(
-    localStorage.getItem("novyaCart") || "[]"
-);
-
-
-/*
-   Stock overrides are currently stored locally
-   in the customer's browser.
-
-   IMPORTANT:
-   A future database version will provide globally
-   shared inventory for all customers.
-*/
-
-let stockOverrides = JSON.parse(
-    localStorage.getItem("novyaStockOverrides") || "{}"
-);
-
-
-/* =========================================================
-   DOM ELEMENTS
-========================================================= */
-
-const productsGrid =
-    document.getElementById("productsGrid");
-
-const emptyProducts =
-    document.getElementById("emptyProducts");
-
-const productResultCount =
-    document.getElementById("productResultCount");
-
-const productsTitle =
-    document.getElementById("productsTitle");
-
-const categoryButtons =
-    document.getElementById("categoryButtons");
-
-const searchInput =
-    document.getElementById("searchInput");
-
-const searchBtn =
-    document.getElementById("searchBtn");
-
-const cartButton =
-    document.getElementById("cartButton");
-
-const cartCount =
-    document.getElementById("cartCount");
-
-const cartDrawer =
-    document.getElementById("cartDrawer");
-
-const cartOverlay =
-    document.getElementById("cartOverlay");
-
-const cartClose =
-    document.getElementById("cartClose");
-
-const cartItems =
-    document.getElementById("cartItems");
-
-const cartSubtotal =
-    document.getElementById("cartSubtotal");
-
-const checkoutBtn =
-    document.getElementById("checkoutBtn");
-
-const checkoutSummary =
-    document.getElementById("checkoutSummary");
-
-const orderForm =
-    document.getElementById("orderForm");
-
-const orderMessage =
-    document.getElementById("orderMessage");
-
-const placeOrderBtn =
-    document.getElementById("placeOrderBtn");
-
-const shopNowBtn =
-    document.getElementById("shopNowBtn");
-
-const viewProductsBtn =
-    document.getElementById("viewProductsBtn");
-
-const mobileMenuBtn =
-    document.getElementById("mobileMenuBtn");
-
-const mainNav =
-    document.getElementById("mainNav");
-
-const currentYear =
-    document.getElementById("currentYear");
-
-
-/* =========================================================
-   HELPER FUNCTIONS
-========================================================= */
+const searchInput = document.getElementById("searchInput");
+const searchBtn = document.getElementById("searchBtn");
+const cartButton = document.getElementById("cartButton");
+const cartCount = document.getElementById("cartCount");
+const cartDrawer = document.getElementById("cartDrawer");
+const cartOverlay = document.getElementById("cartOverlay");
+const cartClose = document.getElementById("cartClose");
+const cartItems = document.getElementById("cartItems");
+const cartSubtotal = document.getElementById("cartSubtotal");
+const checkoutBtn = document.getElementById("checkoutBtn");
+const checkoutSummary = document.getElementById("checkoutSummary");
+const orderForm = document.getElementById("orderForm");
+const orderMessage = document.getElementById("orderMessage");
+const placeOrderBtn = document.getElementById("placeOrderBtn");
+const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+const currentYear = document.getElementById("currentYear");
 
 function formatPrice(price) {
-
     return Number(price).toLocaleString("en-PK");
-
 }
-
-
-function getProduct(productId) {
-
-    return PRODUCTS.find(
-        product => product.id === productId
-    );
-
-}
-
-
-function getAvailableStock(product) {
-
-    if (
-        Object.prototype.hasOwnProperty.call(
-            stockOverrides,
-            product.id
-        )
-    ) {
-
-        return Math.max(
-            0,
-            Number(stockOverrides[product.id])
-        );
-
-    }
-
-    return Math.max(
-        0,
-        Number(product.stock)
-    );
-
-}
-
-
-function saveCart() {
-
-    localStorage.setItem(
-        "novyaCart",
-        JSON.stringify(cart)
-    );
-
-}
-
-
-function saveStock() {
-
-    localStorage.setItem(
-        "novyaStockOverrides",
-        JSON.stringify(stockOverrides)
-    );
-
-}
-
-
-/* =========================================================
-   HTML ESCAPE
-========================================================= */
 
 function escapeHTML(value) {
-
     return String(value)
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
-
 }
 
-
-/* =========================================================
-   CATEGORY BUTTONS
-========================================================= */
-
-function renderCategoryButtons() {
-
-    if (!categoryButtons) {
-        return;
-    }
-
-    categoryButtons.innerHTML = "";
-
-
-    CATEGORIES.forEach(category => {
-
-        const button =
-            document.createElement("button");
-
-        button.className =
-            "category-button";
-
-
-        if (category === selectedCategory) {
-
-            button.classList.add("active");
-
-        }
-
-
-        button.textContent =
-            category;
-
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                selectedCategory =
-                    category;
-
-                searchTerm = "";
-
-                if (searchInput) {
-                    searchInput.value = "";
-                }
-
-                renderCategoryButtons();
-
-                renderProducts();
-
-                const productsSection =
-                    document.getElementById("products");
-
-                if (productsSection) {
-
-                    productsSection.scrollIntoView({
-                        behavior: "smooth"
-                    });
-
-                }
-
-            }
-        );
-
-
-        categoryButtons.appendChild(
-            button
-        );
-
-    });
-
+function getProduct(productId) {
+    return PRODUCTS.find(product => product.id === productId);
 }
 
-
-/* =========================================================
-   FILTER PRODUCTS
-========================================================= */
-
-function getFilteredProducts() {
-
-    return PRODUCTS.filter(product => {
-
-        const matchesCategory =
-            selectedCategory === "All Products" ||
-            product.category === selectedCategory;
-
-
-        const searchText =
-            searchTerm.toLowerCase().trim();
-
-
-        const matchesSearch =
-            !searchText ||
-            product.name
-                .toLowerCase()
-                .includes(searchText) ||
-            product.description
-                .toLowerCase()
-                .includes(searchText) ||
-            product.category
-                .toLowerCase()
-                .includes(searchText);
-
-
-        return (
-            matchesCategory &&
-            matchesSearch
-        );
-
-    });
-
+function getAvailableStock(product) {
+    if (Object.prototype.hasOwnProperty.call(stockOverrides, product.id)) {
+        return Math.max(0, Number(stockOverrides[product.id]));
+    }
+    return Math.max(0, Number(product.stock));
 }
 
+function saveCart() {
+    localStorage.setItem("novyaCart", JSON.stringify(cart));
+}
+
+function saveStock() {
+    localStorage.setItem("novyaStockOverrides", JSON.stringify(stockOverrides));
+}
+
+function getRequestedCategory() {
+    const params = new URLSearchParams(window.location.search);
+    const requested = params.get("category");
+    if (!requested || requested === "all") return "All Products";
+    return CATEGORIES.includes(requested) ? requested : "All Products";
+}
+
+function getCategoryProducts(category) {
+    if (category === "All Products") return PRODUCTS;
+    return PRODUCTS.filter(product => product.category === category);
+}
+
+function getSearchResults(products, term) {
+    const search = String(term || "").trim().toLowerCase();
+    if (!search) return products;
+
+    return products.filter(product =>
+        product.name.toLowerCase().includes(search) ||
+        product.category.toLowerCase().includes(search) ||
+        product.description.toLowerCase().includes(search)
+    );
+}
 
 /* =========================================================
-   RENDER PRODUCTS
+   PRODUCT CARD
 ========================================================= */
 
-function renderProducts() {
+function productCardHTML(product) {
+    const stock = getAvailableStock(product);
+    const outOfStock = stock <= 0;
 
-    if (!productsGrid) {
-        return;
-    }
-
-
-    const products =
-        getFilteredProducts();
-
-
-    productsGrid.innerHTML = "";
-
-
-    if (productsTitle) {
-
-        productsTitle.textContent =
-            selectedCategory;
-
-    }
-
-
-    if (productResultCount) {
-
-        productResultCount.textContent =
-            `${products.length} ${
-                products.length === 1
-                    ? "product"
-                    : "products"
-            }`;
-
-    }
-
-
-    if (products.length === 0) {
-
-        if (emptyProducts) {
-            emptyProducts.hidden = false;
-        }
-
-        return;
-
-    }
-
-
-    if (emptyProducts) {
-        emptyProducts.hidden = true;
-    }
-
-
-    products.forEach(product => {
-
-        const stock =
-            getAvailableStock(product);
-
-
-        const outOfStock =
-            stock <= 0;
-
-
-        const card =
-            document.createElement("article");
-
-
-        card.className =
-            "product-card";
-
-
-        card.innerHTML = `
-
+    return `
+        <article class="product-card">
             <div class="product-image-wrapper">
-
                 <img
                     class="product-image"
                     src="${escapeHTML(product.image)}"
@@ -576,389 +238,200 @@ function renderProducts() {
                     loading="lazy"
                     onerror="this.src='https://placehold.co/800x800/f1f5f9/111827?text=NOVYA+Store'"
                 >
-
                 ${
-                    stock > 0
-
-                    ? `<span class="stock-badge">
-                            ${stock} available
-                       </span>`
-
-                    : `<span class="stock-badge out">
-                            Out of Stock
-                       </span>`
+                    outOfStock
+                        ? `<span class="stock-badge out">Out of Stock</span>`
+                        : `<span class="stock-badge">${stock} available</span>`
                 }
-
             </div>
-
 
             <div class="product-content">
-
-                <div class="product-category">
-                    ${escapeHTML(product.category)}
-                </div>
-
-
-                <h3 class="product-name">
-                    ${escapeHTML(product.name)}
-                </h3>
-
-
-                <p class="product-description">
-                    ${escapeHTML(product.description)}
-                </p>
-
+                <div class="product-category">${escapeHTML(product.category)}</div>
+                <h3 class="product-name">${escapeHTML(product.name)}</h3>
+                <p class="product-description">${escapeHTML(product.description)}</p>
 
                 <div class="product-bottom">
+                    <div class="product-price">Rs. ${formatPrice(product.price)}</div>
 
-                    <div class="product-price">
-                        Rs. ${formatPrice(product.price)}
+                    <div class="product-actions">
+                        <button
+                            class="add-to-cart-btn"
+                            data-product-id="${escapeHTML(product.id)}"
+                            ${outOfStock ? "disabled" : ""}
+                        >
+                            ${outOfStock ? "Out of Stock" : "Add to Cart"}
+                        </button>
+
+                        <button
+                            class="buy-now-btn"
+                            data-buy-now-id="${escapeHTML(product.id)}"
+                            ${outOfStock ? "disabled" : ""}
+                        >
+                            ${outOfStock ? "Out of Stock" : "Buy Now"}
+                        </button>
                     </div>
-
-
-                    <button
-                        class="add-to-cart-btn"
-                        data-product-id="${escapeHTML(product.id)}"
-                        ${outOfStock ? "disabled" : ""}
-                    >
-
-                        ${
-                            outOfStock
-                                ? "Out of Stock"
-                                : "Add to Cart"
-                        }
-
-                    </button>
-
                 </div>
-
             </div>
-
-        `;
-
-
-        const addButton =
-            card.querySelector(
-                ".add-to-cart-btn"
-            );
-
-
-        if (!outOfStock && addButton) {
-
-            addButton.addEventListener(
-                "click",
-                () => {
-
-                    addToCart(
-                        product.id
-                    );
-
-                }
-            );
-
-        }
-
-
-        productsGrid.appendChild(
-            card
-        );
-
-    });
-
+        </article>
+    `;
 }
 
+/* =========================================================
+   RENDER PRODUCTS
+========================================================= */
+
+function renderProducts() {
+    if (!productsGrid) return;
+
+    let category = isCategoryPage ? getRequestedCategory() : "All Products";
+    let products = getCategoryProducts(category);
+
+    if (isCategoryPage) {
+        const search = searchInput ? searchInput.value.trim() : "";
+        products = getSearchResults(products, search);
+
+        if (categoryPageTitle) categoryPageTitle.textContent = category;
+        if (categoryPageDescription) {
+            categoryPageDescription.textContent =
+                category === "All Products"
+                    ? "Browse all currently available NOVYA Store products."
+                    : `Browse products available in ${category}.`;
+        }
+    } else {
+        /* Home page shows a small featured collection, not another category list. */
+        products = getSearchResults(PRODUCTS, searchInput ? searchInput.value : "").slice(0, 8);
+    }
+
+    productsGrid.innerHTML = products.map(productCardHTML).join("");
+
+    if (productResultCount) {
+        productResultCount.textContent =
+            `${products.length} ${products.length === 1 ? "product" : "products"}`;
+    }
+
+    if (emptyProducts) emptyProducts.hidden = products.length !== 0;
+
+    productsGrid.querySelectorAll(".add-to-cart-btn").forEach(button => {
+        button.addEventListener("click", () => addToCart(button.dataset.productId));
+    });
+
+    productsGrid.querySelectorAll(".buy-now-btn").forEach(button => {
+        button.addEventListener("click", () => buyNow(button.dataset.buyNowId));
+    });
+}
 
 /* =========================================================
-   ADD TO CART
+   CART
 ========================================================= */
 
 function addToCart(productId) {
+    const product = getProduct(productId);
+    if (!product) return;
 
-    const product =
-        getProduct(productId);
+    const stock = getAvailableStock(product);
+    const existing = cart.find(item => item.productId === productId);
+    const current = existing ? existing.quantity : 0;
 
-
-    if (!product) {
+    if (current >= stock) {
+        alert(`Only ${stock} unit(s) of ${product.name} are available.`);
         return;
     }
 
-
-    const availableStock =
-        getAvailableStock(product);
-
-
-    const existingItem =
-        cart.find(
-            item =>
-                item.productId === productId
-        );
-
-
-    const currentQuantity =
-        existingItem
-            ? existingItem.quantity
-            : 0;
-
-
-    if (
-        currentQuantity >=
-        availableStock
-    ) {
-
-        alert(
-            `Only ${availableStock} unit(s) of ${product.name} are available.`
-        );
-
-        return;
-
-    }
-
-
-    if (existingItem) {
-
-        existingItem.quantity += 1;
-
+    if (existing) {
+        existing.quantity += 1;
     } else {
-
-        cart.push({
-
-            productId:
-                productId,
-
-            quantity:
-                1
-
-        });
-
+        cart.push({ productId, quantity: 1 });
     }
-
 
     saveCart();
-
     updateCartUI();
-
     openCart();
-
 }
 
+function buyNow(productId) {
+    const product = getProduct(productId);
+    if (!product) return;
 
-/* =========================================================
-   INCREASE CART QUANTITY
-========================================================= */
+    if (getAvailableStock(product) <= 0) {
+        alert(`${product.name} is currently out of stock.`);
+        return;
+    }
+
+    cart = [{ productId, quantity: 1 }];
+    saveCart();
+
+    /*
+       Buy Now takes the customer directly to checkout.
+       The order is still sent through the existing EmailJS setup.
+    */
+    window.location.href = "index.html#checkout";
+}
 
 function increaseQuantity(productId) {
+    const product = getProduct(productId);
+    const item = cart.find(entry => entry.productId === productId);
 
-    const product =
-        getProduct(productId);
+    if (!product || !item) return;
 
+    const stock = getAvailableStock(product);
 
-    if (!product) {
+    if (item.quantity >= stock) {
+        alert(`Only ${stock} unit(s) of ${product.name} are available.`);
         return;
     }
-
-
-    const item =
-        cart.find(
-            cartItem =>
-                cartItem.productId === productId
-        );
-
-
-    if (!item) {
-        return;
-    }
-
-
-    const availableStock =
-        getAvailableStock(product);
-
-
-    if (
-        item.quantity >=
-        availableStock
-    ) {
-
-        alert(
-            `Only ${availableStock} unit(s) of ${product.name} are available.`
-        );
-
-        return;
-
-    }
-
 
     item.quantity += 1;
-
-
     saveCart();
-
     updateCartUI();
-
 }
 
-
-/* =========================================================
-   DECREASE CART QUANTITY
-========================================================= */
-
 function decreaseQuantity(productId) {
-
-    const item =
-        cart.find(
-            cartItem =>
-                cartItem.productId === productId
-        );
-
-
-    if (!item) {
-        return;
-    }
-
+    const item = cart.find(entry => entry.productId === productId);
+    if (!item) return;
 
     item.quantity -= 1;
 
-
     if (item.quantity <= 0) {
-
-        cart =
-            cart.filter(
-                cartItem =>
-                    cartItem.productId !==
-                    productId
-            );
-
+        cart = cart.filter(entry => entry.productId !== productId);
     }
 
-
     saveCart();
-
     updateCartUI();
-
 }
-
-
-/* =========================================================
-   REMOVE CART ITEM
-========================================================= */
 
 function removeFromCart(productId) {
-
-    cart =
-        cart.filter(
-            item =>
-                item.productId !==
-                productId
-        );
-
-
+    cart = cart.filter(item => item.productId !== productId);
     saveCart();
-
     updateCartUI();
-
 }
 
-
-/* =========================================================
-   CART UI
-========================================================= */
-
 function updateCartUI() {
+    if (!cartItems) return;
 
-    if (!cartItems) {
-        return;
-    }
-
-
-    let totalQuantity = 0;
-
+    let quantityTotal = 0;
     let subtotal = 0;
-
 
     cartItems.innerHTML = "";
 
-
-    if (cart.length === 0) {
-
-        cartItems.innerHTML = `
-
-            <div class="cart-empty">
-
-                <div style="font-size:40px;">
-                    🛒
-                </div>
-
-                <p>
-                    Your cart is empty.
-                </p>
-
-            </div>
-
-        `;
-
-    }
-
-
     const validCart = [];
 
-
     cart.forEach(item => {
+        const product = getProduct(item.productId);
+        if (!product) return;
 
-        const product =
-            getProduct(item.productId);
+        const stock = getAvailableStock(product);
 
-
-        if (!product) {
-            return;
-        }
-
-
-        const availableStock =
-            getAvailableStock(product);
-
-
-        /*
-           Automatically correct the cart if
-           stock has become lower than cart quantity.
-        */
-
-        if (
-            item.quantity >
-            availableStock
-        ) {
-
-            item.quantity =
-                availableStock;
-
-        }
-
-
-        if (item.quantity <= 0) {
-            return;
-        }
-
+        if (item.quantity > stock) item.quantity = stock;
+        if (item.quantity <= 0) return;
 
         validCart.push(item);
+        quantityTotal += item.quantity;
+        subtotal += product.price * item.quantity;
 
+        const element = document.createElement("div");
+        element.className = "cart-item";
 
-        totalQuantity +=
-            item.quantity;
-
-
-        subtotal +=
-            product.price *
-            item.quantity;
-
-
-        const cartItem =
-            document.createElement("div");
-
-
-        cartItem.className =
-            "cart-item";
-
-
-        cartItem.innerHTML = `
-
+        element.innerHTML = `
             <img
                 class="cart-item-image"
                 src="${escapeHTML(product.image)}"
@@ -966,1304 +439,373 @@ function updateCartUI() {
                 onerror="this.src='https://placehold.co/200x200/f1f5f9/111827?text=NOVYA'"
             >
 
-
             <div>
-
-                <div class="cart-item-name">
-                    ${escapeHTML(product.name)}
-                </div>
-
-
-                <div class="cart-item-price">
-                    Rs. ${formatPrice(product.price)}
-                </div>
-
+                <div class="cart-item-name">${escapeHTML(product.name)}</div>
+                <div class="cart-item-price">Rs. ${formatPrice(product.price)}</div>
 
                 <div class="quantity-controls">
-
-                    <button
-                        data-action="decrease"
-                        data-id="${escapeHTML(product.id)}"
-                    >
-                        −
-                    </button>
-
-
-                    <span>
-                        ${item.quantity}
-                    </span>
-
-
-                    <button
-                        data-action="increase"
-                        data-id="${escapeHTML(product.id)}"
-                    >
-                        +
-                    </button>
-
+                    <button data-action="decrease" data-id="${escapeHTML(product.id)}">−</button>
+                    <span>${item.quantity}</span>
+                    <button data-action="increase" data-id="${escapeHTML(product.id)}">+</button>
                 </div>
 
-
-                <button
-                    class="remove-cart-item"
-                    data-action="remove"
-                    data-id="${escapeHTML(product.id)}"
-                >
+                <button class="remove-cart-item" data-action="remove" data-id="${escapeHTML(product.id)}">
                     Remove
                 </button>
-
             </div>
-
 
             <div class="cart-item-total">
-
-                Rs.
-                ${formatPrice(
-                    product.price *
-                    item.quantity
-                )}
-
+                Rs. ${formatPrice(product.price * item.quantity)}
             </div>
-
         `;
 
-
-        cartItems.appendChild(
-            cartItem
-        );
-
+        cartItems.appendChild(element);
     });
 
-
-    cart =
-        validCart;
-
-
+    cart = validCart;
     saveCart();
 
-
-    if (cartCount) {
-
-        cartCount.textContent =
-            totalQuantity;
-
+    if (cart.length === 0) {
+        cartItems.innerHTML = `
+            <div class="cart-empty">
+                <div style="font-size:40px;">🛒</div>
+                <p>Your cart is empty.</p>
+            </div>
+        `;
     }
 
-
-    if (cartSubtotal) {
-
-        cartSubtotal.textContent =
-            formatPrice(subtotal);
-
-    }
-
+    if (cartCount) cartCount.textContent = quantityTotal;
+    if (cartSubtotal) cartSubtotal.textContent = formatPrice(subtotal);
 
     updateCheckoutSummary();
-
 }
-
-
-/* =========================================================
-   CART ITEM BUTTONS
-========================================================= */
 
 if (cartItems) {
+    cartItems.addEventListener("click", event => {
+        const button = event.target.closest("button");
+        if (!button) return;
 
-    cartItems.addEventListener(
-        "click",
-        event => {
+        const id = button.dataset.id;
+        const action = button.dataset.action;
 
-            const button =
-                event.target.closest(
-                    "button"
-                );
-
-
-            if (!button) {
-                return;
-            }
-
-
-            const productId =
-                button.dataset.id;
-
-
-            const action =
-                button.dataset.action;
-
-
-            if (
-                action ===
-                "increase"
-            ) {
-
-                increaseQuantity(
-                    productId
-                );
-
-            }
-
-            else if (
-                action ===
-                "decrease"
-            ) {
-
-                decreaseQuantity(
-                    productId
-                );
-
-            }
-
-            else if (
-                action ===
-                "remove"
-            ) {
-
-                removeFromCart(
-                    productId
-                );
-
-            }
-
-        }
-    );
-
+        if (action === "increase") increaseQuantity(id);
+        if (action === "decrease") decreaseQuantity(id);
+        if (action === "remove") removeFromCart(id);
+    });
 }
 
-
 /* =========================================================
-   OPEN CART
+   CART DRAWER
 ========================================================= */
 
 function openCart() {
-
-    if (cartDrawer) {
-
-        cartDrawer.classList.add(
-            "open"
-        );
-
-    }
-
-
-    if (cartOverlay) {
-
-        cartOverlay.classList.add(
-            "open"
-        );
-
-    }
-
-
-    document.body.style.overflow =
-        "hidden";
-
+    if (cartDrawer) cartDrawer.classList.add("open");
+    if (cartOverlay) cartOverlay.classList.add("open");
+    document.body.style.overflow = "hidden";
 }
-
-
-/* =========================================================
-   CLOSE CART
-========================================================= */
 
 function closeCart() {
-
-    if (cartDrawer) {
-
-        cartDrawer.classList.remove(
-            "open"
-        );
-
-    }
-
-
-    if (cartOverlay) {
-
-        cartOverlay.classList.remove(
-            "open"
-        );
-
-    }
-
-
-    document.body.style.overflow =
-        "";
-
+    if (cartDrawer) cartDrawer.classList.remove("open");
+    if (cartOverlay) cartOverlay.classList.remove("open");
+    document.body.style.overflow = "";
 }
 
+if (cartButton) cartButton.addEventListener("click", openCart);
+if (cartClose) cartClose.addEventListener("click", closeCart);
+if (cartOverlay) cartOverlay.addEventListener("click", closeCart);
 
-/* =========================================================
-   CART BUTTON EVENTS
-========================================================= */
-
-if (cartButton) {
-
-    cartButton.addEventListener(
-        "click",
-        openCart
-    );
-
+if (checkoutBtn) {
+    checkoutBtn.addEventListener("click", () => {
+        closeCart();
+    });
 }
-
-
-if (cartClose) {
-
-    cartClose.addEventListener(
-        "click",
-        closeCart
-    );
-
-}
-
-
-if (cartOverlay) {
-
-    cartOverlay.addEventListener(
-        "click",
-        closeCart
-    );
-
-}
-
 
 /* =========================================================
    CHECKOUT SUMMARY
 ========================================================= */
 
 function updateCheckoutSummary() {
-
-    if (!checkoutSummary) {
-        return;
-    }
-
+    if (!checkoutSummary) return;
 
     if (cart.length === 0) {
-
-        checkoutSummary.innerHTML =
-            "Your cart is empty.";
-
+        checkoutSummary.textContent = "Your cart is empty.";
         return;
-
     }
-
 
     let subtotal = 0;
 
+    const rows = cart.map(item => {
+        const product = getProduct(item.productId);
+        if (!product) return "";
 
-    const html =
-        cart.map(item => {
+        const total = product.price * item.quantity;
+        subtotal += total;
 
-            const product =
-                getProduct(
-                    item.productId
-                );
-
-
-            if (!product) {
-                return "";
-            }
-
-
-            const total =
-                product.price *
-                item.quantity;
-
-
-            subtotal += total;
-
-
-            return `
-
-                <div class="summary-item">
-
-                    <span>
-                        ${escapeHTML(product.name)}
-                        × ${item.quantity}
-                    </span>
-
-
-                    <strong>
-                        Rs. ${formatPrice(total)}
-                    </strong>
-
-                </div>
-
-            `;
-
-        }).join("");
-
+        return `
+            <div class="summary-item">
+                <span>${escapeHTML(product.name)} × ${item.quantity}</span>
+                <strong>Rs. ${formatPrice(total)}</strong>
+            </div>
+        `;
+    }).join("");
 
     checkoutSummary.innerHTML = `
-
-        ${html}
-
-        <div
-            class="summary-item"
-            style="margin-top:8px;"
-        >
-
-            <strong>
-                Total
-            </strong>
-
-
-            <strong>
-                Rs. ${formatPrice(subtotal)}
-            </strong>
-
+        ${rows}
+        <div class="summary-item" style="margin-top:8px;">
+            <strong>Total</strong>
+            <strong>Rs. ${formatPrice(subtotal)}</strong>
         </div>
-
     `;
-
 }
-
 
 /* =========================================================
    SEARCH
 ========================================================= */
 
 function performSearch() {
+    if (!searchInput) return;
 
-    if (!searchInput) {
+    const term = searchInput.value.trim();
+
+    if (isCategoryPage) {
+        renderProducts();
         return;
     }
 
-
-    searchTerm =
-        searchInput.value.trim();
-
-
-    selectedCategory =
-        "All Products";
-
-
-    renderCategoryButtons();
-
-    renderProducts();
-
-
-    const productsSection =
-        document.getElementById(
-            "products"
-        );
-
-
-    if (productsSection) {
-
-        productsSection.scrollIntoView({
-            behavior: "smooth"
-        });
-
+    if (!term) {
+        renderProducts();
+        return;
     }
 
+    window.location.href =
+        `category.html?category=All%20Products&search=${encodeURIComponent(term)}`;
 }
 
-
-if (searchBtn) {
-
-    searchBtn.addEventListener(
-        "click",
-        performSearch
-    );
-
-}
-
+if (searchBtn) searchBtn.addEventListener("click", performSearch);
 
 if (searchInput) {
-
-    searchInput.addEventListener(
-        "keydown",
-        event => {
-
-            if (
-                event.key ===
-                "Enter"
-            ) {
-
-                performSearch();
-
-            }
-
-        }
-    );
-
+    searchInput.addEventListener("keydown", event => {
+        if (event.key === "Enter") performSearch();
+    });
 }
 
-
-/* =========================================================
-   CHECKOUT BUTTON
-========================================================= */
-
-if (checkoutBtn) {
-
-    checkoutBtn.addEventListener(
-        "click",
-        () => {
-
-            closeCart();
-
-
-            const checkoutSection =
-                document.getElementById(
-                    "checkout"
-                );
-
-
-            if (checkoutSection) {
-
-                checkoutSection.scrollIntoView({
-                    behavior: "smooth"
-                });
-
-            }
-
-        }
-    );
-
+/* Apply search query on category page */
+if (isCategoryPage && searchInput) {
+    const params = new URLSearchParams(window.location.search);
+    const search = params.get("search") || "";
+    searchInput.value = search;
 }
 
-
 /* =========================================================
-   EMAILJS INITIALIZATION
+   EMAILJS
 ========================================================= */
+
+let emailJSInitialized = false;
 
 function initializeEmailJS() {
-
-    if (
-        typeof emailjs ===
-        "undefined"
-    ) {
-
-        console.error(
-            "EmailJS SDK was not loaded."
-        );
-
-        return false;
-
+    if (typeof emailjs === "undefined") {
+        console.error("EmailJS SDK was not loaded.");
+        return;
     }
-
 
     try {
-
         emailjs.init({
-
-            publicKey:
-                EMAILJS_CONFIG.PUBLIC_KEY
-
+            publicKey: EMAILJS_CONFIG.PUBLIC_KEY
         });
 
-
-        console.log(
-            "EmailJS initialized successfully."
-        );
-
-
-        return true;
-
+        emailJSInitialized = true;
+        console.log("EmailJS initialized successfully.");
+    } catch (error) {
+        console.error("EmailJS initialization failed:", error);
     }
-
-    catch (error) {
-
-        console.error(
-            "EmailJS initialization failed:",
-            error
-        );
-
-
-        return false;
-
-    }
-
 }
 
-
-const emailJSInitialized =
-    initializeEmailJS();
-
-
-/* =========================================================
-   VALIDATE STOCK BEFORE ORDER
-========================================================= */
+initializeEmailJS();
 
 function validateCartStock() {
+    for (const item of cart) {
+        const product = getProduct(item.productId);
+        if (!product) continue;
 
-    for (
-        const item of cart
-    ) {
+        const stock = getAvailableStock(product);
 
-        const product =
-            getProduct(
-                item.productId
-            );
-
-
-        if (!product) {
-            continue;
-        }
-
-
-        const availableStock =
-            getAvailableStock(
-                product
-            );
-
-
-        if (
-            item.quantity >
-            availableStock
-        ) {
-
+        if (item.quantity > stock) {
             return {
-
-                valid:
-                    false,
-
-                message:
-                    `${product.name} has only ${availableStock} unit(s) available.`
-
+                valid: false,
+                message: `${product.name} has only ${stock} unit(s) available.`
             };
-
         }
-
     }
 
-
-    return {
-
-        valid:
-            true,
-
-        message:
-            ""
-
-    };
-
+    return { valid: true, message: "" };
 }
-
-
-/* =========================================================
-   GENERATE ORDER NUMBER
-========================================================= */
 
 function generateOrderNumber() {
-
-    const random =
-        Math.floor(
-            100000 +
-            Math.random() *
-            900000
-        );
-
-
-    return `NOVYA-${random}`;
-
+    return `NOVYA-${Math.floor(100000 + Math.random() * 900000)}`;
 }
-
-
-/* =========================================================
-   BUILD ORDER DETAILS
-========================================================= */
 
 function buildOrderDetails() {
-
     let total = 0;
 
+    const lines = cart.map(item => {
+        const product = getProduct(item.productId);
+        if (!product) return "";
 
-    const productLines =
-        cart.map(item => {
+        const lineTotal = product.price * item.quantity;
+        total += lineTotal;
 
-            const product =
-                getProduct(
-                    item.productId
-                );
-
-
-            if (!product) {
-                return "";
-            }
-
-
-            const lineTotal =
-                product.price *
-                item.quantity;
-
-
-            total +=
-                lineTotal;
-
-
-            return (
-                `${product.name} | ` +
-                `Qty: ${item.quantity} | ` +
-                `Rs. ${formatPrice(
-                    lineTotal
-                )}`
-            );
-
-        });
-
+        return `${product.name} | Qty: ${item.quantity} | Rs. ${formatPrice(lineTotal)}`;
+    });
 
     return {
-
-        productLines:
-            productLines.join(
-                "\n"
-            ),
-
-        total:
-            total
-
+        productLines: lines.join("\n"),
+        total
     };
-
 }
 
-
-/* =========================================================
-   REDUCE LOCAL STOCK
-========================================================= */
-
 function reduceLocalStock() {
-
     cart.forEach(item => {
+        const product = getProduct(item.productId);
+        if (!product) return;
 
-        const product =
-            getProduct(
-                item.productId
-            );
+        const current = getAvailableStock(product);
 
+        stockOverrides[product.id] = Math.max(
+            0,
+            current - item.quantity
+        );
+    });
 
-        if (!product) {
+    saveStock();
+}
+
+function showOrderMessage(message, type) {
+    if (!orderMessage) return;
+
+    orderMessage.textContent = message;
+    orderMessage.className = `order-message ${type || ""}`;
+}
+
+if (orderForm) {
+    orderForm.addEventListener("submit", async event => {
+        event.preventDefault();
+
+        if (cart.length === 0) {
+            showOrderMessage("Please add at least one product to your cart.", "error");
             return;
         }
 
+        const stockCheck = validateCartStock();
 
-        const currentStock =
-            getAvailableStock(
-                product
+        if (!stockCheck.valid) {
+            showOrderMessage(stockCheck.message, "error");
+            updateCartUI();
+            return;
+        }
+
+        if (!emailJSInitialized) {
+            showOrderMessage(
+                "Email service is not available. Please refresh the page and try again.",
+                "error"
+            );
+            return;
+        }
+
+        const formData = new FormData(orderForm);
+
+        const customerName = String(formData.get("customerName") || "").trim();
+        const customerPhone = String(formData.get("customerPhone") || "").trim();
+        const customerEmail = String(formData.get("customerEmail") || "").trim();
+        const customerCity = String(formData.get("customerCity") || "").trim();
+        const customerAddress = String(formData.get("customerAddress") || "").trim();
+        const orderNotes = String(formData.get("orderNotes") || "").trim();
+
+        const orderNumber = generateOrderNumber();
+        const orderDetails = buildOrderDetails();
+
+        if (placeOrderBtn) {
+            placeOrderBtn.disabled = true;
+            placeOrderBtn.textContent = "Sending Order...";
+        }
+
+        try {
+            const templateParams = {
+                order_number: orderNumber,
+                order_date: new Date().toLocaleString("en-PK"),
+                customer_name: customerName,
+                customer_phone: customerPhone,
+                customer_email: customerEmail || "Not provided",
+                customer_city: customerCity,
+                customer_address: customerAddress,
+                order_notes: orderNotes || "None",
+                order_items: orderDetails.productLines,
+                order_total: `Rs. ${formatPrice(orderDetails.total)}`
+            };
+
+            await emailjs.send(
+                EMAILJS_CONFIG.SERVICE_ID,
+                EMAILJS_CONFIG.TEMPLATE_ID,
+                templateParams
             );
 
+            reduceLocalStock();
 
-        stockOverrides[
-            product.id
-        ] =
-            Math.max(
-                0,
-                currentStock -
-                item.quantity
-            );
-
-    });
-
-
-    saveStock();
-
-}
-
-
-/* =========================================================
-   ORDER MESSAGE
-========================================================= */
-
-function showOrderMessage(
-    message,
-    type
-) {
-
-    if (!orderMessage) {
-        return;
-    }
-
-
-    orderMessage.textContent =
-        message;
-
-
-    orderMessage.className =
-        `order-message ${type}`;
-
-}
-
-
-/* =========================================================
-   PLACE ORDER
-========================================================= */
-
-if (orderForm) {
-
-    orderForm.addEventListener(
-        "submit",
-        async event => {
-
-            event.preventDefault();
-
+            cart = [];
+            saveCart();
+            updateCartUI();
+            renderProducts();
+            orderForm.reset();
 
             showOrderMessage(
-                "",
-                ""
+                `Order ${orderNumber} has been submitted successfully. Thank you for shopping with NOVYA Store!`,
+                "success"
             );
+        } catch (error) {
+            console.error("NOVYA EmailJS Order Error:", error);
 
-
-            /*
-               Make sure the customer has products
-               in the cart.
-            */
-
-            if (
-                cart.length === 0
-            ) {
-
-                showOrderMessage(
-                    "Please add at least one product to your cart.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            /*
-               Verify stock again immediately
-               before sending the order.
-            */
-
-            const stockCheck =
-                validateCartStock();
-
-
-            if (
-                !stockCheck.valid
-            ) {
-
-                showOrderMessage(
-                    stockCheck.message,
-                    "error"
-                );
-
-
-                updateCartUI();
-
-
-                return;
-
-            }
-
-
-            /*
-               Verify EmailJS is available.
-            */
-
-            if (
-                !emailJSInitialized
-            ) {
-
-                showOrderMessage(
-                    "Email service is not available. Please refresh the page and try again.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            const formData =
-                new FormData(
-                    orderForm
-                );
-
-
-            const customerName =
-                String(
-                    formData.get(
-                        "customerName"
-                    ) || ""
-                ).trim();
-
-
-            const customerPhone =
-                String(
-                    formData.get(
-                        "customerPhone"
-                    ) || ""
-                ).trim();
-
-
-            const customerEmail =
-                String(
-                    formData.get(
-                        "customerEmail"
-                    ) || ""
-                ).trim();
-
-
-            const customerCity =
-                String(
-                    formData.get(
-                        "customerCity"
-                    ) || ""
-                ).trim();
-
-
-            const customerAddress =
-                String(
-                    formData.get(
-                        "customerAddress"
-                    ) || ""
-                ).trim();
-
-
-            const orderNotes =
-                String(
-                    formData.get(
-                        "orderNotes"
-                    ) || ""
-                ).trim();
-
-
-            /*
-               Generate order number.
-            */
-
-            const orderNumber =
-                generateOrderNumber();
-
-
-            /*
-               Generate order details.
-            */
-
-            const orderDetails =
-                buildOrderDetails();
-
-
-            /*
-               Disable button while sending.
-            */
-
+            showOrderMessage(
+                "We could not submit your order right now. Please check your internet connection and try again.",
+                "error"
+            );
+        } finally {
             if (placeOrderBtn) {
-
-                placeOrderBtn.disabled =
-                    true;
-
-                placeOrderBtn.textContent =
-                    "Sending Order...";
-
+                placeOrderBtn.disabled = false;
+                placeOrderBtn.textContent = "Place Order";
             }
-
-
-            try {
-
-                /*
-                   These variable names MUST match
-                   the variables in your EmailJS template.
-                */
-
-                const templateParams = {
-
-                    order_number:
-                        orderNumber,
-
-                    order_date:
-                        new Date()
-                            .toLocaleString(
-                                "en-PK"
-                            ),
-
-                    customer_name:
-                        customerName,
-
-                    customer_phone:
-                        customerPhone,
-
-                    customer_email:
-                        customerEmail ||
-                        "Not provided",
-
-                    customer_city:
-                        customerCity,
-
-                    customer_address:
-                        customerAddress,
-
-                    order_notes:
-                        orderNotes ||
-                        "None",
-
-                    order_items:
-                        orderDetails.productLines,
-
-                    order_total:
-                        `Rs. ${formatPrice(
-                            orderDetails.total
-                        )}`
-
-                };
-
-
-                console.log(
-                    "Sending NOVYA order:",
-                    templateParams
-                );
-
-
-                /*
-                   SEND ORDER TO EMAILJS
-                */
-
-                const response =
-                    await emailjs.send(
-
-                        EMAILJS_CONFIG.SERVICE_ID,
-
-                        EMAILJS_CONFIG.TEMPLATE_ID,
-
-                        templateParams
-
-                    );
-
-
-                console.log(
-                    "EmailJS response:",
-                    response
-                );
-
-
-                /*
-                   Email successfully accepted.
-                   Now reduce local stock.
-                */
-
-                reduceLocalStock();
-
-
-                /*
-                   Empty cart.
-                */
-
-                cart = [];
-
-
-                saveCart();
-
-
-                updateCartUI();
-
-
-                renderProducts();
-
-
-                /*
-                   Clear checkout form.
-                */
-
-                orderForm.reset();
-
-
-                /*
-                   Show success message.
-                */
-
-                showOrderMessage(
-
-                    `Order ${orderNumber} has been submitted successfully. Thank you for shopping with NOVYA Store!`,
-
-                    "success"
-
-                );
-
-
-            }
-
-            catch (error) {
-
-                console.error(
-                    "NOVYA EmailJS Order Error:",
-                    error
-                );
-
-
-                showOrderMessage(
-
-                    "We could not submit your order right now. Please check your internet connection and try again.",
-
-                    "error"
-
-                );
-
-            }
-
-
-            finally {
-
-                if (placeOrderBtn) {
-
-                    placeOrderBtn.disabled =
-                        false;
-
-                    placeOrderBtn.textContent =
-                        "Place Order";
-
-                }
-
-            }
-
         }
-    );
-
+    });
 }
-
-
-/* =========================================================
-   HERO BUTTONS
-========================================================= */
-
-if (shopNowBtn) {
-
-    shopNowBtn.addEventListener(
-        "click",
-        () => {
-
-            const productsSection =
-                document.getElementById(
-                    "products"
-                );
-
-
-            if (productsSection) {
-
-                productsSection.scrollIntoView({
-                    behavior: "smooth"
-                });
-
-            }
-
-        }
-    );
-
-}
-
-
-if (viewProductsBtn) {
-
-    viewProductsBtn.addEventListener(
-        "click",
-        () => {
-
-            const productsSection =
-                document.getElementById(
-                    "products"
-                );
-
-
-            if (productsSection) {
-
-                productsSection.scrollIntoView({
-                    behavior: "smooth"
-                });
-
-            }
-
-        }
-    );
-
-}
-
 
 /* =========================================================
    MOBILE MENU
 ========================================================= */
 
 if (mobileMenuBtn) {
-
-    mobileMenuBtn.addEventListener(
-        "click",
-        () => {
-
-            if (mainNav) {
-
-                mainNav.classList.toggle(
-                    "mobile-open"
-                );
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   NAVIGATION CATEGORY LINKS
-========================================================= */
-
-document
-    .querySelectorAll(
-        ".nav-container a"
-    )
-    .forEach(link => {
-
-        link.addEventListener(
-            "click",
-            event => {
-
-                const category =
-                    link.dataset.category;
-
-
-                if (
-                    category ===
-                    "all"
-                ) {
-
-                    selectedCategory =
-                        "All Products";
-
-                }
-
-                else if (
-                    category
-                ) {
-
-                    selectedCategory =
-                        category;
-
-                }
-
-
-                searchTerm = "";
-
-
-                if (searchInput) {
-
-                    searchInput.value =
-                        "";
-
-                }
-
-
-                renderCategoryButtons();
-
-                renderProducts();
-
-
-                if (
-                    link.getAttribute(
-                        "href"
-                    ) ===
-                    "#products"
-                ) {
-
-                    event.preventDefault();
-
-
-                    const productsSection =
-                        document.getElementById(
-                            "products"
-                        );
-
-
-                    if (productsSection) {
-
-                        productsSection.scrollIntoView({
-                            behavior: "smooth"
-                        });
-
-                    }
-
-                }
-
-
-                if (mainNav) {
-
-                    mainNav.classList.remove(
-                        "mobile-open"
-                    );
-
-                }
-
-            }
-        );
-
+    mobileMenuBtn.addEventListener("click", () => {
+        const nav = document.getElementById("mainNav");
+        if (nav) nav.classList.toggle("mobile-open");
     });
-
-
-/* =========================================================
-   LOGO
-========================================================= */
-
-const logoLink =
-    document.getElementById(
-        "logoLink"
-    );
-
-
-if (logoLink) {
-
-    logoLink.addEventListener(
-        "click",
-        event => {
-
-            event.preventDefault();
-
-
-            selectedCategory =
-                "All Products";
-
-
-            searchTerm = "";
-
-
-            if (searchInput) {
-
-                searchInput.value =
-                    "";
-
-            }
-
-
-            renderCategoryButtons();
-
-            renderProducts();
-
-
-            window.scrollTo({
-
-                top:
-                    0,
-
-                behavior:
-                    "smooth"
-
-            });
-
-        }
-    );
-
 }
 
-
 /* =========================================================
-   INITIALIZE STORE
+   INITIALIZATION
 ========================================================= */
 
-function initializeStore() {
-
-    if (currentYear) {
-
-        currentYear.textContent =
-            new Date().getFullYear();
-
-    }
-
-
-    renderCategoryButtons();
-
-    renderProducts();
-
-    updateCartUI();
-
+if (currentYear) {
+    currentYear.textContent = new Date().getFullYear();
 }
 
+renderProducts();
+updateCartUI();
 
-initializeStore();
+/*
+   If the customer follows a Buy Now link from a category page,
+   the home page opens at the checkout section.
+*/
+if (window.location.hash === "#checkout" && orderForm) {
+    setTimeout(() => {
+        document.getElementById("checkout")?.scrollIntoView({
+            behavior: "smooth"
+        });
+    }, 150);
+}
