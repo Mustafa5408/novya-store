@@ -1,707 +1,833 @@
 /* =========================================================
-   NOVYA STORE - UPDATED STYLES
+   NOVYA STORE - UPDATED JAVASCRIPT
+   Product management, category pages, cart, Buy Now,
+   inventory, checkout and EmailJS order email.
 ========================================================= */
 
-:root {
-    --primary: #111827;
-    --secondary: #f59e0b;
-    --secondary-dark: #d97706;
-    --background: #f8fafc;
-    --white: #ffffff;
-    --text: #111827;
-    --muted: #64748b;
-    --border: #e2e8f0;
-    --success: #15803d;
-    --danger: #dc2626;
-    --radius: 16px;
-    --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-    --container: 1200px;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { scroll-behavior: smooth; }
-
-body {
-    font-family: Inter, Arial, Helvetica, sans-serif;
-    background: var(--background);
-    color: var(--text);
-    line-height: 1.6;
-}
-
-button, input, textarea { font: inherit; }
-button { cursor: pointer; }
-a { color: inherit; text-decoration: none; }
-
-.top-bar {
-    background: var(--primary);
-    color: #fff;
-    text-align: center;
-    padding: 9px 15px;
-    font-size: 13px;
-    font-weight: 700;
-}
-
-.main-header {
-    background: #fff;
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-.header-container {
-    max-width: var(--container);
-    margin: auto;
-    padding: 18px 20px;
-    display: flex;
-    align-items: center;
-    gap: 25px;
-}
-
-.logo {
-    font-size: 22px;
-    font-weight: 900;
-    letter-spacing: -1px;
-    white-space: nowrap;
-}
-
-.logo span:first-child,
-.logo span:last-child { color: var(--secondary); }
-
-.logo span:last-child { font-size: 14px; }
-
-.search-area {
-    flex: 1;
-    display: flex;
-    max-width: 600px;
-    margin: auto;
-}
-
-.search-area input {
-    width: 100%;
-    border: 1px solid var(--border);
-    border-right: 0;
-    border-radius: 10px 0 0 10px;
-    padding: 12px 15px;
-    outline: none;
-}
-
-.search-area input:focus { border-color: var(--secondary); }
-
-.search-area button {
-    border: 0;
-    background: var(--secondary);
-    color: var(--primary);
-    padding: 0 20px;
-    border-radius: 0 10px 10px 0;
-    font-weight: 800;
-}
-
-.cart-button {
-    border: 0;
-    background: var(--primary);
-    color: #fff;
-    padding: 11px 17px;
-    border-radius: 10px;
-    font-weight: 700;
-    white-space: nowrap;
-}
-
-.cart-button span {
-    background: var(--secondary);
-    color: var(--primary);
-    border-radius: 50%;
-    min-width: 22px;
-    height: 22px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 5px;
-    font-size: 12px;
-}
-
-.mobile-menu-btn {
-    display: none;
-    border: 0;
-    background: transparent;
-    font-size: 25px;
-}
-
-.main-nav {
-    background: #fff;
-    border-bottom: 1px solid var(--border);
-}
-
-.nav-container {
-    max-width: var(--container);
-    margin: auto;
-    padding: 0 20px;
-    display: flex;
-    align-items: center;
-    gap: 22px;
-    overflow-x: auto;
-}
-
-.nav-container a {
-    padding: 14px 0;
-    font-size: 14px;
-    color: var(--muted);
-    white-space: nowrap;
-    border-bottom: 2px solid transparent;
-}
-
-.nav-container a:hover {
-    color: var(--primary);
-    border-color: var(--secondary);
-}
-
-/* Hero */
-.hero { padding: 70px 20px; }
-
-.hero-container {
-    max-width: var(--container);
-    margin: auto;
-    display: grid;
-    grid-template-columns: 1.5fr .8fr;
-    gap: 40px;
-    align-items: center;
-}
-
-.eyebrow {
-    color: var(--secondary-dark);
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 2px;
-    margin-bottom: 8px;
-}
-
-.hero h1 {
-    font-size: clamp(42px, 6vw, 70px);
-    line-height: 1.05;
-    letter-spacing: -3px;
-    margin-bottom: 20px;
-}
-
-.hero h1 span { display: block; color: var(--secondary-dark); }
-
-.hero-description {
-    max-width: 650px;
-    color: var(--muted);
-    font-size: 18px;
-    margin-bottom: 30px;
-}
-
-.hero-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
-
-.primary-btn, .secondary-btn {
-    display: inline-block;
-    border: 0;
-    padding: 13px 22px;
-    border-radius: 10px;
-    font-weight: 800;
-}
-
-.primary-btn { background: var(--primary); color: #fff; }
-.secondary-btn { background: #fff; color: var(--primary); border: 1px solid var(--border); }
-
-.hero-card {
-    background: var(--primary);
-    color: #fff;
-    border-radius: 25px;
-    padding: 45px;
-    min-height: 320px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    box-shadow: var(--shadow);
-}
-
-.hero-card p { color: var(--secondary); font-size: 12px; font-weight: 800; letter-spacing: 2px; }
-.hero-card h2 { font-size: 42px; line-height: 1.05; margin: 15px 0; }
-.hero-card span { color: #cbd5e1; }
-
-/* Features */
-.features {
-    max-width: var(--container);
-    margin: auto;
-    padding: 20px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-}
-
-.feature {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px;
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-}
-
-.feature-icon { font-size: 24px; }
-.feature strong { display: block; font-size: 14px; }
-.feature p { color: var(--muted); font-size: 12px; margin-top: 3px; }
-
-/* Products */
-.products-section {
-    max-width: var(--container);
-    margin: auto;
-    padding: 70px 20px 50px;
-}
-
-.products-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: end;
-    gap: 20px;
-    margin-bottom: 30px;
-}
-
-.section-heading h2 {
-    font-size: 36px;
-    line-height: 1.1;
-    letter-spacing: -1px;
-}
-
-.view-all-link {
-    color: var(--secondary-dark);
-    font-weight: 800;
-}
-
-.product-result-count {
-    color: var(--muted);
-    font-size: 14px;
-}
-
-.products-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-}
-
-.product-card {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 5px 18px rgba(15, 23, 42, .04);
-}
-
-.product-image-wrapper {
-    position: relative;
-    background: #f1f5f9;
-    aspect-ratio: 1 / 1;
-    overflow: hidden;
-}
+/* =========================================================
+   ⭐ PRODUCT MANAGEMENT SECTION ⭐
+
+   Future product changes are made HERE.
+
+   Add product = add another object.
+   Remove product = delete its object.
+   Change price = edit price.
+   Change stock = edit stock.
+   Change category = edit category.
+   Change image = edit image.
+   Change description = edit description.
+========================================================= */
+
+const PRODUCTS = [
+    {
+        id: "chopper",
+        name: "Chopper",
+        category: "Kitchen Appliances",
+        price: 2499,
+        stock: 20,
+        image: "https://placehold.co/800x800/f1f5f9/111827?text=Chopper",
+        description: "Convenient kitchen chopper for quick and easy food preparation."
+    },
+    {
+        id: "beater",
+        name: "Beater",
+        category: "Kitchen Appliances",
+        price: 1999,
+        stock: 15,
+        image: "https://placehold.co/800x800/f1f5f9/111827?text=Beater",
+        description: "Useful electric beater for mixing and preparing everyday recipes."
+    },
+    {
+        id: "induction-hot-plate",
+        name: "Induction Hot Plate",
+        category: "Kitchen Appliances",
+        price: 3499,
+        stock: 10,
+        image: "https://placehold.co/800x800/f1f5f9/111827?text=Induction+Hot+Plate",
+        description: "Compact induction hot plate suitable for everyday cooking."
+    },
+    {
+        id: "cooking-spoons",
+        name: "Cooking Spoons",
+        category: "Kitchen Utensils",
+        price: 899,
+        stock: 25,
+        image: "https://placehold.co/800x800/f1f5f9/111827?text=Cooking+Spoons",
+        description: "Practical cooking spoon set for everyday kitchen use."
+    },
+    {
+        id: "knife-sets",
+        name: "Knife Sets",
+        category: "Kitchen Utensils",
+        price: 1799,
+        stock: 15,
+        image: "https://placehold.co/800x800/f1f5f9/111827?text=Knife+Sets",
+        description: "Useful kitchen knife set for everyday cutting and preparation."
+    },
+    {
+        id: "premium-storage-boxes",
+        name: "Premium Quality Storage Boxes",
+        category: "Kitchen Utensils",
+        price: 1499,
+        stock: 20,
+        image: "https://placehold.co/800x800/f1f5f9/111827?text=Storage+Boxes",
+        description: "Premium quality storage boxes for organized kitchen storage."
+    },
+    {
+        id: "nebulizer",
+        name: "Nebulizer",
+        category: "Electronics Gadgets",
+        price: 2999,
+        stock: 10,
+        image: "https://placehold.co/800x800/f1f5f9/111827?text=Nebulizer",
+        description: "Compact nebulizer suitable for home use."
+    },
+    {
+        id: "trimmer",
+        name: "Trimmer",
+        category: "Electronics Gadgets",
+        price: 1799,
+        stock: 20,
+        image: "https://placehold.co/800x800/f1f5f9/111827?text=Trimmer",
+        description: "Convenient rechargeable trimmer for everyday grooming."
+    },
+    {
+        id: "hair-brush",
+        name: "Hair Brush",
+        category: "Electronics Gadgets",
+        price: 2299,
+        stock: 15,
+        image: "https://placehold.co/800x800/f1f5f9/111827?text=Hair+Brush",
+        description: "Easy-to-use hair brush for everyday styling."
+    },
+    {
+        id: "bags",
+        name: "Bags",
+        category: "Bags & Luggage",
+        price: 2499,
+        stock: 20,
+        image: "https://placehold.co/800x800/f1f5f9/111827?text=Bags",
+        description: "Useful everyday bags suitable for shopping, travel and daily use."
+    }
+];
+
+const CATEGORIES = [
+    "All Products",
+    "Kitchen Appliances",
+    "Kitchen Accessories",
+    "Kitchen Utensils",
+    "Home Appliances",
+    "Home Accessories",
+    "Home Decor",
+    "Electronics Gadgets",
+    "Mobile Accessories",
+    "Personal Care",
+    "Baby Accessories",
+    "Tools & Tool Kits",
+    "Men",
+    "Women",
+    "Bags & Luggage"
+];
+
+/* Existing working EmailJS configuration */
+const EMAILJS_CONFIG = {
+    PUBLIC_KEY: "lUS3en_oobE9akyfp",
+    SERVICE_ID: "service_74rgsbc",
+    TEMPLATE_ID: "template_uavapz8"
+};
+
+let cart = JSON.parse(localStorage.getItem("novyaCart") || "[]");
+let stockOverrides = JSON.parse(localStorage.getItem("novyaStockOverrides") || "{}");
+
+const isCategoryPage = document.body.classList.contains("category-page");
+
+const productsGrid = document.getElementById("productsGrid");
+const emptyProducts = document.getElementById("emptyProducts");
+const productResultCount = document.getElementById("productResultCount");
+const productsTitle = document.getElementById("productsTitle");
+const categoryPageTitle = document.getElementById("categoryPageTitle");
+const categoryPageDescription = document.getElementById("categoryPageDescription");
+
+const searchInput = document.getElementById("searchInput");
+const searchBtn = document.getElementById("searchBtn");
+const cartButton = document.getElementById("cartButton");
+const cartCount = document.getElementById("cartCount");
+const cartDrawer = document.getElementById("cartDrawer");
+const cartOverlay = document.getElementById("cartOverlay");
+const cartClose = document.getElementById("cartClose");
+const cartItems = document.getElementById("cartItems");
+const cartSubtotal = document.getElementById("cartSubtotal");
+const checkoutBtn = document.getElementById("checkoutBtn");
+const checkoutSummary = document.getElementById("checkoutSummary");
+const orderForm = document.getElementById("orderForm");
+const orderMessage = document.getElementById("orderMessage");
+const placeOrderBtn = document.getElementById("placeOrderBtn");
+const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+const currentYear = document.getElementById("currentYear");
+
+function formatPrice(price) {
+    return Number(price).toLocaleString("en-PK");
+}
+
+function escapeHTML(value) {
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+function getProduct(productId) {
+    return PRODUCTS.find(product => product.id === productId);
+}
+
+function getAvailableStock(product) {
+    if (Object.prototype.hasOwnProperty.call(stockOverrides, product.id)) {
+        return Math.max(0, Number(stockOverrides[product.id]));
+    }
+    return Math.max(0, Number(product.stock));
+}
+
+function saveCart() {
+    localStorage.setItem("novyaCart", JSON.stringify(cart));
+}
+
+function saveStock() {
+    localStorage.setItem("novyaStockOverrides", JSON.stringify(stockOverrides));
+}
+
+function getRequestedCategory() {
+    const params = new URLSearchParams(window.location.search);
+    const requested = (params.get("category") || "").trim();
+
+    if (!requested || requested.toLowerCase() === "all products" || requested.toLowerCase() === "all") {
+        return "All Products";
+    }
+
+    // Decode URL text and match categories case-insensitively.
+    const match = CATEGORIES.find(category =>
+        category.toLowerCase() === requested.toLowerCase()
+    );
+
+    return match || "All Products";
+}
+
+function getCategoryProducts(category) {
+    if (category === "All Products") return PRODUCTS;
+
+    return PRODUCTS.filter(product =>
+        product.category.trim().toLowerCase() === category.trim().toLowerCase()
+    );
+}
+
+function getSearchResults(products, term) {
+    const search = String(term || "").trim().toLowerCase();
+    if (!search) return products;
+
+    return products.filter(product =>
+        product.name.toLowerCase().includes(search) ||
+        product.category.toLowerCase().includes(search) ||
+        product.description.toLowerCase().includes(search)
+    );
+}
+
+/* =========================================================
+   PRODUCT CARD
+========================================================= */
+
+function productCardHTML(product) {
+    const stock = getAvailableStock(product);
+    const outOfStock = stock <= 0;
+
+    return `
+        <article class="product-card">
+            <div class="product-image-wrapper">
+                <img
+                    class="product-image"
+                    src="${escapeHTML(product.image)}"
+                    alt="${escapeHTML(product.name)}"
+                    loading="lazy"
+                    onerror="this.src='https://placehold.co/800x800/f1f5f9/111827?text=NOVYA+Store'"
+                >
+                ${
+                    outOfStock
+                        ? `<span class="stock-badge out">Out of Stock</span>`
+                        : `<span class="stock-badge">${stock} available</span>`
+                }
+            </div>
+
+            <div class="product-content">
+                <div class="product-category">${escapeHTML(product.category)}</div>
+                <h3 class="product-name">${escapeHTML(product.name)}</h3>
+                <p class="product-description">${escapeHTML(product.description)}</p>
+
+                <div class="product-bottom">
+                    <div class="product-price">Rs. ${formatPrice(product.price)}</div>
+
+                    <div class="product-actions">
+                        <button
+                            class="add-to-cart-btn"
+                            data-product-id="${escapeHTML(product.id)}"
+                            ${outOfStock ? "disabled" : ""}
+                        >
+                            ${outOfStock ? "Out of Stock" : "Add to Cart"}
+                        </button>
+
+                        <button
+                            class="buy-now-btn"
+                            data-buy-now-id="${escapeHTML(product.id)}"
+                            ${outOfStock ? "disabled" : ""}
+                        >
+                            ${outOfStock ? "Out of Stock" : "Buy Now"}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </article>
+    `;
+}
+
+/* =========================================================
+   RENDER PRODUCTS
+========================================================= */
+
+function renderProducts() {
+    if (!productsGrid) return;
+
+    let category = isCategoryPage ? getRequestedCategory() : "All Products";
+    let products = getCategoryProducts(category);
+
+    if (isCategoryPage) {
+        const search = searchInput ? searchInput.value.trim() : "";
+        products = getSearchResults(products, search);
+
+        if (categoryPageTitle) categoryPageTitle.textContent = category;
+        if (categoryPageDescription) {
+            categoryPageDescription.textContent =
+                category === "All Products"
+                    ? "Browse all currently available NOVYA Store products."
+                    : `Browse products available in ${category}.`;
+        }
+    } else {
+        /* Home page shows a small featured collection, not another category list. */
+        products = getSearchResults(PRODUCTS, searchInput ? searchInput.value : "").slice(0, 8);
+    }
+
+    productsGrid.innerHTML = products.map(productCardHTML).join("");
+
+    if (productResultCount) {
+        productResultCount.textContent =
+            `${products.length} ${products.length === 1 ? "product" : "products"}`;
+    }
+
+    if (emptyProducts) emptyProducts.hidden = products.length !== 0;
+
+    productsGrid.querySelectorAll(".add-to-cart-btn").forEach(button => {
+        button.addEventListener("click", () => addToCart(button.dataset.productId));
+    });
+
+    productsGrid.querySelectorAll(".buy-now-btn").forEach(button => {
+        button.addEventListener("click", () => buyNow(button.dataset.buyNowId));
+    });
+}
+
+/* =========================================================
+   CART
+========================================================= */
+
+function addToCart(productId) {
+    const product = getProduct(productId);
+    if (!product) return;
+
+    const stock = getAvailableStock(product);
+    const existing = cart.find(item => item.productId === productId);
+    const current = existing ? existing.quantity : 0;
+
+    if (current >= stock) {
+        alert(`Only ${stock} unit(s) of ${product.name} are available.`);
+        return;
+    }
+
+    if (existing) {
+        existing.quantity += 1;
+    } else {
+        cart.push({ productId, quantity: 1 });
+    }
+
+    saveCart();
+    updateCartUI();
+    openCart();
+}
+
+function buyNow(productId) {
+    const product = getProduct(productId);
+    if (!product) return;
+
+    if (getAvailableStock(product) <= 0) {
+        alert(`${product.name} is currently out of stock.`);
+        return;
+    }
+
+    cart = [{ productId, quantity: 1 }];
+    saveCart();
+
+    /*
+       Buy Now takes the customer directly to checkout.
+       The order is still sent through the existing EmailJS setup.
+    */
+    window.location.href = "index.html#checkout";
+}
+
+function increaseQuantity(productId) {
+    const product = getProduct(productId);
+    const item = cart.find(entry => entry.productId === productId);
+
+    if (!product || !item) return;
+
+    const stock = getAvailableStock(product);
+
+    if (item.quantity >= stock) {
+        alert(`Only ${stock} unit(s) of ${product.name} are available.`);
+        return;
+    }
+
+    item.quantity += 1;
+    saveCart();
+    updateCartUI();
+}
+
+function decreaseQuantity(productId) {
+    const item = cart.find(entry => entry.productId === productId);
+    if (!item) return;
+
+    item.quantity -= 1;
+
+    if (item.quantity <= 0) {
+        cart = cart.filter(entry => entry.productId !== productId);
+    }
+
+    saveCart();
+    updateCartUI();
+}
+
+function removeFromCart(productId) {
+    cart = cart.filter(item => item.productId !== productId);
+    saveCart();
+    updateCartUI();
+}
+
+function updateCartUI() {
+    if (!cartItems) return;
+
+    let quantityTotal = 0;
+    let subtotal = 0;
+
+    cartItems.innerHTML = "";
+
+    const validCart = [];
+
+    cart.forEach(item => {
+        const product = getProduct(item.productId);
+        if (!product) return;
+
+        const stock = getAvailableStock(product);
+
+        if (item.quantity > stock) item.quantity = stock;
+        if (item.quantity <= 0) return;
+
+        validCart.push(item);
+        quantityTotal += item.quantity;
+        subtotal += product.price * item.quantity;
+
+        const element = document.createElement("div");
+        element.className = "cart-item";
+
+        element.innerHTML = `
+            <img
+                class="cart-item-image"
+                src="${escapeHTML(product.image)}"
+                alt="${escapeHTML(product.name)}"
+                onerror="this.src='https://placehold.co/200x200/f1f5f9/111827?text=NOVYA'"
+            >
+
+            <div>
+                <div class="cart-item-name">${escapeHTML(product.name)}</div>
+                <div class="cart-item-price">Rs. ${formatPrice(product.price)}</div>
+
+                <div class="quantity-controls">
+                    <button data-action="decrease" data-id="${escapeHTML(product.id)}">−</button>
+                    <span>${item.quantity}</span>
+                    <button data-action="increase" data-id="${escapeHTML(product.id)}">+</button>
+                </div>
+
+                <button class="remove-cart-item" data-action="remove" data-id="${escapeHTML(product.id)}">
+                    Remove
+                </button>
+            </div>
+
+            <div class="cart-item-total">
+                Rs. ${formatPrice(product.price * item.quantity)}
+            </div>
+        `;
+
+        cartItems.appendChild(element);
+    });
+
+    cart = validCart;
+    saveCart();
+
+    if (cart.length === 0) {
+        cartItems.innerHTML = `
+            <div class="cart-empty">
+                <div style="font-size:40px;">🛒</div>
+                <p>Your cart is empty.</p>
+            </div>
+        `;
+    }
+
+    if (cartCount) cartCount.textContent = quantityTotal;
+    if (cartSubtotal) cartSubtotal.textContent = formatPrice(subtotal);
+
+    updateCheckoutSummary();
+}
+
+if (cartItems) {
+    cartItems.addEventListener("click", event => {
+        const button = event.target.closest("button");
+        if (!button) return;
 
-.product-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform .25s ease;
+        const id = button.dataset.id;
+        const action = button.dataset.action;
+
+        if (action === "increase") increaseQuantity(id);
+        if (action === "decrease") decreaseQuantity(id);
+        if (action === "remove") removeFromCart(id);
+    });
 }
+
+/* =========================================================
+   CART DRAWER
+========================================================= */
 
-.product-card:hover .product-image { transform: scale(1.03); }
-
-.stock-badge {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    background: var(--secondary);
-    color: var(--primary);
-    border-radius: 999px;
-    padding: 5px 9px;
-    font-size: 11px;
-    font-weight: 800;
-}
-
-.stock-badge.out {
-    background: #fee2e2;
-    color: var(--danger);
-}
-
-.product-content {
-    padding: 18px;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-}
-
-.product-category {
-    color: var(--secondary-dark);
-    text-transform: uppercase;
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    margin-bottom: 5px;
-}
-
-.product-name { font-size: 18px; line-height: 1.25; margin-bottom: 8px; }
-
-.product-description {
-    color: var(--muted);
-    font-size: 13px;
-    margin-bottom: 15px;
-    min-height: 42px;
-}
-
-.product-bottom { margin-top: auto; }
-
-.product-price {
-    font-size: 21px;
-    font-weight: 900;
-    margin-bottom: 10px;
-}
-
-.product-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-}
-
-.add-to-cart-btn,
-.buy-now-btn {
-    width: 100%;
-    border: 0;
-    padding: 11px 8px;
-    border-radius: 9px;
-    font-weight: 800;
-}
-
-.add-to-cart-btn { background: var(--primary); color: #fff; }
-.buy-now-btn { background: var(--secondary); color: var(--primary); }
-
-.add-to-cart-btn:hover { background: #1f2937; }
-.buy-now-btn:hover { background: var(--secondary-dark); color: #fff; }
-
-.add-to-cart-btn:disabled,
-.buy-now-btn:disabled {
-    background: #cbd5e1;
-    color: #64748b;
-    cursor: not-allowed;
+function openCart() {
+    if (cartDrawer) cartDrawer.classList.add("open");
+    if (cartOverlay) cartOverlay.classList.add("open");
+    document.body.style.overflow = "hidden";
 }
 
-.empty-products {
-    background: #fff;
-    border: 1px dashed var(--border);
-    border-radius: var(--radius);
-    padding: 70px 20px;
-    text-align: center;
+function closeCart() {
+    if (cartDrawer) cartDrawer.classList.remove("open");
+    if (cartOverlay) cartOverlay.classList.remove("open");
+    document.body.style.overflow = "";
 }
 
-.empty-icon { font-size: 45px; margin-bottom: 10px; }
-.empty-products h3 { font-size: 22px; margin-bottom: 5px; }
-.empty-products p { color: var(--muted); margin-bottom: 20px; }
-.inline-btn { margin-top: 5px; }
-
-/* Category page */
-.category-hero {
-    background: linear-gradient(135deg, #111827, #1f2937);
-    color: #fff;
-    padding: 70px 20px;
-}
-
-.category-hero-container {
-    max-width: var(--container);
-    margin: auto;
-}
+if (cartButton) cartButton.addEventListener("click", openCart);
+if (cartClose) cartClose.addEventListener("click", closeCart);
+if (cartOverlay) cartOverlay.addEventListener("click", closeCart);
 
-.category-hero .eyebrow { color: var(--secondary); }
-.category-hero h1 { font-size: clamp(38px, 5vw, 60px); line-height: 1.05; margin-bottom: 15px; }
-.category-hero p:not(.eyebrow) { color: #cbd5e1; max-width: 650px; margin-bottom: 25px; }
-.category-products-section { padding-top: 60px; }
+if (checkoutBtn) {
+    checkoutBtn.addEventListener("click", () => {
+        closeCart();
+    });
+}
 
-/* Checkout */
-.checkout-section {
-    padding: 90px 20px;
-    background: #eef2f7;
-    margin-top: 30px;
-}
+/* =========================================================
+   CHECKOUT SUMMARY
+========================================================= */
 
-.checkout-container {
-    max-width: var(--container);
-    margin: auto;
-    display: grid;
-    grid-template-columns: .8fr 1.2fr;
-    gap: 50px;
-}
+function updateCheckoutSummary() {
+    if (!checkoutSummary) return;
 
-.checkout-info h2 { font-size: 42px; line-height: 1.1; margin-bottom: 12px; }
-.checkout-info > p { color: var(--muted); margin-bottom: 25px; }
+    if (cart.length === 0) {
+        checkoutSummary.textContent = "Your cart is empty.";
+        return;
+    }
 
-.checkout-summary {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px;
-    font-size: 14px;
-}
+    let subtotal = 0;
 
-.summary-item {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-}
+    const rows = cart.map(item => {
+        const product = getProduct(item.productId);
+        if (!product) return "";
 
-.summary-item:last-child { border-bottom: 0; }
+        const total = product.price * item.quantity;
+        subtotal += total;
 
-.order-form {
-    background: #fff;
-    padding: 30px;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-}
+        return `
+            <div class="summary-item">
+                <span>${escapeHTML(product.name)} × ${item.quantity}</span>
+                <strong>Rs. ${formatPrice(total)}</strong>
+            </div>
+        `;
+    }).join("");
 
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
+    checkoutSummary.innerHTML = `
+        ${rows}
+        <div class="summary-item" style="margin-top:8px;">
+            <strong>Total</strong>
+            <strong>Rs. ${formatPrice(subtotal)}</strong>
+        </div>
+    `;
 }
-
-.form-group { margin-bottom: 18px; }
-.form-group label { display: block; font-weight: 700; font-size: 13px; margin-bottom: 7px; }
 
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    padding: 12px;
-    outline: none;
-    resize: vertical;
-}
+/* =========================================================
+   SEARCH
+========================================================= */
 
-.form-group input:focus,
-.form-group textarea:focus { border-color: var(--secondary); }
+function performSearch() {
+    if (!searchInput) return;
 
-.payment-note {
-    background: #fffbeb;
-    border: 1px solid #fde68a;
-    color: #92400e;
-    padding: 12px;
-    border-radius: 9px;
-    margin-bottom: 15px;
-    font-size: 13px;
-}
+    const term = searchInput.value.trim();
 
-.place-order-btn,
-.checkout-btn {
-    display: block;
-    width: 100%;
-    border: 0;
-    background: var(--primary);
-    color: #fff;
-    padding: 13px;
-    border-radius: 9px;
-    font-weight: 800;
-    text-align: center;
-}
+    if (isCategoryPage) {
+        renderProducts();
+        return;
+    }
 
-.order-message { min-height: 22px; margin-bottom: 10px; font-weight: 700; }
-.order-message.success { color: var(--success); }
-.order-message.error { color: var(--danger); }
+    if (!term) {
+        renderProducts();
+        return;
+    }
 
-/* Cart */
-.cart-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(15, 23, 42, .45);
-    z-index: 1998;
-    opacity: 0;
-    visibility: hidden;
-    transition: .2s;
+    window.location.href =
+        `category.html?category=All%20Products&search=${encodeURIComponent(term)}`;
 }
 
-.cart-overlay.open { opacity: 1; visibility: visible; }
+if (searchBtn) searchBtn.addEventListener("click", performSearch);
 
-.cart-drawer {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: min(460px, 100%);
-    height: 100vh;
-    background: #fff;
-    z-index: 1999;
-    transform: translateX(100%);
-    transition: .25s ease;
-    display: flex;
-    flex-direction: column;
-    box-shadow: -10px 0 30px rgba(0,0,0,.12);
+if (searchInput) {
+    searchInput.addEventListener("keydown", event => {
+        if (event.key === "Enter") performSearch();
+    });
 }
 
-.cart-drawer.open { transform: translateX(0); }
-
-.cart-header {
-    padding: 22px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* Apply search query on category page */
+if (isCategoryPage && searchInput) {
+    const params = new URLSearchParams(window.location.search);
+    const search = params.get("search") || "";
+    searchInput.value = search;
 }
 
-.cart-header h2 { line-height: 1.1; }
+/* =========================================================
+   EMAILJS
+========================================================= */
 
-.cart-close {
-    border: 0;
-    background: transparent;
-    font-size: 32px;
-    line-height: 1;
-}
+let emailJSInitialized = false;
 
-.cart-items {
-    flex: 1;
-    overflow-y: auto;
-    padding: 18px;
-}
+function initializeEmailJS() {
+    if (typeof emailjs === "undefined") {
+        console.error("EmailJS SDK was not loaded.");
+        return;
+    }
 
-.cart-item {
-    display: grid;
-    grid-template-columns: 70px 1fr auto;
-    gap: 12px;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border);
-}
+    try {
+        emailjs.init({
+            publicKey: EMAILJS_CONFIG.PUBLIC_KEY
+        });
 
-.cart-item-image {
-    width: 70px;
-    height: 70px;
-    object-fit: cover;
-    border-radius: 10px;
-    background: #f1f5f9;
+        emailJSInitialized = true;
+        console.log("EmailJS initialized successfully.");
+    } catch (error) {
+        console.error("EmailJS initialization failed:", error);
+    }
 }
 
-.cart-item-name { font-weight: 800; }
-.cart-item-price { color: var(--muted); font-size: 13px; }
+initializeEmailJS();
 
-.quantity-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 8px;
-}
+function validateCartStock() {
+    for (const item of cart) {
+        const product = getProduct(item.productId);
+        if (!product) continue;
 
-.quantity-controls button {
-    width: 28px;
-    height: 28px;
-    border: 1px solid var(--border);
-    background: #fff;
-    border-radius: 6px;
-}
+        const stock = getAvailableStock(product);
 
-.quantity-controls span {
-    min-width: 25px;
-    text-align: center;
-    font-size: 13px;
-    font-weight: 700;
-}
+        if (item.quantity > stock) {
+            return {
+                valid: false,
+                message: `${product.name} has only ${stock} unit(s) available.`
+            };
+        }
+    }
 
-.remove-cart-item {
-    border: 0;
-    background: transparent;
-    color: var(--danger);
-    font-size: 12px;
-    margin-top: 6px;
+    return { valid: true, message: "" };
 }
-
-.cart-item-total { font-weight: 800; font-size: 13px; white-space: nowrap; }
-
-.cart-empty { text-align: center; color: var(--muted); padding: 60px 15px; }
 
-.cart-footer {
-    border-top: 1px solid var(--border);
-    padding: 20px;
+function generateOrderNumber() {
+    return `NOVYA-${Math.floor(100000 + Math.random() * 900000)}`;
 }
 
-.cart-total {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
+function buildOrderDetails() {
+    let total = 0;
 
-.cart-total strong { font-size: 20px; }
+    const lines = cart.map(item => {
+        const product = getProduct(item.productId);
+        if (!product) return "";
 
-/* Footer */
-footer {
-    background: var(--primary);
-    color: #fff;
-    padding: 60px 20px 20px;
-}
+        const lineTotal = product.price * item.quantity;
+        total += lineTotal;
 
-.footer-container {
-    max-width: var(--container);
-    margin: auto;
-    display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr 1.3fr;
-    gap: 40px;
-}
+        return `${product.name} | Qty: ${item.quantity} | Rs. ${formatPrice(lineTotal)}`;
+    });
 
-.footer-brand p {
-    color: #94a3b8;
-    font-size: 14px;
-    margin-top: 12px;
-    max-width: 350px;
+    return {
+        productLines: lines.join("\n"),
+        total
+    };
 }
 
-.footer-column h3 { font-size: 15px; margin-bottom: 15px; }
-.footer-column a,
-.footer-column p {
-    display: block;
-    color: #94a3b8;
-    font-size: 13px;
-    margin-bottom: 9px;
-}
+function reduceLocalStock() {
+    cart.forEach(item => {
+        const product = getProduct(item.productId);
+        if (!product) return;
 
-.footer-column a:hover { color: #fff; }
+        const current = getAvailableStock(product);
+
+        stockOverrides[product.id] = Math.max(
+            0,
+            current - item.quantity
+        );
+    });
+
+    saveStock();
+}
+
+function showOrderMessage(message, type) {
+    if (!orderMessage) return;
+
+    orderMessage.textContent = message;
+    orderMessage.className = `order-message ${type || ""}`;
+}
+
+if (orderForm) {
+    orderForm.addEventListener("submit", async event => {
+        event.preventDefault();
+
+        if (cart.length === 0) {
+            showOrderMessage("Please add at least one product to your cart.", "error");
+            return;
+        }
 
-.footer-bottom {
-    max-width: var(--container);
-    margin: 40px auto 0;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255,255,255,.1);
-    color: #94a3b8;
-    text-align: center;
-    font-size: 12px;
-}
+        const stockCheck = validateCartStock();
 
-/* Responsive */
-@media (max-width: 1000px) {
-    .products-grid { grid-template-columns: repeat(3, 1fr); }
-    .features { grid-template-columns: repeat(2, 1fr); }
-    .footer-container { grid-template-columns: repeat(2, 1fr); }
-}
+        if (!stockCheck.valid) {
+            showOrderMessage(stockCheck.message, "error");
+            updateCartUI();
+            return;
+        }
+
+        if (!emailJSInitialized) {
+            showOrderMessage(
+                "Email service is not available. Please refresh the page and try again.",
+                "error"
+            );
+            return;
+        }
 
-@media (max-width: 760px) {
-    .header-container { flex-wrap: wrap; gap: 12px; }
-    .mobile-menu-btn { display: block; }
-    .search-area { order: 3; flex-basis: 100%; max-width: none; }
-    .main-nav { overflow: hidden; }
-    .nav-container { gap: 16px; }
-    .hero-container,
-    .checkout-container { grid-template-columns: 1fr; }
-    .hero { padding: 50px 20px; }
-    .hero-card { min-height: 250px; }
-    .products-grid { grid-template-columns: repeat(2, 1fr); }
-    .form-row { grid-template-columns: 1fr; gap: 0; }
-    .products-heading { align-items: flex-start; }
-}
+        const formData = new FormData(orderForm);
 
-@media (max-width: 520px) {
-    .features,
-    .products-grid,
-    .footer-container { grid-template-columns: 1fr; }
-    .hero h1 { font-size: 44px; letter-spacing: -2px; }
-    .hero-card { padding: 30px; }
-    .section-heading h2 { font-size: 30px; }
-    .product-actions { grid-template-columns: 1fr; }
-    .order-form { padding: 20px; }
-    .footer-container { gap: 25px; }
+        const customerName = String(formData.get("customerName") || "").trim();
+        const customerPhone = String(formData.get("customerPhone") || "").trim();
+        const customerEmail = String(formData.get("customerEmail") || "").trim();
+        const customerCity = String(formData.get("customerCity") || "").trim();
+        const customerAddress = String(formData.get("customerAddress") || "").trim();
+        const orderNotes = String(formData.get("orderNotes") || "").trim();
+
+        const orderNumber = generateOrderNumber();
+        const orderDetails = buildOrderDetails();
+
+        if (placeOrderBtn) {
+            placeOrderBtn.disabled = true;
+            placeOrderBtn.textContent = "Sending Order...";
+        }
+
+        try {
+            const templateParams = {
+                order_number: orderNumber,
+                order_date: new Date().toLocaleString("en-PK"),
+                customer_name: customerName,
+                customer_phone: customerPhone,
+                customer_email: customerEmail || "Not provided",
+                customer_city: customerCity,
+                customer_address: customerAddress,
+                order_notes: orderNotes || "None",
+                order_items: orderDetails.productLines,
+                order_total: `Rs. ${formatPrice(orderDetails.total)}`
+            };
+
+            await emailjs.send(
+                EMAILJS_CONFIG.SERVICE_ID,
+                EMAILJS_CONFIG.TEMPLATE_ID,
+                templateParams
+            );
+
+            reduceLocalStock();
+
+            cart = [];
+            saveCart();
+            updateCartUI();
+            renderProducts();
+            orderForm.reset();
+
+            showOrderMessage(
+                `Order ${orderNumber} has been submitted successfully. Thank you for shopping with NOVYA Store!`,
+                "success"
+            );
+        } catch (error) {
+            console.error("NOVYA EmailJS Order Error:", error);
+
+            showOrderMessage(
+                "We could not submit your order right now. Please check your internet connection and try again.",
+                "error"
+            );
+        } finally {
+            if (placeOrderBtn) {
+                placeOrderBtn.disabled = false;
+                placeOrderBtn.textContent = "Place Order";
+            }
+        }
+    });
+}
+
+/* =========================================================
+   MOBILE MENU
+========================================================= */
+
+if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener("click", () => {
+        const nav = document.getElementById("mainNav");
+        if (nav) nav.classList.toggle("mobile-open");
+    });
+}
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+if (currentYear) {
+    currentYear.textContent = new Date().getFullYear();
+}
+
+/*
+   Render the correct page immediately.
+   Category pages use ?category=... and products are taken from PRODUCTS above.
+*/
+if (isCategoryPage) {
+    const selectedCategory = getRequestedCategory();
+    console.log("NOVYA category page:", selectedCategory);
+    console.log("Products in category:", getCategoryProducts(selectedCategory));
+}
+
+renderProducts();
+updateCartUI();
+
+/*
+   If the customer follows a Buy Now link from a category page,
+   the home page opens at the checkout section.
+*/
+if (window.location.hash === "#checkout" && orderForm) {
+    setTimeout(() => {
+        document.getElementById("checkout")?.scrollIntoView({
+            behavior: "smooth"
+        });
+    }, 150);
 }
