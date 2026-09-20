@@ -68,7 +68,7 @@ function setupWhatsApp(){
  if(document.getElementById('novyaWhatsAppWidget'))return;
  const wrap=document.createElement('div');
  wrap.id='novyaWhatsAppWidget';
- wrap.innerHTML=`<button class="whatsapp-float" id="whatsappFloat" aria-label="Live Chat on WhatsApp">💬<span>WhatsApp</span></button><div class="whatsapp-modal" id="whatsappModal" hidden><div class="whatsapp-card"><button class="whatsapp-close" id="whatsappClose" aria-label="Close">×</button><div class="whatsapp-icon">☘</div><h3>Chat with NOVYA Store</h3><p>Choose how you would like to continue with WhatsApp.</p><a class="whatsapp-option" href="https://web.whatsapp.com/send?phone=923319999230" target="_blank" rel="noopener">Continue to WhatsApp Web</a><a class="whatsapp-option" href="whatsapp://send?phone=923319999230" rel="noopener">Open App</a></div></div>`;
+ wrap.innerHTML=`<button class="whatsapp-float" id="whatsappFloat" aria-label="Live Chat on WhatsApp">💬<span>WhatsApp</span></button><div class="whatsapp-modal" id="whatsappModal" hidden><div class="whatsapp-card"><button class="whatsapp-close" id="whatsappClose" aria-label="Close">×</button><div class="whatsapp-icon">☘</div><h3>Chat with NOVYA Store</h3><p>Choose how you would like to continue with WhatsApp.</p><a class="whatsapp-option" href="https://web.whatsapp.com/send?phone=923164697881" target="_blank" rel="noopener">Continue to WhatsApp Web</a><a class="whatsapp-option" href="whatsapp://send?phone=923164697881" rel="noopener">Open App</a></div></div>`;
  document.body.appendChild(wrap);
  const modal=$('whatsappModal');
  $('whatsappFloat').onclick=()=>{modal.hidden=false;document.body.classList.add('whatsapp-open')};
