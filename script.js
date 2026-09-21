@@ -15,7 +15,7 @@ const PRODUCTS = [
  {id:'novya-brown-handbag',name:'Premium Brown Handbag',category:'Bags & Luggage',price:1750,stock:20,image:'assets/novya-bag.jpg',description:'Stylish brown patterned handbag with elegant handles and a convenient shoulder strap.',features:['Elegant patterned design','Spacious everyday storage','Comfortable top handles','Adjustable shoulder strap','Suitable for daily use and outings']},
  {
   id:'travelling-bag-weekend-duffel-bag',
-  name:'Storage Bag For Cloths Foldable Weekender Bag For Travelling Large Gym Bag Wardrobe Organizer For Cloths Washable Bags Travel BackPack Travel Bag',
+  name:'New design Travelling bag / weekend bag / duffel bag',
   category:'Bags & Luggage',
   price:796,
   stock:20,
