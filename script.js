@@ -12,7 +12,23 @@ const PRODUCTS = [
  {id:'nebulizer',name:'Nebulizer',category:'Electronics Gadgets',price:2999,stock:10,image:'https://placehold.co/800x800/f1f5f9/111827?text=Nebulizer',description:'Compact nebulizer suitable for convenient home use.',features:['Compact design','Simple operation','Convenient for home use','Portable and easy to store','Practical everyday device']},
  {id:'trimmer',name:'Trimmer',category:'Electronics Gadgets',price:1799,stock:20,image:'https://placehold.co/800x800/f1f5f9/111827?text=Trimmer',description:'Convenient rechargeable trimmer for everyday grooming.',features:['Convenient grooming tool','Easy to handle','Compact design','Suitable for everyday use','Practical and portable']},
  {id:'hair-brush',name:'Hair Brush',category:'Electronics Gadgets',price:2299,stock:15,image:'https://placehold.co/800x800/f1f5f9/111827?text=Hair+Brush',description:'Easy-to-use hair brush for everyday styling.',features:['Comfortable everyday use','Easy styling','Convenient design','Durable construction','Suitable for regular grooming']},
- {id:'novya-brown-handbag',name:'Premium Brown Handbag',category:'Bags & Luggage',price:1750,stock:20,image:'assets/novya-bag.jpg',description:'Stylish brown patterned handbag with elegant handles and a convenient shoulder strap.',features:['Elegant patterned design','Spacious everyday storage','Comfortable top handles','Adjustable shoulder strap','Suitable for daily use and outings']}
+ {id:'novya-brown-handbag',name:'Premium Brown Handbag',category:'Bags & Luggage',price:1750,stock:20,image:'assets/novya-bag.jpg',description:'Stylish brown patterned handbag with elegant handles and a convenient shoulder strap.',features:['Elegant patterned design','Spacious everyday storage','Comfortable top handles','Adjustable shoulder strap','Suitable for daily use and outings']},
+ {id:'New design Travelling bag / weekend bag / duffel bag',name:'Storage Bag For Cloths Foldable Weekender Bag For Travelling Large Gym Bag Wardrobe Organizer For Cloths Washable Bags Travel BackPack Travel Bag',category:'Bags & Luggage',price:796,stock:20,image:'assets/Travelling Bag Weekend Bag Duffel Bag.jpg','assets/travle bag.jpg',colors: [
+    'Black/Red',
+    'Brown/Red',
+    'Gray/Red'
+  ],description:'Stylish brown patterned handbag with elegant handles and a convenient shoulder strap.',features:['Elegant patterned design','Spacious everyday storage','SIZE 16 inches length 12 inches width 12 inches height
+•	 Foldable Ideal storage solution for clothes and accessories 
+•	Can fit up to 15Kgs of Closet & accessories
+•	 Durable and long-lasting material 
+•	Saves space Maximizes storage space in small closets Perfect for organizing any closet
+•	 Great for keeping your wardrobe in order
+•	Keep your belongings organized and secure with our premium Storage Bag, perfect for clothes, toys, and travel essentials, ensuring everything has its place.
+•	Transform your closet with our high-quality Weekender Bag For Cloths. These stylish and durable Large Storage Bag is perfect for storing off-season garments, keeping them fresh and protected. With ample space and easy-access features.
+•	our Bag For Travelling make organizing your wardrobe a breeze, ensuring your clothes stay in pristine condition months-round.
+•	Maximize your closet space with our innovative Foldable Bag, Crafted for efficiency and style.
+•	 this Washable Bag offers a wide space to neatly store your clothes, accessories, and more.
+','Suitable for daily use and outings']}
 ];
 // Product image/color settings are optional.
 // To add multiple images, use images:[...]. If images is omitted, the existing image field is used.
