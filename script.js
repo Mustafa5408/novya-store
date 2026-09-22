@@ -65,7 +65,7 @@ const PRODUCTS = [
     'Easy to clean and maintain',
     'Compact design suitable for modern kitchens',
     'Brand: Silver Crest',
-    'Model: SC-102',
+    'Model: SC-1589',
     'Product Type: Meat and Vegetable Chopper',
     'Bowl Capacity: 3 Liters',
     'Bowl Material: Stainless Steel',
