@@ -45,7 +45,7 @@ const PRODUCTS = [
 // To add selectable colors, use colors:['Black','White','Blue']. Multiple colors require customer selection.
 const CATEGORIES=['All Products','Kitchen Appliances','Kitchen Accessories','Kitchen Utensils','Home Appliances','Home Accessories','Home Decor','Electronics Gadgets','Mobile Accessories','Personal Care','Baby Accessories','Tools & Tool Kits','Men','Women','Bags & Luggage'];
 const EMAILJS_CONFIG={PUBLIC_KEY:'lUS3en_oobE9akyfp',SERVICE_ID:'service_74rgsbc',TEMPLATE_ID:'template_uavapz8'};
-const LAHORE_DELIVERY=160, OTHER_CITY_DELIVERY=190;
+const LAHORE_DELIVERY=190, OTHER_CITY_DELIVERY=225;
 let cart=JSON.parse(localStorage.getItem('novyaCart')||'[]');
 let stockOverrides=JSON.parse(localStorage.getItem('novyaStockOverrides')||'{}');
 let pendingBuyNow=null;
