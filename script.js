@@ -38,7 +38,55 @@ const PRODUCTS = [
    'Washable and convenient for regular use',
    'Suitable for travelling, gym use and wardrobe organization'
   ]
- }
+ },
+{
+  id:'silver-crest-3l-stainless-steel-meat-vegetable-chopper-sc-1589',
+  name:'Silver Crest 3L Stainless Steel Meat and Vegetable Chopper SC-1589',
+  category:'Kitchen Appliances',
+  price:3999,
+  stock:51,
+  image:'assets/chopper 1.jpg',
+  images:[
+    'assets/chopper 1.jpg',
+    'assets/chpr 2.jpg',
+    'assets/chpr 3.jpg',
+    'assets/chpr 4.jpg',
+    'assets/chpr 5.jpg'
+  ],
+  description:'Tired of slow, messy food prep? The Silver Crest 3L Stainless Steel Chopper SC-1589 is built to make chopping faster, safer, and more efficient. Whether you’re mincing meat, chopping vegetables, or preparing ingredients for daily cooking, this powerful chopper saves time while delivering consistent, professional results every time.',
+  features:[
+    'Large 3-liter stainless steel bowl for family-size preparation',
+    'Powerful motor for quick chopping and mincing',
+    'Ultra-sharp stainless steel blades for precise cuts',
+    'Ideal for meat, vegetables, onions, herbs and fruits',
+    'Durable, rust-resistant and hygienic construction',
+    'One-touch operation for easy control',
+    'Anti-slip base for stable and safe usage',
+    'Easy to clean and maintain',
+    'Compact design suitable for modern kitchens',
+    'Brand: Silver Crest',
+    'Model: SC-102',
+    'Product Type: Meat and Vegetable Chopper',
+    'Bowl Capacity: 3 Liters',
+    'Bowl Material: Stainless Steel',
+    'Blade Material: Stainless Steel',
+    'Motor Type: High-power electric motor',
+    'Operation: One-touch button',
+    'Suitable For: Meat, vegetables, herbs and fruits',
+    'Safety Features: Anti-slip base and secure lid',
+    'Cleaning: Easy disassembly and wash',
+    'Use Case: Home and kitchen cooking',
+    'Accessory: 1 × Silver Crest SC-102 Chopper Motor Unit',
+    'Accessory: 1 × 3L Stainless Steel Bowl',
+    'Accessory: 1 × Multi-layer Stainless Steel Blade Set',
+    'Accessory: 1 × Lid with Safety Lock',
+    'Accessory: User guide/manual',
+    'Fast food preparation for busy kitchens',
+    'Handles both soft and tough ingredients effortlessly',
+    'Large 3L capacity ideal for families, meal prep and bulk cooking',
+    'Durable stainless steel build for long-lasting performance'
+  ]
+}
 ];
 // Product image/color settings are optional.
 // To add multiple images, use images:[...]. If images is omitted, the existing image field is used.
