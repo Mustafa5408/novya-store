@@ -86,6 +86,35 @@ const PRODUCTS = [
     'Large 3L capacity ideal for families, meal prep and bulk cooking',
     'Durable stainless steel build for long-lasting performance'
   ]
+},
+{
+  id:'electric-spice-coffee-grinder-raf-appliances',
+  name:'Electric - Spice & Coffee Grinder',
+  category:'Kitchen Appliances',
+  price:2890,
+  stock:38,
+  image:'assets/grngr 1 main.jpg',
+  images:[
+    'assets/grngr 1 main.jpg',
+    'assets/grndr 2.jpg',
+    'assets/grndr 3.jpg',
+    'assets/grndr 4.jpg'
+  ],
+  description:'30% OFF – Limited Time! Multifunction Electric Masala Grinder by RAF Appliances. Enjoy fresh masala every day and restaurant-style taste at home with this compact and powerful grinder.',
+  features:[
+    'Brand: RAF Appliances',
+    'German imported quality',
+    'Fresh masala for everyday cooking',
+    'Ideal for preparing restaurant-style flavors at home',
+    'Material: Stainless Steel + Heavy-Duty Glass',
+    'Grinding Mechanism: Adjustable Ceramic/Steel Grinder',
+    'Capacity: 500ML',
+    'Compact design with anti-slip base',
+    'Suitable for salt, pepper, dry spices and whole masala',
+    'Origin: Germany Imported',
+    'Cash on Delivery available',
+    'Limited stock available'
+  ]
 }
 ];
 // Product image/color settings are optional.
