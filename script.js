@@ -16,7 +16,7 @@ const PRODUCTS = [
   name:'New design Travelling bag / weekend bag / duffel bag',
   category:'Bags & Luggage',
   price:796,
-  stock:19,
+  stock:23,
   image:'assets/Travelling Bag Weekend Bag Duffel Bag.jpg',
   images:[
    'assets/Travelling Bag Weekend Bag Duffel Bag.jpg',
