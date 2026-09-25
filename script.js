@@ -109,7 +109,7 @@ const PRODUCTS = [
   ]
 },
 {
-  id:'baby-diaper-bag-large-capacity-multi-pocket',
+  id:'baby-diaper-bag-large-capacity-multi-pocket 11.5 inch x 15.5 inch small',
   name:'Baby Diaper Bag Large Capacity | Multi Pocket Maternity Bag | Baby Travel Organizer | Cartoon Printed Mother Bag | 4 Colors Available',
   category:'Bags & Luggage',
   price:899,
@@ -135,6 +135,35 @@ const PRODUCTS = [
     'Suitable for use as a hospital bag',
     'Length: 11.5 inches',
     'Width: 15.5 inches'
+  ]
+},
+{
+  id:'baby-diaper-bag-large-capacity-multi-pocket 13 inch x 16.5 inch Large',
+  name:'Baby Diaper Bag Large Capacity | Multi Pocket Maternity Bag | Baby Travel Organizer | Cartoon Printed Mother Bag | 4 Colors Available',
+  category:'Bags & Luggage',
+  price:999,
+  stock:440,
+  image:'assets/Baby 1 main.jpg',
+  images:[
+    'assets/Baby 1 main.jpg',
+    'assets/Baby 2.jpg',
+    'assets/baby 3.jpg'
+  ],
+  colors:['Red','Green','Pink','Blue'],
+  description:'Newborn baby clothing bag for diapers, feeder, baby accessories and hospital essentials. This practical baby diaper bag provides convenient storage and organization for mothers while travelling or going out with their baby.',
+  features:[
+    'Product Name: Baby Diaper Bag',
+    'Type: Baby Bag / Baby Diaper Bag',
+    'Style: Messenger Bag',
+    'Material: Microfiber',
+    'Strong hanging hooks for convenient attachment',
+    'Portable design - convenient and practical',
+    'Easily washable',
+    'Suitable for outings and daily baby essentials',
+    'Ideal for diapers, baby clothes, feeding accessories and other baby items',
+    'Suitable for use as a hospital bag',
+    'Length: 13 inches',
+    'Width: 16.5 inches'
   ]
 }
 ];
