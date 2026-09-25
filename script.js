@@ -4,12 +4,6 @@
 ========================================================= */
 const PRODUCTS = [
    
- {id:'cooking-spoons',name:'Cooking Spoons',category:'Kitchen Utensils',price:899,stock:25,image:'https://placehold.co/800x800/f1f5f9/111827?text=Cooking+Spoons',description:'Practical cooking spoon set for everyday kitchen use.',features:['Useful multi-purpose set','Comfortable everyday use','Easy to clean','Durable material','Suitable for home kitchens']},
- {id:'knife-sets',name:'Knife Sets',category:'Kitchen Utensils',price:1799,stock:15,image:'https://placehold.co/800x800/f1f5f9/111827?text=Knife+Sets',description:'Useful kitchen knife set for everyday cutting and preparation.',features:['Multiple useful knife types','Comfortable handling','Everyday kitchen essential','Durable design','Convenient food preparation']},
- {id:'premium-storage-boxes',name:'Premium Quality Storage Boxes',category:'Kitchen Utensils',price:1499,stock:20,image:'https://placehold.co/800x800/f1f5f9/111827?text=Storage+Boxes',description:'Premium quality storage boxes for organized kitchen storage.',features:['Helps keep items organized','Premium quality material','Convenient storage solution','Easy to use','Suitable for everyday household needs']},
- {id:'nebulizer',name:'Nebulizer',category:'Electronics Gadgets',price:2999,stock:10,image:'https://placehold.co/800x800/f1f5f9/111827?text=Nebulizer',description:'Compact nebulizer suitable for convenient home use.',features:['Compact design','Simple operation','Convenient for home use','Portable and easy to store','Practical everyday device']},
- {id:'trimmer',name:'Trimmer',category:'Electronics Gadgets',price:1799,stock:20,image:'https://placehold.co/800x800/f1f5f9/111827?text=Trimmer',description:'Convenient rechargeable trimmer for everyday grooming.',features:['Convenient grooming tool','Easy to handle','Compact design','Suitable for everyday use','Practical and portable']},
- {id:'hair-brush',name:'Hair Brush',category:'Electronics Gadgets',price:2299,stock:15,image:'https://placehold.co/800x800/f1f5f9/111827?text=Hair+Brush',description:'Easy-to-use hair brush for everyday styling.',features:['Comfortable everyday use','Easy styling','Convenient design','Durable construction','Suitable for regular grooming']},
  {id:'novya-brown-handbag',name:'Premium Brown Handbag',category:'Bags & Luggage',price:1750,stock:0,image:'assets/novya-bag.jpg',description:'Stylish brown patterned handbag with elegant handles and a convenient shoulder strap.',features:['Elegant patterned design','Spacious everyday storage','Comfortable top handles','Adjustable shoulder strap','Suitable for daily use and outings']},
  {
   id:'travelling-bag-weekend-duffel-bag',
@@ -112,6 +106,35 @@ const PRODUCTS = [
     'Origin: Germany Imported',
     'Cash on Delivery available',
     'Limited stock available'
+  ]
+},
+{
+  id:'baby-diaper-bag-large-capacity-multi-pocket',
+  name:'Baby Diaper Bag Large Capacity | Multi Pocket Maternity Bag | Baby Travel Organizer | Cartoon Printed Mother Bag | 4 Colors Available',
+  category:'Bags & Luggage',
+  price:899,
+  stock:483,
+  image:'assets/Baby 1 main.jpg',
+  images:[
+    'assets/Baby 1 main.jpg',
+    'assets/Baby 2.jpg',
+    'assets/baby 3.jpg'
+  ],
+  colors:['Red','Green','Pink','Blue'],
+  description:'Newborn baby clothing bag for diapers, feeder, baby accessories and hospital essentials. This practical baby diaper bag provides convenient storage and organization for mothers while travelling or going out with their baby.',
+  features:[
+    'Product Name: Baby Diaper Bag',
+    'Type: Baby Bag / Baby Diaper Bag',
+    'Style: Messenger Bag',
+    'Material: Microfiber',
+    'Strong hanging hooks for convenient attachment',
+    'Portable design - convenient and practical',
+    'Easily washable',
+    'Suitable for outings and daily baby essentials',
+    'Ideal for diapers, baby clothes, feeding accessories and other baby items',
+    'Suitable for use as a hospital bag',
+    'Length: 11.5 inches',
+    'Width: 15.5 inches'
   ]
 }
 ];
