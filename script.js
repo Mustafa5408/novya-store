@@ -110,7 +110,7 @@ const PRODUCTS = [
 },
 {
   id:'baby-diaper-bag-large-capacity-multi-pocket 11.5 inch x 15.5 inch small',
-  name:'Baby Diaper Bag Large Capacity | Multi Pocket Maternity Bag | Baby Travel Organizer | Cartoon Printed Mother Bag | 4 Colors Available',
+  name:'Baby Diaper Bag Large Capacity 11.5 inch x 15.5 inch small| Multi Pocket Maternity Bag | Baby Travel Organizer | Cartoon Printed Mother Bag | 4 Colors Available',
   category:'Bags & Luggage',
   price:899,
   stock:483,
@@ -139,7 +139,7 @@ const PRODUCTS = [
 },
 {
   id:'baby-diaper-bag-large-capacity-multi-pocket 13 inch x 16.5 inch Large',
-  name:'Baby Diaper Bag Large Capacity | Multi Pocket Maternity Bag | Baby Travel Organizer | Cartoon Printed Mother Bag | 4 Colors Available',
+  name:'Baby Diaper Bag Large Capacity 13 inch x 16.5 inch Large | Multi Pocket Maternity Bag | Baby Travel Organizer | Cartoon Printed Mother Bag | 4 Colors Available',
   category:'Bags & Luggage',
   price:999,
   stock:440,
@@ -164,6 +164,60 @@ const PRODUCTS = [
     'Suitable for use as a hospital bag',
     'Length: 13 inches',
     'Width: 16.5 inches'
+  ]
+},
+{
+  id:'premium-travel-sports-duffel-bag-14x22',
+  name:'Premium Travel & Sports Duffel Bag Large 14inch x 22inch',
+  category:'Bags & Luggage',
+  price:1599,
+  stock:203,
+  image:'assets/D-bag silki 1 main.jpg',
+  images:[
+    'assets/D-bag silki 1 main.jpg',
+    'assets/d bag silki 2.jpg'
+  ],
+  colors:['Gray','Red','Maroon','Blue'],
+  description:'Travel with ease and keep your essentials organized with this Premium Travel & Sports Duffel Bag. Designed with a spacious main compartment and multiple zippered pockets, it is ideal for travel, gym, sports, shopping, weekend trips and everyday use. The bag features strong carry handles, a comfortable design, durable fabric and smooth zippers. Its stylish appearance makes it suitable for both men and women.',
+  features:[
+    'Size: 14 inches × 22 inches',
+    'Spacious main compartment - enough room for clothes, shoes and other essentials',
+    'Front zipper pocket - convenient space for keeping small items easily accessible',
+    'Multiple compartments - helps keep your belongings organized',
+    'Strong carry handles - comfortable for hand carrying',
+    'Durable fabric - suitable for regular travel and everyday use',
+    'Smooth zippers - easy and convenient opening and closing',
+    'Stylish modern design suitable for travel, gym and sports',
+    'Multi-purpose use - great for travel, gym, sports, shopping and weekend trips',
+    'Unisex design - suitable for both men and women',
+    'Available Colors: Gray, Red, Maroon and Blue'
+  ]
+},
+{
+  id:'premium-travel-sports-duffel-bag-12x20',
+  name:'Premium Travel & Sports Duffel Bag Small 12inch x 20inch',
+  category:'Bags & Luggage',
+  price:1199,
+  stock:243,
+  image:'assets/D-bag silki 1 main.jpg',
+  images:[
+    'assets/D-bag silki 1 main.jpg',
+    'assets/d bag silki 2.jpg'
+  ],
+  colors:['Gray','Red','Maroon','Blue'],
+  description:'Travel with ease and keep your essentials organized with this Premium Travel & Sports Duffel Bag. Designed with a spacious main compartment and multiple zippered pockets, it is ideal for travel, gym, sports, shopping, weekend trips and everyday use. The bag features strong carry handles, a comfortable design, durable fabric and smooth zippers. Its stylish appearance makes it suitable for both men and women.',
+  features:[
+    'Size: 14 inches × 22 inches',
+    'Spacious main compartment - enough room for clothes, shoes and other essentials',
+    'Front zipper pocket - convenient space for keeping small items easily accessible',
+    'Multiple compartments - helps keep your belongings organized',
+    'Strong carry handles - comfortable for hand carrying',
+    'Durable fabric - suitable for regular travel and everyday use',
+    'Smooth zippers - easy and convenient opening and closing',
+    'Stylish modern design suitable for travel, gym and sports',
+    'Multi-purpose use - great for travel, gym, sports, shopping and weekend trips',
+    'Unisex design - suitable for both men and women',
+    'Available Colors: Gray, Red, Maroon and Blue'
   ]
 }
 ];
