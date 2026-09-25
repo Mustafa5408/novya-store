@@ -110,7 +110,7 @@ const PRODUCTS = [
 },
 {
   id:'baby-diaper-bag-large-capacity-multi-pocket 11.5 inch x 15.5 inch small',
-  name:'Baby Diaper Bag Large Capacity 11.5 inch x 15.5 inch small| Multi Pocket Maternity Bag | Baby Travel Organizer | Cartoon Printed Mother Bag | 4 Colors Available',
+  name:'Baby Diaper Bag 11.5 inch x 15.5 inch| Multi Pocket Maternity Bag | Baby Travel Organizer | Cartoon Printed Mother Bag | 4 Colors Available',
   category:'Bags & Luggage',
   price:899,
   stock:483,
@@ -218,6 +218,37 @@ const PRODUCTS = [
     'Multi-purpose use - great for travel, gym, sports, shopping and weekend trips',
     'Unisex design - suitable for both men and women',
     'Available Colors: Gray, Red, Maroon and Blue'
+  ]
+},
+{
+  id:'d-bag-matt-coat-foam-travel-sports-bag',
+  name:'D Bag Matt Coat Foam – Travel & Sports Bag 15 x 21 inches',
+  category:'Bags & Luggage',
+  price:1850,
+  stock:98,
+  image:'assets/matt coat dbag 1.jpg',
+  images:[
+    'assets/matt coat dbag 1.jpg',
+    'assets/matt coat dbag 2.jpg',
+    'assets/matt coat dbag 3.jpg'
+  ],
+  colors:['Black','Blue','Brown'],
+  description:'The D Bag Matt Coat Foam is a spacious and stylish multipurpose bag designed for travel, sports, gym, shopping and everyday use. Its large 15 × 21 inch size provides plenty of space for clothes, shoes, accessories and other essentials. The bag features a large main compartment, multiple front storage pockets, strong carry handles and an adjustable strap with buckle for secure and convenient carrying. The foam-supported construction gives the bag a structured appearance while the attractive design makes it suitable for both men and women.',
+  features:[
+    'Size: 15 × 21 inches',
+    'Spacious design - large capacity for clothes, accessories and other essentials',
+    'Large main compartment - suitable for carrying your main belongings',
+    'Front zipper pocket - convenient storage for smaller items',
+    'Additional front storage - multiple sections for better organization',
+    'Strong carry handles - designed for comfortable hand carrying',
+    'Adjustable carrying strap with buckle',
+    'Foam construction - provides added structure and shape',
+    'Smooth zippers - easy opening and closing',
+    'Durable design - suitable for regular use',
+    'Stylish appearance - attractive modern design',
+    'Multipurpose - suitable for travel, gym, sports, shopping and weekend trips',
+    'Unisex - suitable for both men and women',
+    'Available Colors: Black, Blue and Brown'
   ]
 }
 ];
