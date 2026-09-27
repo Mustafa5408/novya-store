@@ -263,16 +263,14 @@ const LAHORE_DELIVERY=190, OTHER_CITY_DELIVERY=225;
 // actual delivery-charge calculation above. This only updates the old
 // displayed values if they are still present in HTML text.
 function syncDisplayedDeliveryCharges(){
-  const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
-  const nodes=[];
-  let node;
-  while(node=walker.nextNode()) nodes.push(node);
-  nodes.forEach(n=>{
-    if(/Lahore\s*:\s*Rs\.?\s*160/i.test(n.nodeValue)||/Other\s*Cities?\s*:\s*Rs\.?\s*190/i.test(n.nodeValue)){
-      n.nodeValue=n.nodeValue
-        .replace(/Lahore\s*:\s*Rs\.?\s*160/gi,'Lahore: Rs. 190')
-        .replace(/Other\s*Cities?\s*:\s*Rs\.?\s*190/gi,'Other Cities: Rs. 225');
-    }
+  // Keep visible delivery information consistent with the actual charges.
+  // Only target delivery-specific text; do not globally replace ordinary prices.
+  document.querySelectorAll('[data-delivery-lahore]').forEach(el=>{el.textContent='Lahore: Rs. 190'});
+  document.querySelectorAll('[data-delivery-other]').forEach(el=>{el.textContent='Other Cities: Rs. 225'});
+  document.querySelectorAll('.delivery-mini,.delivery-info,.delivery-charges').forEach(el=>{
+    const text=(el.textContent||'').toLowerCase();
+    if(text.includes('lahore') && !text.includes('other')) el.textContent='Lahore: Rs. 190';
+    else if(text.includes('other')) el.textContent='Other Cities: Rs. 225';
   });
 }
 
@@ -320,7 +318,56 @@ function changeModalQuantity(delta){if(!pendingBuyNow)return;const stock=getStoc
 function closeQuantityModal(){$('quantityModal')?.classList.remove('show');pendingBuyNow=null}
 function confirmBuyNow(){if(!pendingBuyNow)return;const {id,quantity}=pendingBuyNow,p=getProduct(id),color=$('quantityModalColor')?.value||defaultColor(p);if(hasMultipleColors(p)&&!color)return alert('Please select a color before continuing.');cart=[{productId:id,quantity,...(color?{color}:{})}];saveCart();closeQuantityModal();updateCartUI();if($('checkout'))openCheckout();else location.href='index.html#checkout'}
 
-function updateCartUI(){const items=$('cartItems');let qty=0,subtotal=0;if(items){items.innerHTML='';cart=cart.filter(i=>{const p=getProduct(i.productId);if(!p)return false;i.quantity=Math.min(i.quantity,getStock(p));return i.quantity>0});cart.forEach((i,index)=>{const p=getProduct(i.productId),colors=getProductColors(p);qty+=i.quantity;subtotal+=p.price*i.quantity;const colorHtml=colors.length>1?`<label class="cart-color-label">Color<select class="cart-color-select" data-color-index="${index}"><option value="">Select color</option>${colors.map(c=>`<option value="${esc(c)}" ${i.color===c?'selected':''}>${esc(c)}</option>`).join('')}</select></label>`:colors.length===1?`<div class="cart-item-color">Color: ${esc(colors[0])}</div>`:'';items.insertAdjacentHTML('beforeend',`<div class="cart-item"><img class="cart-item-image" src="${esc(getProductImages(p)[0])}" alt=""><div><div class="cart-item-name">${esc(p.name)}</div><div class="cart-item-price">Rs. ${formatPrice(p.price)}</div>${colorHtml}<div class="quantity-controls"><button data-cart="minus" data-index="${index}">−</button><span>${i.quantity}</span><button data-cart="plus" data-index="${index}">+</button></div><button class="remove-cart-item" data-cart="remove" data-index="${index}">Remove</button></div><div class="cart-item-total">Rs. ${formatPrice(p.price*i.quantity)}</div></div>`)});if(!cart.length)items.innerHTML='<div class="cart-empty">🛒<p>Your cart is empty.</p></div>';items.querySelectorAll('[data-cart]').forEach(b=>b.onclick=()=>cartAction(b.dataset.cart,Number(b.dataset.index)));items.querySelectorAll('[data-color-index]').forEach(sel=>sel.onchange=()=>{const i=Number(sel.dataset.colorIndex);if(!cart[i])return;cart[i].color=sel.value||undefined;if(!cart[i].color)delete cart[i].color;saveCart();updateCheckoutSummary()})}if($('cartCount'))$('cartCount').textContent=qty;if($('cartSubtotal'))$('cartSubtotal').textContent=formatPrice(subtotal);saveCart();updateCheckoutSummary()}
+function updateCartUI(){
+ const items=$('cartItems');
+ let qty=0,subtotal=0;
+ if(items){
+   items.innerHTML='';
+   cart=cart.filter(i=>{
+     const p=getProduct(i.productId);
+     if(!p)return false;
+     i.quantity=Math.min(i.quantity,getStock(p));
+     return i.quantity>0
+   });
+   cart.forEach((i,index)=>{
+     const p=getProduct(i.productId),colors=getProductColors(p);
+     qty+=i.quantity;
+     subtotal+=p.price*i.quantity;
+     const colorHtml=colors.length>1
+       ? `<label class="cart-color-label">Color<select class="cart-color-select" data-color-index="${index}"><option value="">Select color</option>${colors.map(c=>`<option value="${esc(c)}" ${i.color===c?'selected':''}>${esc(c)}</option>`).join('')}</select></label>`
+       : colors.length===1 ? `<div class="cart-item-color">Color: ${esc(colors[0])}</div>` : '';
+     items.insertAdjacentHTML('beforeend',
+       `<div class="cart-item"><img class="cart-item-image" src="${esc(getProductImages(p)[0])}" alt=""><div><div class="cart-item-name">${esc(p.name)}</div><div class="cart-item-price">Rs. ${formatPrice(p.price)}</div>${colorHtml}<div class="quantity-controls"><button data-cart="minus" data-index="${index}">−</button><span>${i.quantity}</span><button data-cart="plus" data-index="${index}">+</button></div><button class="remove-cart-item" data-cart="remove" data-index="${index}">Remove</button></div><div class="cart-item-total">Rs. ${formatPrice(p.price*i.quantity)}</div></div>`
+     );
+   });
+   if(!cart.length)items.innerHTML='<div class="cart-empty">🛒<p>Your cart is empty.</p></div>';
+   items.querySelectorAll('[data-cart]').forEach(b=>b.onclick=()=>cartAction(b.dataset.cart,Number(b.dataset.index)));
+   items.querySelectorAll('[data-color-index]').forEach(sel=>sel.onchange=()=>{
+     const i=Number(sel.dataset.colorIndex);
+     if(!cart[i])return;
+     cart[i].color=sel.value||undefined;
+     if(!cart[i].color)delete cart[i].color;
+     saveCart();
+     updateCheckoutSummary();
+   });
+ }
+ if($('cartCount'))$('cartCount').textContent=qty;
+
+ // Support both the current HTML IDs and older IDs so the displayed cart
+ // totals/delivery values cannot silently stop updating.
+ if($('cartTotal'))$('cartTotal').textContent=`Rs. ${formatPrice(subtotal)}`;
+ if($('cartSubtotal'))$('cartSubtotal').textContent=formatPrice(subtotal);
+
+ const city=$('customerCity')?.value || $('city')?.value || '';
+ const delivery=deliveryCharge(city);
+ const total=subtotal+delivery;
+ if($('cartDelivery'))$('cartDelivery').textContent=city.trim().toLowerCase()==='lahore'?'Rs. 190':'Rs. 225';
+ if($('cartGrandTotal'))$('cartGrandTotal').textContent=`Rs. ${formatPrice(total)}`;
+
+ saveCart();
+ updateCheckoutSummary();
+ syncDisplayedDeliveryCharges();
+}
 function cartAction(action,index){const item=cart[index],p=item&&getProduct(item.productId);if(!item||!p)return;if(action==='plus'){if(item.quantity>=getStock(p))return alert(`Only ${getStock(p)} available.`);item.quantity++}if(action==='minus')item.quantity--;if(action==='remove'||item.quantity<=0)cart.splice(index,1);saveCart();updateCartUI()}
 function openCart(){$('cartDrawer')?.classList.add('open');$('cartOverlay')?.classList.add('open');if(!document.body.classList.contains('checkout-modal-open'))document.body.style.overflow='hidden'}
 function closeCart(){$('cartDrawer')?.classList.remove('open');$('cartOverlay')?.classList.remove('open');if(!document.body.classList.contains('checkout-modal-open'))document.body.style.overflow=''}
@@ -361,8 +408,24 @@ function closeCheckout(){
  if(location.hash==='#checkout')history.replaceState(null,'',location.pathname+location.search);
 }
 
-function updateCheckoutSummary(){const box=$('checkoutSummary');if(!box)return;if(!cart.length){box.textContent='Your cart is empty.';return}const subtotal=cartSubtotal(),city=$('customerCity')?.value||'',delivery=deliveryCharge(city),total=subtotal+delivery;box.innerHTML=cart.map(i=>{const p=getProduct(i.productId);return `<div class="summary-item"><span>${esc(p.name)}${i.color?` <small>(${esc(i.color)})</small>`:''} × ${i.quantity}</span><strong>Rs. ${formatPrice(p.price*i.quantity)}</strong></div>`}).join('')+`<div class="summary-item total-line"><span>Product Subtotal</span><strong>Rs. ${formatPrice(subtotal)}</strong></div><div class="summary-item"><span>Delivery Charges <small>(${city&&city.trim().toLowerCase()==='lahore'?'Lahore':'Other Cities'})</small></span><strong>Rs. ${formatPrice(delivery)}</strong></div><div class="summary-item grand-total"><strong>Final Total</strong><strong>Rs. ${formatPrice(total)}</strong></div>`}
-
+function updateCheckoutSummary(){
+ const box=$('checkoutSummary');
+ if(!box)return;
+ if(!cart.length){box.textContent='Your cart is empty.';return}
+ const subtotal=cartSubtotal();
+ const city=$('customerCity')?.value || $('city')?.value || '';
+ const delivery=deliveryCharge(city);
+ const total=subtotal+delivery;
+ const cityLabel=city.trim().toLowerCase()==='lahore'?'Lahore':'Other Cities';
+ box.innerHTML=cart.map(i=>{
+   const p=getProduct(i.productId);
+   return `<div class="summary-item"><span>${esc(p.name)}${i.color?` <small>(${esc(i.color)})</small>`:''} × ${i.quantity}</span><strong>Rs. ${formatPrice(p.price*i.quantity)}</strong></div>`;
+ }).join('')+
+ `<div class="summary-item total-line"><span>Product Subtotal</span><strong>Rs. ${formatPrice(subtotal)}</strong></div>
+  <div class="summary-item"><span>Delivery Charges <small>(${cityLabel})</small></span><strong>Rs. ${formatPrice(delivery)}</strong></div>
+  <div class="summary-item grand-total"><strong>Final Total</strong><strong>Rs. ${formatPrice(total)}</strong></div>
+  <div class="delivery-rate-note">Delivery rates: Lahore Rs. 190 &nbsp;|&nbsp; Other Cities Rs. 225</div>`;
+}
 function renderProductPage(){const container=$('productPage');if(!container)return;const p=getProduct(new URLSearchParams(location.search).get('id'));if(!p){container.innerHTML='<div class="not-found"><h1>Product not found</h1><a class="primary-btn" href="index.html">Back to Home</a></div>';return}const stock=getStock(p),out=stock<1,images=getProductImages(p),colors=getProductColors(p);document.title=`${p.name} | NOVYA Store`;const colorControl=colors.length>1?`<div class="detail-color-field"><label for="detailColor">Color <span>*</span></label><select id="detailColor"><option value="">Select a color</option>${colors.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('')}</select><small>Please select a color before adding to cart or buying.</small></div>`:colors.length===1?`<div class="detail-color-single">Color: <strong>${esc(colors[0])}</strong></div>`:'';container.innerHTML=`<section class="product-detail"><div class="product-detail-media"><div class="product-gallery-main"><button class="gallery-arrow gallery-prev" id="galleryPrev" aria-label="Previous image">‹</button><img id="galleryMainImage" src="${esc(images[0])}" alt="${esc(p.name)}"><button class="gallery-arrow gallery-next" id="galleryNext" aria-label="Next image">›</button></div><div class="product-gallery-thumbs" id="galleryThumbs">${images.map((img,i)=>`<button class="gallery-thumb ${i===0?'active':''}" data-gallery-index="${i}"><img src="${esc(img)}" alt="${esc(p.name)} image ${i+1}"></button>`).join('')}</div></div><div class="product-detail-info"><div class="product-category">${esc(p.category)}</div><h1>${esc(p.name)}</h1><div class="detail-rating">★★★★★ <span>4.5 out of 5 stars</span></div><p class="detail-description">${esc(p.description)}</p><div class="detail-price">Rs. ${formatPrice(p.price)}</div><div class="detail-stock ${out?'out':''}">${out?'Out of Stock':stock+' available in stock'}</div>${colorControl}<div class="quantity-picker"><span>Quantity</span><div><button id="detailMinus">−</button><strong id="detailQty">1</strong><button id="detailPlus">+</button></div></div><div class="detail-actions"><button id="detailAdd" class="add-to-cart-btn" ${out?'disabled':''}>Add to Cart</button><button id="detailBuy" class="buy-now-btn" ${out?'disabled':''}>Buy Now</button></div><div class="trust-grid"><div>💬<strong>24/7 Customer Support</strong><span>We're here to help</span></div><div>🛡️<strong>Money-Back Guarantee</strong><span>Shop with confidence</span></div><div>🚚<strong>Fast Delivery</strong><span>3–5 Days</span></div></div></div></section><section class="detail-section"><h2>Key Features</h2><ul class="key-features">${p.features.map(f=>`<li>${esc(f)}</li>`).join('')}</ul></section><section class="detail-section review-section"><h2>Customer Reviews</h2><div class="review-summary"><div class="big-rating">4.5 <span>★★★★★</span><small>out of 5 stars</small></div><div><strong>Be the first to write a review</strong><button id="writeReviewBtn" class="secondary-btn review-btn">Write a Review</button></div></div><form id="reviewForm" class="review-form" hidden><input id="reviewName" placeholder="Your name" required><select id="reviewRating"><option value="5">★★★★★ - 5 Stars</option><option value="4">★★★★☆ - 4 Stars</option><option value="3">★★★☆☆ - 3 Stars</option><option value="2">★★☆☆☆ - 2 Stars</option><option value="1">★☆☆☆☆ - 1 Star</option></select><input id="reviewTitle" placeholder="Review title" required><textarea id="reviewComment" placeholder="Write your review" required></textarea><button class="primary-btn" type="submit">Submit Review</button></form><div id="reviewsList"></div></section><section class="detail-section"><h2>You May Also Like</h2><div class="products-grid recommendation-grid" id="recommendations"></div></section>`;let galleryIndex=0;const showGalleryImage=index=>{galleryIndex=(index+images.length)%images.length;$('galleryMainImage').src=images[galleryIndex];document.querySelectorAll('[data-gallery-index]').forEach(btn=>btn.classList.toggle('active',Number(btn.dataset.galleryIndex)===galleryIndex))};$('galleryPrev').onclick=()=>showGalleryImage(galleryIndex-1);$('galleryNext').onclick=()=>showGalleryImage(galleryIndex+1);document.querySelectorAll('[data-gallery-index]').forEach(btn=>btn.onclick=()=>showGalleryImage(Number(btn.dataset.galleryIndex)));if(images.length<2){$('galleryPrev').hidden=true;$('galleryNext').hidden=true;$('galleryThumbs').hidden=true}let q=1;const setQ=()=>$('detailQty').textContent=q;$('detailMinus').onclick=()=>{q=Math.max(1,q-1);setQ()};$('detailPlus').onclick=()=>{q=Math.min(stock,q+1);setQ()};const selectedDetailColor=()=>colors.length>1?($('detailColor')?.value||''):defaultColor(p);$('detailAdd').onclick=()=>{const color=selectedDetailColor();if(hasMultipleColors(p)&&!color){alert('Please select a color before adding this product to the cart.');$('detailColor')?.focus();return}addToCart(p.id,q,true,color)};$('detailBuy').onclick=()=>{const color=selectedDetailColor();if(hasMultipleColors(p)&&!color){alert('Please select a color before buying this product.');$('detailColor')?.focus();return}cart=[{productId:p.id,quantity:q,...(color?{color}:{})}];saveCart();if($('checkout'))openCheckout();else location.href='index.html#checkout'};$('writeReviewBtn').onclick=()=>$('reviewForm').hidden=!$('reviewForm').hidden;$('reviewForm').onsubmit=e=>{e.preventDefault();const reviews=JSON.parse(localStorage.getItem('novyaReviews')||'{}');reviews[p.id]=reviews[p.id]||[];reviews[p.id].push({name:$('reviewName').value.trim(),rating:$('reviewRating').value,title:$('reviewTitle').value.trim(),comment:$('reviewComment').value.trim()});localStorage.setItem('novyaReviews',JSON.stringify(reviews));e.target.reset();e.target.hidden=true;renderReviews(p.id)};renderReviews(p.id);const related=[...PRODUCTS.filter(x=>x.id!==p.id&&x.category===p.category),...PRODUCTS.filter(x=>x.id!==p.id&&x.category!==p.category)].slice(0,4);$('recommendations').innerHTML=related.map(productCardHTML).join('');bindProductButtons($('recommendations'))}
 
 function renderReviews(id){const list=$('reviewsList');if(!list)return;const reviews=(JSON.parse(localStorage.getItem('novyaReviews')||'{}'))[id]||[];list.innerHTML=reviews.map(r=>`<article class="review-card"><div>${'★'.repeat(Number(r.rating))}${'☆'.repeat(5-Number(r.rating))}</div><strong>${esc(r.title)}</strong><p>${esc(r.comment)}</p><small>— ${esc(r.name)}</small></article>`).join('')}
@@ -370,7 +433,56 @@ function renderReviews(id){const list=$('reviewsList');if(!list)return;const rev
 function initEmail(){if(typeof emailjs!=='undefined')emailjs.init({publicKey:EMAILJS_CONFIG.PUBLIC_KEY})}
 function reduceStock(){cart.forEach(i=>{const p=getProduct(i.productId);stockOverrides[p.id]=Math.max(0,getStock(p)-i.quantity)});saveStock()}
 function orderDetails(city){const subtotal=cartSubtotal(),delivery=deliveryCharge(city);return{lines:cart.map(i=>{const p=getProduct(i.productId);return `${p.name}${i.color?` | Color: ${i.color}`:''} | Qty: ${i.quantity} | Rs. ${formatPrice(p.price*i.quantity)}`}).join('\n'),subtotal,delivery,total:subtotal+delivery}}
-function setupOrderForm(){const form=$('orderForm');if(!form)return;form.onsubmit=async e=>{e.preventDefault();if(!cart.length)return showOrderMessage('Please add at least one product to your cart.','error');for(const i of cart){const p=getProduct(i.productId);if(!p)continue;if(i.quantity>getStock(p))return showOrderMessage(`${p.name} does not have enough stock.`,'error');if(hasMultipleColors(p)&&!i.color)return showOrderMessage(`Please select a color for ${p.name} in your cart before placing the order.`,'error')}const data=new FormData(form),city=String(data.get('customerCity')||'').trim(),details=orderDetails(city),btn=$('placeOrderBtn');btn.disabled=true;btn.textContent='Sending Order...';try{await emailjs.send(EMAILJS_CONFIG.SERVICE_ID,EMAILJS_CONFIG.TEMPLATE_ID,{order_number:`NOVYA-${Math.floor(100000+Math.random()*900000)}`,order_date:new Date().toLocaleString('en-PK'),customer_name:data.get('customerName'),customer_phone:data.get('customerPhone'),customer_email:data.get('customerEmail')||'Not provided',customer_city:city,customer_address:data.get('customerAddress'),order_notes:data.get('orderNotes')||'None',order_items:details.lines,order_subtotal:`Rs. ${formatPrice(details.subtotal)}`,delivery_charges:`Rs. ${formatPrice(details.delivery)}`,order_total:`Rs. ${formatPrice(details.total)}`});reduceStock();cart=[];saveCart();form.reset();updateCartUI();renderProducts();showOrderMessage('Your order has been submitted successfully. Thank you for shopping with NOVYA Store!','success')}catch(err){console.error(err);showOrderMessage('We could not submit your order. Please try again.','error')}finally{btn.disabled=false;btn.textContent='Place Order'}}}
+function setupOrderForm(){
+ const form=$('orderForm');
+ if(!form)return;
+ form.onsubmit=async e=>{
+   e.preventDefault();
+   if(!cart.length)return showOrderMessage('Please add at least one product to your cart.','error');
+   for(const i of cart){
+     const p=getProduct(i.productId);
+     if(!p)continue;
+     if(i.quantity>getStock(p))return showOrderMessage(`${p.name} does not have enough stock.`,'error');
+     if(hasMultipleColors(p)&&!i.color)return showOrderMessage(`Please select a color for ${p.name} in your cart before placing the order.`,'error');
+   }
+   const data=new FormData(form);
+   const getField=(...names)=>{for(const n of names){const v=data.get(n);if(v!==null)return v}return ''};
+   const city=String(getField('customerCity','city')||'').trim();
+   const details=orderDetails(city);
+   const btn=$('placeOrderBtn');
+   btn.disabled=true;
+   btn.textContent='Sending Order...';
+   try{
+     await emailjs.send(EMAILJS_CONFIG.SERVICE_ID,EMAILJS_CONFIG.TEMPLATE_ID,{
+       order_number:`NOVYA-${Math.floor(100000+Math.random()*900000)}`,
+       order_date:new Date().toLocaleString('en-PK'),
+       customer_name:getField('customerName'),
+       customer_phone:getField('customerPhone','phone'),
+       customer_email:getField('customerEmail','email')||'Not provided',
+       customer_city:city,
+       customer_address:getField('customerAddress','address'),
+       order_notes:getField('orderNotes','notes')||'None',
+       order_items:details.lines,
+       order_subtotal:`Rs. ${formatPrice(details.subtotal)}`,
+       delivery_charges:`Rs. ${formatPrice(details.delivery)}`,
+       order_total:`Rs. ${formatPrice(details.total)}`
+     });
+     reduceStock();
+     cart=[];
+     saveCart();
+     form.reset();
+     updateCartUI();
+     renderProducts();
+     showOrderMessage('Your order has been submitted successfully. Thank you for shopping with NOVYA Store!','success');
+   }catch(err){
+     console.error(err);
+     showOrderMessage('We could not submit your order. Please try again.','error');
+   }finally{
+     btn.disabled=false;
+     btn.textContent='Place Order';
+   }
+ }
+}
 function showOrderMessage(msg,type){const box=$('orderMessage');if(box){box.textContent=msg;box.className=`order-message ${type}`}}
 function setupWhatsApp(){
  if(document.getElementById('novyaWhatsAppWidget'))return;
@@ -384,8 +496,70 @@ function setupWhatsApp(){
  modal.onclick=e=>{if(e.target===modal){modal.hidden=true;document.body.classList.remove('whatsapp-open')}};
 }
 
-function setupCommon(){initEmail();setupWhatsApp();ensureCheckoutModal();$('currentYear')&&($('currentYear').textContent=new Date().getFullYear());$('cartButton')?.addEventListener('click',openCart);$('cartClose')?.addEventListener('click',closeCart);$('cartOverlay')?.addEventListener('click',closeCart);$('quantityModalMinus')?.addEventListener('click',()=>changeModalQuantity(-1));$('quantityModalPlus')?.addEventListener('click',()=>changeModalQuantity(1));$('quantityModalCancel')?.addEventListener('click',closeQuantityModal);$('quantityModalConfirm')?.addEventListener('click',confirmBuyNow);$('mobileMenuBtn')?.addEventListener('click',()=>$('mainNav')?.classList.toggle('mobile-open'));$('customerCity')?.addEventListener('input',updateCheckoutSummary);$('searchBtn')?.addEventListener('click',()=>{const q=$('searchInput').value.trim();if(document.body.classList.contains('category-page'))renderProducts();else location.href=`category.html?category=All%20Products&search=${encodeURIComponent(q)}`});$('searchInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')$('searchBtn').click()});document.addEventListener('click',e=>{const checkoutTrigger=e.target.closest('.checkout-btn,[data-checkout],a[href="#checkout"]');if(!checkoutTrigger)return;e.preventDefault();openCheckout()});window.addEventListener('popstate',()=>{if(location.hash==='#checkout')openCheckout();else if(document.body.classList.contains('checkout-modal-open'))closeCheckout()});if(document.body.classList.contains('category-page')){$('searchInput')&&($('searchInput').value=new URLSearchParams(location.search).get('search')||'');renderProducts()}else if(!document.body.classList.contains('product-page')){renderProducts();renderFreshArrivals();}renderProductPage();updateCartUI();setupOrderForm();if(location.hash==='#checkout')setTimeout(openCheckout,100)}
-document.addEventListener('DOMContentLoaded',setupCommon);
+function setupCommon(){
+ initEmail();
+ setupWhatsApp();
+ ensureCheckoutModal();
+ $('currentYear')&&($('currentYear').textContent=new Date().getFullYear());
+ $('cartButton')?.addEventListener('click',openCart);
+ $('cartClose')?.addEventListener('click',closeCart);
+ $('cartOverlay')?.addEventListener('click',closeCart);
+ $('checkoutBtn')?.addEventListener('click',e=>{e.preventDefault();openCheckout()});
+ $('quantityModalMinus')?.addEventListener('click',()=>changeModalQuantity(-1));
+ $('quantityModalPlus')?.addEventListener('click',()=>changeModalQuantity(1));
+ $('quantityModalCancel')?.addEventListener('click',closeQuantityModal);
+ $('quantityModalConfirm')?.addEventListener('click',confirmBuyNow);
+ $('mobileMenuBtn')?.addEventListener('click',()=>$('mainNav')?.classList.toggle('mobile-open'));
+ const cityField=$('customerCity')||$('city');
+ cityField?.addEventListener('input',updateCheckoutSummary);
+ $('searchBtn')?.addEventListener('click',()=>{
+   const q=$('searchInput').value.trim();
+   if(document.body.classList.contains('category-page'))renderProducts();
+   else location.href=`category.html?category=All%20Products&search=${encodeURIComponent(q)}`
+ });
+ $('searchInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')$('searchBtn').click()});
+ document.addEventListener('click',e=>{
+   const checkoutTrigger=e.target.closest('#checkoutBtn,.checkout-btn,[data-checkout],a[href="#checkout"]');
+   if(!checkoutTrigger)return;
+   e.preventDefault();
+   openCheckout();
+ });
+ window.addEventListener('popstate',()=>{
+   if(location.hash==='#checkout')openCheckout();
+   else if(document.body.classList.contains('checkout-modal-open'))closeCheckout()
+ });
+ if(document.body.classList.contains('category-page')){
+   $('searchInput')&&($('searchInput').value=new URLSearchParams(location.search).get('search')||'');
+   renderProducts()
+ }else if(!document.body.classList.contains('product-page')){
+   renderProducts();
+   renderFreshArrivals();
+ }
+ renderProductPage();
+ updateCartUI();
+ setupOrderForm();
+ if(location.hash==='#checkout')setTimeout(openCheckout,100);
+}
+function ensureCartCheckoutButton(){
+ const footer=document.querySelector('#cartDrawer .drawer-footer, #cartDrawer .cart-footer');
+ if(!footer)return;
+ let btn=$('checkoutBtn');
+ if(!btn){
+   btn=document.createElement('button');
+   btn.id='checkoutBtn';
+   btn.className='btn primary wide checkout-btn';
+   btn.type='button';
+   btn.textContent='Checkout';
+   footer.appendChild(btn);
+ }
+ btn.style.display='block';
+ btn.style.visibility='visible';
+ btn.style.opacity='1';
+ btn.style.width='100%';
+ btn.style.minHeight='46px';
+ btn.onclick=e=>{e.preventDefault();openCheckout()};
+}
+document.addEventListener('DOMContentLoaded',()=>{setupCommon();ensureCartCheckoutButton();});
 
 
 // Synchronize any legacy static delivery text after the page is ready.
