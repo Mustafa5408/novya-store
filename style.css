@@ -52,131 +52,37 @@
  .gallery-arrow{width:38px;height:38px;font-size:26px}
 }
 
-/* Mobile cart checkout visibility fix */
-.drawer-footer{
+/* Cart checkout: one stable, always-visible control on every screen size. */
+#cartDrawer{display:flex;flex-direction:column;height:100dvh;max-height:100dvh;overflow:hidden;}
+#cartDrawer .cart-items{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;}
+#cartDrawer .drawer-footer,#cartDrawer .cart-footer{
   flex:0 0 auto;
   position:relative;
-  z-index:2;
-  background:#fff;
-}
-.drawer-footer #checkoutBtn{
-  display:block !important;
+  z-index:5;
   width:100%;
-  min-height:46px;
-}
-@media(max-width:520px){
-  .drawer-footer{
-    padding:14px;
-    box-shadow:0 -6px 18px rgba(15,23,42,.06);
-  }
-}
-
-/* =========================================================
-   NOVYA STORE - DIRECT CHECKOUT MODAL
-   Opens checkout as a full-screen responsive view instead
-   of scrolling the customer down the home page.
-========================================================= */
-.checkout-modal{
-  position:fixed !important;
-  inset:0;
-  z-index:3000;
-  width:100%;
-  height:100dvh;
-  overflow-y:auto;
-  overflow-x:hidden;
   box-sizing:border-box;
-  padding:42px 20px 32px;
-  background:#f8fafc;
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
-  transform:translateY(10px);
-  transition:opacity .2s ease,visibility .2s ease,transform .2s ease;
-}
-.checkout-modal.checkout-open{
-  opacity:1;
-  visibility:visible;
-  pointer-events:auto;
-  transform:translateY(0);
-}
-.checkout-modal .checkout-container{
-  position:relative;
-  width:min(1120px,100%);
-  margin:0 auto;
-  padding-top:10px;
-}
-.checkout-modal .checkout-info h2{
-  margin-top:0;
-  padding-right:54px;
-}
-.checkout-close{
-  position:fixed;
-  top:18px;
-  right:22px;
-  z-index:3005;
-  width:44px;
-  height:44px;
-  border:1px solid var(--border);
-  border-radius:50%;
   background:#fff;
-  color:#0f172a;
-  font-size:30px;
-  line-height:1;
-  cursor:pointer;
-  box-shadow:0 8px 24px rgba(15,23,42,.12);
-  transition:transform .2s ease,background .2s ease;
+  border-top:1px solid var(--border);
+  padding:16px;
+  overflow:visible;
 }
-.checkout-close:hover{
-  transform:scale(1.04);
-  background:#f1f5f9;
+#cartDrawer #checkoutBtn{
+  display:block !important;
+  position:relative !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  width:100% !important;
+  max-width:100% !important;
+  min-height:50px;
+  margin:12px 0 0;
+  box-sizing:border-box;
+  white-space:nowrap;
+  overflow:visible;
 }
-.checkout-modal .checkout-summary,
-.checkout-modal .order-form{
-  box-shadow:0 10px 30px rgba(15,23,42,.06);
+#cartDrawer .drawer-footer #checkoutBtn~#checkoutBtn,
+#cartDrawer .cart-footer #checkoutBtn~#checkoutBtn{display:none !important;}
+@media(max-width:600px){
+  #cartDrawer{width:100%;max-width:100%;}
+  #cartDrawer .drawer-footer,#cartDrawer .cart-footer{padding:14px 16px calc(14px + env(safe-area-inset-bottom));}
+  #cartDrawer #checkoutBtn{min-height:50px;margin-top:10px;}
 }
-body.checkout-modal-open{
-  overflow:hidden !important;
-}
-
-@media (max-width:700px){
-  .checkout-modal{
-    padding:68px 12px 22px;
-  }
-  .checkout-modal .checkout-container{
-    gap:18px;
-  }
-  .checkout-modal .checkout-info h2{
-    font-size:30px;
-  }
-  .checkout-close{
-    top:12px;
-    right:12px;
-    width:42px;
-    height:42px;
-    font-size:28px;
-  }
-  .checkout-modal .checkout-summary,
-  .checkout-modal .order-form{
-    padding:17px;
-    border-radius:14px;
-  }
-  .checkout-modal .form-row{
-    grid-template-columns:1fr;
-    gap:0;
-  }
-  .checkout-modal .form-group input,
-  .checkout-modal .form-group textarea,
-  .checkout-modal .place-order-btn{
-    font-size:16px;
-    min-height:48px;
-  }
-  .checkout-modal .form-group textarea{
-    min-height:110px;
-  }
-}
-
-/* FINAL CART CHECKOUT FIX: exactly one fully visible Checkout button. */
-#cartDrawer .drawer-footer,#cartDrawer .cart-footer{position:relative;flex:0 0 auto;width:100%;box-sizing:border-box;background:#fff;overflow:visible}
-#cartDrawer #checkoutBtn{display:block!important;width:100%!important;max-width:100%!important;min-height:50px;margin:12px 0 0;box-sizing:border-box;white-space:nowrap;overflow:visible;position:relative!important;visibility:visible!important;opacity:1!important}
-#cartDrawer .drawer-footer #checkoutBtn~#checkoutBtn,#cartDrawer .cart-footer #checkoutBtn~#checkoutBtn{display:none!important}
-@media(max-width:600px){#cartDrawer{width:100%;max-width:100%}#cartDrawer .drawer-footer,#cartDrawer .cart-footer{padding:16px}#cartDrawer #checkoutBtn{min-height:50px;margin-top:10px}}

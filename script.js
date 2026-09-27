@@ -259,53 +259,48 @@ const CATEGORIES=['All Products','Kitchen Appliances','Kitchen Accessories','Kit
 const EMAILJS_CONFIG={PUBLIC_KEY:'lUS3en_oobE9akyfp',SERVICE_ID:'service_74rgsbc',TEMPLATE_ID:'template_uavapz8'};
 const LAHORE_DELIVERY=190, OTHER_CITY_DELIVERY=225;
 
-// Keep any static delivery-charge text on the page consistent with the
-// actual delivery-charge calculation above. This only updates the old
-// displayed values if they are still present in HTML text.
-function syncDisplayedDeliveryCharges(){
-  const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+// Remove only the old/inaccurate delivery-charge wording from the checkout view.
+// This does NOT modify the delivery-charge calculation or order totals.
+function removeOldCheckoutDeliveryText(){
+  const checkout=$('checkout');
+  if(!checkout)return;
+  const oldText='Delivery: Lahore Rs. 160 • Other Cities Rs. 190';
+  const walker=document.createTreeWalker(checkout,NodeFilter.SHOW_TEXT);
   const nodes=[]; let node;
-  while(node=walker.nextNode()) nodes.push(node);
+  while(node=walker.nextNode())nodes.push(node);
   nodes.forEach(n=>{
-    let t=n.nodeValue||'';
-    t=t.replace(/Lahore\s*:\s*Rs\.?\s*(?:160|190|290)/gi,'Lahore: Rs. 190')
-         .replace(/Other\s*Cities?\s*:\s*(?:Charges\s+to\s+be\s+finalized|Rs\.?\s*(?:160|190|225|290))/gi,'Other Cities: Rs. 225')
-         .replace(/Lahore\s+delivery\s+Rs\.?\s*(?:160|190|290)/gi,'Lahore delivery Rs. 190');
-    n.nodeValue=t;
+    const text=n.nodeValue||'';
+    if(text.includes(oldText))n.nodeValue=text.replace(oldText,'');
   });
 }
 
 function normalizeCartCheckoutButton(){
   const drawer=$('cartDrawer'); if(!drawer)return;
-  // There must be exactly one Checkout control in the cart drawer.
-  // Remove both duplicate buttons and duplicate checkout links/controls,
-  // then keep/create one canonical button with the fixed ID.
-  const controls=[...drawer.querySelectorAll('button,a,[role=button]')].filter(el=>{
+  const isCheckoutControl=el=>{
     const id=(el.id||'').toLowerCase();
     const label=(el.textContent||'').trim().replace(/\s+/g,' ').toLowerCase();
     const action=(el.getAttribute('data-checkout')||'').toLowerCase();
     const href=(el.getAttribute('href')||'').toLowerCase();
-    return id==='checkoutbtn' || label==='checkout' || action==='checkout' || href==='#checkout';
-  });
-  const keep=controls.find(el=>el.id==='checkoutBtn')||controls.find(el=>el.tagName==='BUTTON')||controls[0];
+    return id==='checkoutbtn'||label==='checkout'||action==='checkout'||href==='#checkout';
+  };
+  const controls=[...drawer.querySelectorAll('button,a,[role="button"]')].filter(isCheckoutControl);
+  let keep=controls.find(el=>el.id==='checkoutBtn'&&el.tagName==='BUTTON');
+  if(!keep)keep=controls.find(el=>el.tagName==='BUTTON')||controls[0];
   controls.forEach(el=>{if(el!==keep)el.remove()});
-  if(keep){
-    keep.id='checkoutBtn';
-    keep.type='button';
-    keep.classList.add('btn','primary','wide');
-    keep.removeAttribute('href');
-    keep.removeAttribute('data-checkout');
-    keep.onclick=openCheckout;
-    return;
+  if(!keep){
+    const footer=drawer.querySelector('.drawer-footer,.cart-footer');
+    if(!footer)return;
+    keep=document.createElement('button');
+    footer.appendChild(keep);
   }
-  const footer=drawer.querySelector('.drawer-footer,.cart-footer');
-  if(footer){
-    const btn=document.createElement('button');
-    btn.type='button'; btn.id='checkoutBtn';
-    btn.className='btn primary wide'; btn.textContent='Checkout';
-    btn.onclick=openCheckout;
-    footer.appendChild(btn);
-  }
+  keep.type='button';
+  keep.id='checkoutBtn';
+  keep.className='btn primary wide';
+  keep.textContent='Checkout';
+  keep.removeAttribute('href');
+  keep.removeAttribute('data-checkout');
+  keep.setAttribute('aria-label','Checkout');
+  keep.onclick=openCheckout;
 }
 
 let cart=JSON.parse(localStorage.getItem('novyaCart')||'[]');
@@ -377,6 +372,7 @@ function openCheckout(){
  if(!checkout){location.href='index.html#checkout';return}
  if(!cart.length){alert('Your cart is empty. Please add a product before checkout.');return}
  closeCart();
+ removeOldCheckoutDeliveryText();
  updateCheckoutSummary();
  checkout.classList.add('checkout-open');
  document.body.classList.add('checkout-modal-open');
@@ -444,12 +440,9 @@ function setupCommon(){
  if(document.body.classList.contains('category-page')){$('searchInput')&&($('searchInput').value=new URLSearchParams(location.search).get('search')||'');renderProducts()} else if(!document.body.classList.contains('product-page')){renderProducts();renderFreshArrivals()}
  renderProductPage(); updateCartUI(); normalizeCartCheckoutButton(); setupOrderForm();
  if(location.hash==='#checkout')setTimeout(openCheckout,100);
- const drawer=$('cartDrawer'); if(drawer){const observer=new MutationObserver(()=>normalizeCartCheckoutButton());observer.observe(drawer,{childList:true,subtree:true})}
  syncDisplayedDeliveryCharges();
 }
 
 document.addEventListener('DOMContentLoaded',setupCommon);
 
 
-// Synchronize any legacy static delivery text after the page is ready.
-if(document.body) syncDisplayedDeliveryCharges();
