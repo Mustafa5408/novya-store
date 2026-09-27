@@ -258,6 +258,24 @@ const PRODUCTS = [
 const CATEGORIES=['All Products','Kitchen Appliances','Kitchen Accessories','Kitchen Utensils','Home Appliances','Home Accessories','Home Decor','Electronics Gadgets','Mobile Accessories','Personal Care','Baby Accessories','Tools & Tool Kits','Men','Women','Bags & Luggage'];
 const EMAILJS_CONFIG={PUBLIC_KEY:'lUS3en_oobE9akyfp',SERVICE_ID:'service_74rgsbc',TEMPLATE_ID:'template_uavapz8'};
 const LAHORE_DELIVERY=190, OTHER_CITY_DELIVERY=225;
+
+// Keep any static delivery-charge text on the page consistent with the
+// actual delivery-charge calculation above. This only updates the old
+// displayed values if they are still present in HTML text.
+function syncDisplayedDeliveryCharges(){
+  const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+  const nodes=[];
+  let node;
+  while(node=walker.nextNode()) nodes.push(node);
+  nodes.forEach(n=>{
+    if(/Lahore\s*:\s*Rs\.?\s*160/i.test(n.nodeValue)||/Other\s*Cities?\s*:\s*Rs\.?\s*190/i.test(n.nodeValue)){
+      n.nodeValue=n.nodeValue
+        .replace(/Lahore\s*:\s*Rs\.?\s*160/gi,'Lahore: Rs. 190')
+        .replace(/Other\s*Cities?\s*:\s*Rs\.?\s*190/gi,'Other Cities: Rs. 225');
+    }
+  });
+}
+
 let cart=JSON.parse(localStorage.getItem('novyaCart')||'[]');
 let stockOverrides=JSON.parse(localStorage.getItem('novyaStockOverrides')||'{}');
 let pendingBuyNow=null;
@@ -368,3 +386,7 @@ function setupWhatsApp(){
 
 function setupCommon(){initEmail();setupWhatsApp();ensureCheckoutModal();$('currentYear')&&($('currentYear').textContent=new Date().getFullYear());$('cartButton')?.addEventListener('click',openCart);$('cartClose')?.addEventListener('click',closeCart);$('cartOverlay')?.addEventListener('click',closeCart);$('quantityModalMinus')?.addEventListener('click',()=>changeModalQuantity(-1));$('quantityModalPlus')?.addEventListener('click',()=>changeModalQuantity(1));$('quantityModalCancel')?.addEventListener('click',closeQuantityModal);$('quantityModalConfirm')?.addEventListener('click',confirmBuyNow);$('mobileMenuBtn')?.addEventListener('click',()=>$('mainNav')?.classList.toggle('mobile-open'));$('customerCity')?.addEventListener('input',updateCheckoutSummary);$('searchBtn')?.addEventListener('click',()=>{const q=$('searchInput').value.trim();if(document.body.classList.contains('category-page'))renderProducts();else location.href=`category.html?category=All%20Products&search=${encodeURIComponent(q)}`});$('searchInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')$('searchBtn').click()});document.addEventListener('click',e=>{const checkoutTrigger=e.target.closest('.checkout-btn,[data-checkout],a[href="#checkout"]');if(!checkoutTrigger)return;e.preventDefault();openCheckout()});window.addEventListener('popstate',()=>{if(location.hash==='#checkout')openCheckout();else if(document.body.classList.contains('checkout-modal-open'))closeCheckout()});if(document.body.classList.contains('category-page')){$('searchInput')&&($('searchInput').value=new URLSearchParams(location.search).get('search')||'');renderProducts()}else if(!document.body.classList.contains('product-page')){renderProducts();renderFreshArrivals();}renderProductPage();updateCartUI();setupOrderForm();if(location.hash==='#checkout')setTimeout(openCheckout,100)}
 document.addEventListener('DOMContentLoaded',setupCommon);
+
+
+// Synchronize any legacy static delivery text after the page is ready.
+if(document.body) syncDisplayedDeliveryCharges();

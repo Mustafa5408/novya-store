@@ -52,6 +52,25 @@
  .gallery-arrow{width:38px;height:38px;font-size:26px}
 }
 
+/* Mobile cart checkout visibility fix */
+.drawer-footer{
+  flex:0 0 auto;
+  position:relative;
+  z-index:2;
+  background:#fff;
+}
+.drawer-footer #checkoutBtn{
+  display:block !important;
+  width:100%;
+  min-height:46px;
+}
+@media(max-width:520px){
+  .drawer-footer{
+    padding:14px;
+    box-shadow:0 -6px 18px rgba(15,23,42,.06);
+  }
+}
+
 /* =========================================================
    NOVYA STORE - DIRECT CHECKOUT MODAL
    Opens checkout as a full-screen responsive view instead
