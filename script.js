@@ -277,24 +277,35 @@ function syncDisplayedDeliveryCharges(){
 
 function normalizeCartCheckoutButton(){
   const drawer=$('cartDrawer'); if(!drawer)return;
-  const buttons=[...drawer.querySelectorAll('button')].filter(b=>{
-    const id=(b.id||'').toLowerCase();
-    const label=(b.textContent||'').trim().replace(/\s+/g,' ').toLowerCase();
-    return id==='checkoutbtn' || label==='checkout';
+  // There must be exactly one Checkout control in the cart drawer.
+  // Remove both duplicate buttons and duplicate checkout links/controls,
+  // then keep/create one canonical button with the fixed ID.
+  const controls=[...drawer.querySelectorAll('button,a,[role=button]')].filter(el=>{
+    const id=(el.id||'').toLowerCase();
+    const label=(el.textContent||'').trim().replace(/\s+/g,' ').toLowerCase();
+    const action=(el.getAttribute('data-checkout')||'').toLowerCase();
+    const href=(el.getAttribute('href')||'').toLowerCase();
+    return id==='checkoutbtn' || label==='checkout' || action==='checkout' || href==='#checkout';
   });
-  if(!buttons.length){
-    const footer=drawer.querySelector('.drawer-footer,.cart-footer');
-    if(footer){
-      const btn=document.createElement('button'); btn.type='button'; btn.id='checkoutBtn';
-      btn.className='btn primary wide'; btn.textContent='Checkout'; footer.appendChild(btn);
-      btn.onclick=openCheckout;
-    }
+  const keep=controls.find(el=>el.id==='checkoutBtn')||controls.find(el=>el.tagName==='BUTTON')||controls[0];
+  controls.forEach(el=>{if(el!==keep)el.remove()});
+  if(keep){
+    keep.id='checkoutBtn';
+    keep.type='button';
+    keep.classList.add('btn','primary','wide');
+    keep.removeAttribute('href');
+    keep.removeAttribute('data-checkout');
+    keep.onclick=openCheckout;
     return;
   }
-  const keep=buttons.find(b=>b.id==='checkoutBtn')||buttons[0];
-  keep.id='checkoutBtn'; keep.type='button'; keep.classList.add('btn','primary','wide');
-  buttons.forEach(b=>{if(b!==keep)b.remove()});
-  keep.onclick=openCheckout;
+  const footer=drawer.querySelector('.drawer-footer,.cart-footer');
+  if(footer){
+    const btn=document.createElement('button');
+    btn.type='button'; btn.id='checkoutBtn';
+    btn.className='btn primary wide'; btn.textContent='Checkout';
+    btn.onclick=openCheckout;
+    footer.appendChild(btn);
+  }
 }
 
 let cart=JSON.parse(localStorage.getItem('novyaCart')||'[]');
@@ -388,7 +399,7 @@ function updateCheckoutSummary(){
  const subtotal=cartSubtotal();
  const city=String($('city')?.value || $('customerCity')?.value || '').trim();
  const delivery=deliveryCharge(city), total=subtotal+delivery;
- box.innerHTML=cart.map(i=>{const p=getProduct(i.productId);return `<div class="summary-item"><span>${esc(p.name)}${i.color?` <small>(${esc(i.color)})</small>`:''} × ${i.quantity}</span><strong>Rs. ${formatPrice(p.price*i.quantity)}</strong></div>`}).join('')+`<div class="summary-item total-line"><span>Product Subtotal</span><strong>Rs. ${formatPrice(subtotal)}</strong></div><div class="summary-item"><span>Delivery Charges <small>(${city&&city.toLowerCase()==='lahore'?'Lahore':'Other Cities'})</small></span><strong>Rs. ${formatPrice(delivery)}</strong></div><div class="summary-item grand-total"><strong>Final Total</strong><strong>Rs. ${formatPrice(total)}</strong></div>`;
+ box.innerHTML=cart.map(i=>{const p=getProduct(i.productId);return `<div class="summary-item"><span>${esc(p.name)}${i.color?` <small>(${esc(i.color)})</small>`:''} × ${i.quantity}</span><strong>Rs. ${formatPrice(p.price*i.quantity)}</strong></div>`}).join('')+`<div class="summary-item total-line"><span>Product Subtotal</span><strong>Rs. ${formatPrice(subtotal)}</strong></div><div class="summary-item grand-total"><strong>Final Total</strong><strong>Rs. ${formatPrice(total)}</strong></div>`;
  if($('cartTotal'))$('cartTotal').textContent=`Rs. ${formatPrice(subtotal)}`;
  if($('cartDelivery'))$('cartDelivery').textContent=`Rs. ${formatPrice(delivery)}`;
  if($('cartGrandTotal'))$('cartGrandTotal').textContent=`Rs. ${formatPrice(total)}`;

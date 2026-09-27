@@ -175,45 +175,8 @@ body.checkout-modal-open{
   }
 }
 
-/* FINAL CART CHECKOUT SAFETY FIX
-   Keep the cart's single Checkout action fully visible on every viewport. */
-#cartDrawer .drawer-footer,
-#cartDrawer .cart-footer{
-  position:relative;
-  flex:0 0 auto;
-  width:100%;
-  box-sizing:border-box;
-  background:#fff;
-  overflow:visible;
-}
-#cartDrawer #checkoutBtn{
-  display:block !important;
-  position:relative;
-  width:100% !important;
-  max-width:100%;
-  min-height:48px;
-  margin:12px 0 0;
-  box-sizing:border-box;
-  white-space:nowrap;
-  overflow:visible;
-}
-#cartDrawer .drawer-footer > #checkoutBtn + #checkoutBtn,
-#cartDrawer .cart-footer > #checkoutBtn + #checkoutBtn{
-  display:none !important;
-}
-@media(max-width:600px){
-  #cartDrawer{width:100%;max-width:100%;}
-  #cartDrawer .drawer-footer,
-  #cartDrawer .cart-footer{padding:16px;}
-  #cartDrawer #checkoutBtn{min-height:50px;margin-top:10px;}
-}
-
-/* Final cart checkout safety: exactly one full-width Checkout action. */
+/* FINAL CART CHECKOUT FIX: exactly one fully visible Checkout button. */
 #cartDrawer .drawer-footer,#cartDrawer .cart-footer{position:relative;flex:0 0 auto;width:100%;box-sizing:border-box;background:#fff;overflow:visible}
-#cartDrawer #checkoutBtn{display:block!important;position:relative;width:100%!important;max-width:100%;min-height:48px;margin:12px 0 0;box-sizing:border-box;white-space:nowrap;overflow:visible}
-@media(max-width:600px){#cartDrawer{width:100%;max-width:100%}#cartDrawer .drawer-footer,#cartDrawer .cart-footer{padding:16px}#cartDrawer #checkoutBtn{min-height:50px;margin-top:10px}}
-
-/* Final cart checkout safety: exactly one full-width Checkout action. */
-#cartDrawer .drawer-footer,#cartDrawer .cart-footer{position:relative;flex:0 0 auto;width:100%;box-sizing:border-box;background:#fff;overflow:visible}
-#cartDrawer #checkoutBtn{display:block!important;position:relative;width:100%!important;max-width:100%;min-height:48px;margin:12px 0 0;box-sizing:border-box;white-space:nowrap;overflow:visible}
+#cartDrawer #checkoutBtn{display:block!important;width:100%!important;max-width:100%!important;min-height:50px;margin:12px 0 0;box-sizing:border-box;white-space:nowrap;overflow:visible;position:relative!important;visibility:visible!important;opacity:1!important}
+#cartDrawer .drawer-footer #checkoutBtn~#checkoutBtn,#cartDrawer .cart-footer #checkoutBtn~#checkoutBtn{display:none!important}
 @media(max-width:600px){#cartDrawer{width:100%;max-width:100%}#cartDrawer .drawer-footer,#cartDrawer .cart-footer{padding:16px}#cartDrawer #checkoutBtn{min-height:50px;margin-top:10px}}
