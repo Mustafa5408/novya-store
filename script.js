@@ -10,7 +10,7 @@ const PRODUCTS = [
   name:'New design Travelling bag / weekend bag / duffel bag',
   category:'Bags & Luggage',
   price:796,
-  stock:23,
+  stock:8,
   image:'assets/Travelling Bag Weekend Bag Duffel Bag.jpg',
   images:[
    'assets/Travelling Bag Weekend Bag Duffel Bag.jpg',
@@ -36,7 +36,7 @@ const PRODUCTS = [
   name:'Silver Crest 3L Stainless Steel Meat and Vegetable Chopper SC-1589',
   category:'Kitchen Appliances',
   price:3999,
-  stock:51,
+  stock:9,
   image:'assets/chopper 1.jpg',
   images:[
     'assets/chopper 1.jpg',
@@ -84,8 +84,8 @@ const PRODUCTS = [
   name:'Electric - Spice & Coffee Grinder',
   category:'Kitchen Appliances',
   price:2890,
-  stock:38,
-  image:'assets/grngr 1 main.jpg',
+  stock:5,
+  image:'assets/coffee grindr Main 2.jpg',
   images:[
     'assets/grngr 1 main.jpg',
     'assets/grndr 2.jpg',
@@ -113,7 +113,7 @@ const PRODUCTS = [
   name:'Baby Diaper Bag 11.5 inch x 15.5 inch| Multi Pocket Maternity Bag | Baby Travel Organizer | Cartoon Printed Mother Bag | 4 Colors Available',
   category:'Bags & Luggage',
   price:899,
-  stock:483,
+  stock:6,
   image:'assets/Baby 1 main.jpg',
   images:[
     'assets/Baby 1 main.jpg',
@@ -142,7 +142,7 @@ const PRODUCTS = [
   name:'Baby Diaper Bag Large Capacity 13 inch x 16.5 inch Large | Multi Pocket Maternity Bag | Baby Travel Organizer | Cartoon Printed Mother Bag | 4 Colors Available',
   category:'Bags & Luggage',
   price:999,
-  stock:440,
+  stock:8,
   image:'assets/Baby 1 main.jpg',
   images:[
     'assets/Baby 1 main.jpg',
@@ -171,7 +171,7 @@ const PRODUCTS = [
   name:'Premium Travel & Sports Duffel Bag Large 14inch x 22inch',
   category:'Bags & Luggage',
   price:1599,
-  stock:203,
+  stock:5,
   image:'assets/D-bag silki 1 main.jpg',
   images:[
     'assets/D-bag silki 1 main.jpg',
@@ -198,7 +198,7 @@ const PRODUCTS = [
   name:'Premium Travel & Sports Duffel Bag Small 12inch x 20inch',
   category:'Bags & Luggage',
   price:1199,
-  stock:243,
+  stock:9,
   image:'assets/D-bag silki 1 main.jpg',
   images:[
     'assets/D-bag silki 1 main.jpg',
@@ -225,7 +225,7 @@ const PRODUCTS = [
   name:'D Bag Matt Coat Foam – Travel & Sports Bag 15 x 21 inches',
   category:'Bags & Luggage',
   price:1850,
-  stock:98,
+  stock:9,
   image:'assets/matt coat dbag 1.jpg',
   images:[
     'assets/matt coat dbag 1.jpg',
