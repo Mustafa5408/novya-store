@@ -259,47 +259,41 @@ const CATEGORIES=['All Products','Kitchen Appliances','Kitchen Accessories','Kit
 const EMAILJS_CONFIG={PUBLIC_KEY:'lUS3en_oobE9akyfp',SERVICE_ID:'service_74rgsbc',TEMPLATE_ID:'template_uavapz8'};
 const LAHORE_DELIVERY=190, OTHER_CITY_DELIVERY=225;
 
-// Remove only the old/inaccurate delivery-charge wording from the checkout view.
-// This does NOT modify the delivery-charge calculation or order totals.
-function removeOldCheckoutDeliveryText(){
-  const checkout=$('checkout');
-  if(!checkout)return;
-  const oldText='Delivery: Lahore Rs. 160 • Other Cities Rs. 190';
-  const walker=document.createTreeWalker(checkout,NodeFilter.SHOW_TEXT);
+// Keep any static delivery-charge text on the page consistent with the
+// actual delivery-charge calculation above. This only updates the old
+// displayed values if they are still present in HTML text.
+function syncDisplayedDeliveryCharges(){
+  const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
   const nodes=[]; let node;
-  while(node=walker.nextNode())nodes.push(node);
+  while(node=walker.nextNode()) nodes.push(node);
   nodes.forEach(n=>{
-    const text=n.nodeValue||'';
-    if(text.includes(oldText))n.nodeValue=text.replace(oldText,'');
+    let t=n.nodeValue||'';
+    t=t.replace(/Lahore\s*:\s*Rs\.?\s*(?:160|190|290)/gi,'Lahore: Rs. 190')
+         .replace(/Other\s*Cities?\s*:\s*(?:Charges\s+to\s+be\s+finalized|Rs\.?\s*(?:160|190|225|290))/gi,'Other Cities: Rs. 225')
+         .replace(/Lahore\s+delivery\s+Rs\.?\s*(?:160|190|290)/gi,'Lahore delivery Rs. 190');
+    n.nodeValue=t;
   });
 }
 
 function normalizeCartCheckoutButton(){
   const drawer=$('cartDrawer'); if(!drawer)return;
-  const isCheckoutControl=el=>{
-    const id=(el.id||'').toLowerCase();
-    const label=(el.textContent||'').trim().replace(/\s+/g,' ').toLowerCase();
-    const action=(el.getAttribute('data-checkout')||'').toLowerCase();
-    const href=(el.getAttribute('href')||'').toLowerCase();
-    return id==='checkoutbtn'||label==='checkout'||action==='checkout'||href==='#checkout';
-  };
-  const controls=[...drawer.querySelectorAll('button,a,[role="button"]')].filter(isCheckoutControl);
-  let keep=controls.find(el=>el.id==='checkoutBtn'&&el.tagName==='BUTTON');
-  if(!keep)keep=controls.find(el=>el.tagName==='BUTTON')||controls[0];
-  controls.forEach(el=>{if(el!==keep)el.remove()});
-  if(!keep){
+  const buttons=[...drawer.querySelectorAll('button')].filter(b=>{
+    const id=(b.id||'').toLowerCase();
+    const label=(b.textContent||'').trim().replace(/\s+/g,' ').toLowerCase();
+    return id==='checkoutbtn' || label==='checkout';
+  });
+  if(!buttons.length){
     const footer=drawer.querySelector('.drawer-footer,.cart-footer');
-    if(!footer)return;
-    keep=document.createElement('button');
-    footer.appendChild(keep);
+    if(footer){
+      const btn=document.createElement('button'); btn.type='button'; btn.id='checkoutBtn';
+      btn.className='btn primary wide'; btn.textContent='Checkout'; footer.appendChild(btn);
+      btn.onclick=openCheckout;
+    }
+    return;
   }
-  keep.type='button';
-  keep.id='checkoutBtn';
-  keep.className='btn primary wide';
-  keep.textContent='Checkout';
-  keep.removeAttribute('href');
-  keep.removeAttribute('data-checkout');
-  keep.setAttribute('aria-label','Checkout');
+  const keep=buttons.find(b=>b.id==='checkoutBtn')||buttons[0];
+  keep.id='checkoutBtn'; keep.type='button'; keep.classList.add('btn','primary','wide');
+  buttons.forEach(b=>{if(b!==keep)b.remove()});
   keep.onclick=openCheckout;
 }
 
@@ -372,7 +366,6 @@ function openCheckout(){
  if(!checkout){location.href='index.html#checkout';return}
  if(!cart.length){alert('Your cart is empty. Please add a product before checkout.');return}
  closeCart();
- removeOldCheckoutDeliveryText();
  updateCheckoutSummary();
  checkout.classList.add('checkout-open');
  document.body.classList.add('checkout-modal-open');
@@ -395,7 +388,7 @@ function updateCheckoutSummary(){
  const subtotal=cartSubtotal();
  const city=String($('city')?.value || $('customerCity')?.value || '').trim();
  const delivery=deliveryCharge(city), total=subtotal+delivery;
- box.innerHTML=cart.map(i=>{const p=getProduct(i.productId);return `<div class="summary-item"><span>${esc(p.name)}${i.color?` <small>(${esc(i.color)})</small>`:''} × ${i.quantity}</span><strong>Rs. ${formatPrice(p.price*i.quantity)}</strong></div>`}).join('')+`<div class="summary-item total-line"><span>Product Subtotal</span><strong>Rs. ${formatPrice(subtotal)}</strong></div><div class="summary-item grand-total"><strong>Final Total</strong><strong>Rs. ${formatPrice(total)}</strong></div>`;
+ box.innerHTML=cart.map(i=>{const p=getProduct(i.productId);return `<div class="summary-item"><span>${esc(p.name)}${i.color?` <small>(${esc(i.color)})</small>`:''} × ${i.quantity}</span><strong>Rs. ${formatPrice(p.price*i.quantity)}</strong></div>`}).join('')+`<div class="summary-item total-line"><span>Product Subtotal</span><strong>Rs. ${formatPrice(subtotal)}</strong></div><div class="summary-item"><span>Delivery Charges <small>(${city&&city.toLowerCase()==='lahore'?'Lahore':'Other Cities'})</small></span><strong>Rs. ${formatPrice(delivery)}</strong></div><div class="summary-item grand-total"><strong>Final Total</strong><strong>Rs. ${formatPrice(total)}</strong></div>`;
  if($('cartTotal'))$('cartTotal').textContent=`Rs. ${formatPrice(subtotal)}`;
  if($('cartDelivery'))$('cartDelivery').textContent=`Rs. ${formatPrice(delivery)}`;
  if($('cartGrandTotal'))$('cartGrandTotal').textContent=`Rs. ${formatPrice(total)}`;
@@ -440,9 +433,12 @@ function setupCommon(){
  if(document.body.classList.contains('category-page')){$('searchInput')&&($('searchInput').value=new URLSearchParams(location.search).get('search')||'');renderProducts()} else if(!document.body.classList.contains('product-page')){renderProducts();renderFreshArrivals()}
  renderProductPage(); updateCartUI(); normalizeCartCheckoutButton(); setupOrderForm();
  if(location.hash==='#checkout')setTimeout(openCheckout,100);
+ const drawer=$('cartDrawer'); if(drawer){const observer=new MutationObserver(()=>normalizeCartCheckoutButton());observer.observe(drawer,{childList:true,subtree:true})}
  syncDisplayedDeliveryCharges();
 }
 
 document.addEventListener('DOMContentLoaded',setupCommon);
 
 
+// Synchronize any legacy static delivery text after the page is ready.
+if(document.body) syncDisplayedDeliveryCharges();
