@@ -109,8 +109,8 @@ const PRODUCTS = [
   ]
 },
 {
-  id:'baby-diaper-bag-large-capacity-multi-pocket 11.5 inch x 15.5 inch small',
-  name:'Baby Diaper Bag 11.5 inch x 15.5 inch| Multi Pocket Maternity Bag | Baby Travel Organizer | Cartoon Printed Mother Bag | 4 Colors Available',
+  id:'baby-diaper-bag-large-capacity-multi-pocket 11.5 inch x 15.5 inch Medium',
+  name:'Baby Diaper Bag Medium 11.5 inch x 15.5 inch| Multi Pocket Maternity Bag | Baby Travel Organizer | Cartoon Printed Mother Bag | 4 Colors Available',
   category:'Bags & Luggage',
   price:899,
   stock:6,
@@ -194,8 +194,8 @@ const PRODUCTS = [
   ]
 },
 {
-  id:'premium-travel-sports-duffel-bag-12x20',
-  name:'Premium Travel & Sports Duffel Bag Small 12inch x 20inch',
+  id:'premium-travel-sports-duffel-bag-Medium-12x20',
+  name:'Premium Travel & Sports Duffel Bag Medium 12inch x 20inch',
   category:'Bags & Luggage',
   price:1199,
   stock:9,
@@ -222,7 +222,7 @@ const PRODUCTS = [
 },
 {
   id:'d-bag-matt-coat-foam-travel-sports-bag',
-  name:'D Bag Matt Coat Foam – Travel & Sports Bag 15 x 21 inches',
+  name:'D Bag Matt Coat Foam – Travel & Sports Bag Large Size 15 x 21 inches',
   category:'Bags & Luggage',
   price:1850,
   stock:9,
