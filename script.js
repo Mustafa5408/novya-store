@@ -87,7 +87,7 @@ const PRODUCTS = [
   stock:5,
   image:'assets/coffee grindr Main 2.jpg',
   images:[
-    'assets/grngr 1 main.jpg',
+    'assets/coffee grindr Main 2.jpg',
     'assets/grndr 2.jpg',
     'assets/grndr 3.jpg',
     'assets/grndr 4.jpg'
